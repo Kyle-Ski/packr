@@ -1,0 +1,21 @@
+import React from 'react'
+import { Image, Button, Input, Icon, Form, Message } from 'semantic-ui-react'
+import { Link, } from 'react-router-dom'
+import logo from '../../PackrLogoPng.png'
+
+const LogIn = ({test, warning}) => (
+  <div>
+  <Image src={logo} size='large'  />
+  <Form className={warning} onSubmit={()=>console.log('submit')}>
+    <Form.Input label='Email' placeholder='joe@schmoe.com' icon='at' />
+    <Form.Input type='password' label='Password' placeholder='password' icon='lock' />
+    <Message success header='Form Completed' content="You're all signed up for the newsletter" />
+    <Button size={`medium`} toggle={true} color={`olive`} >Log In</Button>
+  </Form>
+
+    <Button size={`medium`} toggle={true} basic={true} color={`green`} onClick={test}><Link to='/signup'>Sign Up</Link></Button>
+  
+  </div>
+)
+
+export default LogIn
