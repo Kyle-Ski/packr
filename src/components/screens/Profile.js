@@ -1,12 +1,7 @@
 import React, { Component } from 'react'
 import { Image, Button, Icon, Header, Segment } from 'semantic-ui-react'
-import { Link, } from 'react-router-dom'
-import logo from '../../PackrLogoPng.png'
 import MobileNav from '../nav/MobileNav'
-
-const style = {
-}
-
+import { Link } from 'react-router-dom'
 class Profile extends Component {
 
     render(){
@@ -23,7 +18,7 @@ class Profile extends Component {
             </Segment>
             <Header as='h1'>Backpacks:</Header>
             <Header as='h2'>backpack list placehoder</Header>
-            <Button color='grey'><Icon name='edit' />Edit Packs</Button>
+            <Button color='green'><Icon name='add' /><Link to='add-pack'>Add Pack</Link></Button>
             </div>
         )
     }
