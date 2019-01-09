@@ -5,6 +5,7 @@ import Signup from '../screens/SignUp'
 import Profile from '../screens/Profile'
 import AddPack from '../screens/AddPack'
 import AddItems from '../screens/AddItems'
+import CreateItem from '../screens/CreateItem'
 class Main extends Component {
 
     state = {
@@ -26,6 +27,7 @@ class Main extends Component {
         <Route path="/profile" component={Profile} />
         <Route path="/add-pack" component={AddPack} />
         <Route path="/add-items" component={AddItems} />
+        <Route path="/create-item" component={CreateItem} />
         {/* <Route component={NoTfound} /> */}
     </Switch>
       </div>

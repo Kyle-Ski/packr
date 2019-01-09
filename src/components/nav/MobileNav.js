@@ -35,8 +35,8 @@ export default class MobileNav extends Component {
         <Dropdown.Menu>
           <Dropdown.Item><Link to='/'>Sign Out</Link></Dropdown.Item>
           <Dropdown.Item><Link to='profile'>Profile</Link></Dropdown.Item>
-          <Dropdown.Item>Backpacks</Dropdown.Item>
-          <Dropdown.Item>Add Items</Dropdown.Item>
+          <Dropdown.Item><Link to='create-item'>Create Item</Link></Dropdown.Item>
+          <Dropdown.Item><Link to='add-items'>Add Items</Link></Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Header>Export</Dropdown.Header>
           <Dropdown.Item>Share</Dropdown.Item>
