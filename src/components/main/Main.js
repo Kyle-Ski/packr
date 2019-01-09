@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom'
 import Login from '../screens/LogIn'
 import Signup from '../screens/SignUp'
+import Profile from '../screens/Profile'
 
 class Main extends Component {
 
@@ -21,6 +22,7 @@ class Main extends Component {
       <Switch>
         <Route exact path="/" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/profile" component={Profile} />
         {/* <Route component={NoTfound} /> */}
     </Switch>
       </div>

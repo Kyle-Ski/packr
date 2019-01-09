@@ -1,13 +1,20 @@
 import React, { Component } from 'react'
-import { Icon, Menu, Segment } from 'semantic-ui-react'
+import { Icon, Menu, Segment, Dropdown, Image } from 'semantic-ui-react'
 import { Link, } from 'react-router-dom'
+import logo from '../../PackrLogoPng.png'
 const style = {
-    segment: {
-        minHeight: '90vh'
+    logo: {
+      marginTop: '3px',
+      maxWidth: '368px',
+      maxHeight: '35px',
+      width: 'auto',
+      height: 'auto'
     },
-    page: {
-      maxWidth: '95vw',
-      marginLeft: '10px'
+    menu: {
+      maxHeight: '42px'
+    },
+    altMenu: {
+      padding: '10px',
     }
 }
 
@@ -19,40 +26,55 @@ export default class MobileNav extends Component {
     const { activeItem } = this.state
 
     return (
-      <div style={style.page}>
+      <div>
         {/* <Segment style={style.segment}>
           <Main />
         </Segment> */}
-
-        <Menu fixed='bottom' tabular>
-
-          <Menu.Item name='1' active={activeItem === '1'} onClick={this.handleItemClick}>
+        <Menu style={style.menu} attached='top'>
+      <Dropdown item icon='bars' simple>
+        <Dropdown.Menu>
+          <Dropdown.Item><Link to='/'>Sign Out</Link></Dropdown.Item>
+          <Dropdown.Item><Link to='profile'>Profile</Link></Dropdown.Item>
+          <Dropdown.Item>Backpacks</Dropdown.Item>
+          <Dropdown.Item>Add Items</Dropdown.Item>
+          <Dropdown.Divider />
+          <Dropdown.Header>Export</Dropdown.Header>
+          <Dropdown.Item>Share</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+      <Image src={logo} style={style.logo} centered size='tiny'/>
+      </Menu>
+        {/* <Menu fixed='top' >
+        <Dropdown item icon='hamburger' simple>
+          <Dropdown.Item>
           <Link to='/'>
             Sign In
             </Link>
-          </Menu.Item>
+          </Dropdown.Item>
 
-          <Menu.Item name='active' active={activeItem === 'active'} onClick={this.handleItemClick}>
+          <Dropdown.item>
           <Link to='/signup'>
             Sign Up
             </Link>
-          </Menu.Item>
+          </Dropdown.item>
 
-          <Menu.Item name='3' active={activeItem === '3'} onClick={this.handleItemClick}>
-            Profile
-          </Menu.Item>
+          <Dropdown.item>
+            <Icon name='users'/>
+            <Link to='profile'>
+              Profile
+            </Link>
+          </Dropdown.item>
 
-          <Menu.Menu position='right'>
-            <Menu.Item
-              name='new-tab'
-              active={activeItem === 'new-tab'}
-              onClick={this.handleItemClick}
-            >
+            <Dropdown.item>
               <Icon name='add' />
-              New Tab
-            </Menu.Item>
-          </Menu.Menu>
-        </Menu>
+              Backpacks
+            </Dropdown.item>
+            <Dropdown.item>
+              <Icon name='add' />
+              Backpacks
+            </Dropdown.item>
+        </Dropdown>
+        </Menu> */}
       </div>
     )
   }
