@@ -52,7 +52,7 @@ class Main extends Component {
               return alert(res.error)
             } else {
               console.log('else')
-              return this.setState({user: res[0], isAuthed: true})
+              return this.setState({user: res, isAuthed: true, password: ''})
             }
           })
           .catch(this.generalError)
@@ -70,7 +70,7 @@ class Main extends Component {
       <Switch>
         <Route exact path="/" render={(props) => <Login {...props} handleChange={this.handleChange} logIn={this.logIn}/>} />
         <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} />
-        {this.state.isAuthed && <Route exact path="/profile" component={Profile} />}
+        {this.state.isAuthed && <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} />} />}
         {this.state.isAuthed && <Route exact path="/add-pack" component={AddPack} />}
         {this.state.isAuthed && <Route exact path="/add-items" component={AddItems} />}
         {this.state.isAuthed && <Route exact path="/create-item" component={CreateItem} />}
