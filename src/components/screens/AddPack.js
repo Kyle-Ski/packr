@@ -15,9 +15,9 @@ class AddPack extends Component{
             <Divider />
             <Form style={{margin: '10vw'}} className={'warning'} onSubmit={()=>console.log('submit')}>
             <Header as='h4' style={{color: 'white'}}>Pack Name</Header>
-                <Form.Input placeholder='Pack Name...' icon='travel' />
+                <Form.Input name='packName' placeholder='Pack Name...' icon='travel' onChange={this.props.handleChange} />
                 <Message success header='Form Completed' content="You're all signed up for the newsletter" />
-                <Link to='add-items'><button className='add-button create' ><Icon name='plus' /> Create Pack</button></Link>
+                <Link onClick={this.props.addPack} to='add-items'><button className='add-button create' ><Icon name='plus' /> Create Pack</button></Link>
             </Form>
             </div>
         )

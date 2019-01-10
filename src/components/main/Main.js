@@ -9,6 +9,7 @@ import CreateItem from '../screens/CreateItem'
 import BackPack from '../screens/Backpack'
 
 const loginUrl = 'http://localhost:3222/auth/login'
+const addPackUrl = 'http://localhost:3222/packs'
 class Main extends Component {
 
     state = {
@@ -19,6 +20,7 @@ class Main extends Component {
         lastName: '',
         isAuthed: false,
         user: '',
+        packName: ''
     }
 
     generalError = (err) => {
@@ -56,11 +58,36 @@ class Main extends Component {
             }
           })
           .catch(this.generalError)
-      
     }
 
     signUp =(e) => {
 
+    }
+
+    addPack = () => {
+      fetch(addPackUrl ,{
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify({
+          'user_id': this.state.user.id,
+          'name': this.state.packName
+        }) 
+      })
+          .then(response => response.json())
+          .then(res => {
+            console.log('before if',res)
+            if(res.error){
+              console.log('error')
+              return alert(res.error)
+            } else {
+              console.log('else', res)
+              return res
+            }
+          })
+          .catch(this.generalError)
     }
 
   render() {
@@ -71,7 +98,7 @@ class Main extends Component {
         <Route exact path="/" render={(props) => <Login {...props} handleChange={this.handleChange} logIn={this.logIn}/>} />
         <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} />
         {this.state.isAuthed && <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} />} />}
-        {this.state.isAuthed && <Route exact path="/add-pack" component={AddPack} />}
+        {this.state.isAuthed && <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} />}
         {this.state.isAuthed && <Route exact path="/add-items" component={AddItems} />}
         {this.state.isAuthed && <Route exact path="/create-item" component={CreateItem} />}
         {this.state.isAuthed && <Route path="/backpack/:id" component={BackPack} />}
