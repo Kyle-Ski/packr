@@ -7,6 +7,8 @@ import AddPack from '../screens/AddPack'
 import AddItems from '../screens/AddItems'
 import CreateItem from '../screens/CreateItem'
 import BackPack from '../screens/Backpack'
+
+const loginUrl = 'http://localhost:3222/auth/login'
 class Main extends Component {
 
     state = {
@@ -15,6 +17,8 @@ class Main extends Component {
         pass: '',
         firstName: '',
         lastName: '',
+        isAuthed: false,
+        user: '',
     }
 
     getEmail = (e) => this.setState({email: e.target.value})
@@ -23,21 +27,42 @@ class Main extends Component {
     getLastName = (e) => this.setState({lastName: e.target.value})
 
     logIn = (e) => {
-      
+      fetch(loginUrl, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify({
+          'email': this.state.email,
+          'password': this.state.password
+        }) 
+          .then(response => response.json())
+          .then(res => {
+            if(res.error){
+              return alert(res.error)
+            } else {
+              this.setState({user: res[0], isAuthed: true})
+            }
+          })
+      })
+    }
+
+    signUp =(e) => {
+
     }
 
   render() {
     return (
       <div >
-      {/* <Login test={this.test} warning={this.state.warning}/> */}
       <Switch>
-        <Route exact path="/" component={Login} />
-        <Route exact path="/signup" component={Signup} />
-        <Route exact path="/profile" component={Profile} />
-        <Route exact path="/add-pack" component={AddPack} />
-        <Route exact path="/add-items" component={AddItems} />
-        <Route exact path="/create-item" component={CreateItem} />
-        <Route path="/backpack/:id" component={BackPack} />
+        <Route exact path="/" render={(props) => <Login {...props} getEmail={this.state.getEmail} getPass={this.state.getPass} logIn={this.logIn}/>} />
+        <Route exact path="/signup" render={(props) => <Signup {...props} getEmail={this.state.getEmail} getPass={this.state.getPass} getFirstName={this.state.getFirstName} getLastName={this.state.getLastName} signUp={this.signUp}/>} />
+        {this.state.isAuthed && <Route exact path="/profile" component={Profile} />}
+        {this.state.isAuthed && <Route exact path="/add-pack" component={AddPack} />}
+        {this.state.isAuthed && <Route exact path="/add-items" component={AddItems} />}
+        {this.state.isAuthed && <Route exact path="/create-item" component={CreateItem} />}
+        {this.state.isAuthed && <Route path="/backpack/:id" component={BackPack} />}
         {/* <Route component={NoTfound} /> */}
     </Switch>
       </div>
