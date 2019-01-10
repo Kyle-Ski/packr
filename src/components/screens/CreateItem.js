@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Form, Message, Icon, Header, Divider } from 'semantic-ui-react'
+import { Form, Message, Icon, Header, Divider } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Form, Message, Select, Dropdown, Header, Divider } from 'semantic-ui-react'
+import { Form, Select, Dropdown, Header, Divider, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 
@@ -8,7 +8,7 @@ const style = {
         marginLeft: '25vw',
     },
     button: {
-        marginRight: '25vw'
+        marginRight: '31vw'
     }
 }
 
@@ -83,7 +83,7 @@ class AddItems extends Component{
           const chosenItem = this.state.dropdownOptions.filter(author => {
             // let spaces =`${author.firstName} ${author.lastName}` 
             // let noSpaces = spaces.replace(/\s/g,'')
-            return author == targetSpaces
+            return author === targetSpaces
           })[0]  
           const authors = this.state.newAuthors.map((author, sidx) => {
             if (idx !== sidx){
@@ -116,14 +116,14 @@ class AddItems extends Component{
                         placeholder='Pack..'
                     />
                     
-                     <button className='add-button create' onClick={this.handleAddAuthor}>+ Another Item</button>
+                     <button className='add-button create' onClick={this.handleAddAuthor}><Icon name='plus' /> Another Item</button>
                      </div>
                         {this.state.newAuthors.map((author, idx) =>(
-                            <div>
+                            <div key={idx}>
                             <Header style={{color: 'white'}} as='h4'>Select an Item</Header>
                             <Form.Field control={Dropdown} onChange={this.handleUserAuthorAdd(idx)} selection options={this.state.dropdownOptions} placeholder='Items..' />
                             {/* <Form.Field control={Button} color='red' onClick={this.handleRemoveAuthor(idx)}>- Item</Form.Field> */}
-                            <button className='minus-button' onClick={this.handleRemoveAuthor(idx)}>- Item</button>
+                            <button className='minus-button' onClick={this.handleRemoveAuthor(idx)}><Icon name='minus'/> Item</button>
                             </div>
                         ))
                         }

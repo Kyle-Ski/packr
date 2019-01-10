@@ -7,6 +7,10 @@ body {
   position: fixed !important; */
 }
 
+.ui.form .field>label{
+  color: white !important;
+}
+
 .App {
   text-align: center;
   /* background-color: blue !important; */
@@ -39,6 +43,7 @@ body {
   border-radius: 2px;
   box-shadow: 1.5px 2px 0px 2px rgb(175, 69, 69);
   margin-bottom: 10px;
+  font-weight: 900;
 }
 
 .minus-button:focus{
@@ -56,8 +61,8 @@ body {
 }
 
 .add-button.create{
-  background-color: #92A855;
-  border: #92A855;
+  background-color: #35A3A6;
+  border: grey;
 }
 .scan{
   background-color: #FD6041;
@@ -70,8 +75,10 @@ body {
   border: solid 2px #FD6041;
   height: 40px;
   border-radius: 2px;
-  box-shadow: 1px 2px 0px 2px rgba(0,0,0,0.2);
+  box-shadow: 1px 2px 0px 2px rgba(0,0,0,0.6);
   margin-bottom: 5px;
+  font-size: 15px;
+  font-weight: 900;
 }
 
 .ui.form .field>label {

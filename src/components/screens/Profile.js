@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Button, Icon, Header, Segment, Divider } from 'semantic-ui-react'
+import { Icon, Header, Segment, Divider } from 'semantic-ui-react'
 import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
 import ProfilePacks from './ProfilePacks'

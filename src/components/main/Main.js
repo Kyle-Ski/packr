@@ -10,12 +10,20 @@ import BackPack from '../screens/Backpack'
 class Main extends Component {
 
     state = {
-        warning: ''
+        warning: '',
+        email: '',
+        pass: '',
+        firstName: '',
+        lastName: '',
     }
 
-    test = () => {
-        console.log('test')
-        return true
+    getEmail = (e) => this.setState({email: e.target.value})
+    getPass = (e) => this.setState({pass: e.target.value})
+    getFirstName = (e) => this.setState({firstName: e.target.value})
+    getLastName = (e) => this.setState({lastName: e.target.value})
+
+    logIn = (e) => {
+      
     }
 
   render() {
@@ -24,11 +32,11 @@ class Main extends Component {
       {/* <Login test={this.test} warning={this.state.warning}/> */}
       <Switch>
         <Route exact path="/" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/add-pack" component={AddPack} />
-        <Route path="/add-items" component={AddItems} />
-        <Route path="/create-item" component={CreateItem} />
+        <Route exact path="/signup" component={Signup} />
+        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/add-pack" component={AddPack} />
+        <Route exact path="/add-items" component={AddItems} />
+        <Route exact path="/create-item" component={CreateItem} />
         <Route path="/backpack/:id" component={BackPack} />
         {/* <Route component={NoTfound} /> */}
     </Switch>

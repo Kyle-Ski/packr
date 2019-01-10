@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Icon, Menu, Segment, Dropdown, Image } from 'semantic-ui-react'
+import { Menu, Dropdown, Image } from 'semantic-ui-react'
 import { Link, } from 'react-router-dom'
-import logo from '../../PackrShadow1.png'
+import logo from '../../PackrShadow2.png'
 const style = {
     logo: {
       marginTop: '3px',
@@ -36,9 +36,9 @@ export default class MobileNav extends Component {
       <Dropdown item icon='bars' simple>
         <Dropdown.Menu>
           <Dropdown.Item><Link style={{color:'black'}} to='/'>Sign Out</Link></Dropdown.Item>
-          <Dropdown.Item><Link style={{color:'black'}} to='profile'>Profile</Link></Dropdown.Item>
-          <Dropdown.Item><Link style={{color:'black'}} to='create-item'>Create Item</Link></Dropdown.Item>
-          <Dropdown.Item><Link style={{color:'black'}} to='add-items'>Add Items</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black'}} to='/profile'>Profile</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black'}} to='/create-item'>Create Item</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black'}} to='/add-items'>Add Items</Link></Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Image src={logo} style={style.logo} centered size='tiny'/>

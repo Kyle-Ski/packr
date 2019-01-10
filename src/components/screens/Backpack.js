@@ -61,10 +61,10 @@ class Backpack extends Component{
                     <Divider />
                     <BackpackItems items={this.state.name} />
                     <div >
-                        <button className='add-button create' onClick={(e) => {
-                            e.preventDefault()
+                        <Link to='/add-items'><button className='add-button create' onClick={(e) => {
+                            // e.preventDefault()
                             console.log(this.state.backpack)
-                        }} ><Icon name='add' />Add Item</button>
+                        }} ><Icon name='add' />Add Item</button></Link>
 
                     </div> 
                     </div>: <Loader active />}
