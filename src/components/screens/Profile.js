@@ -14,15 +14,15 @@ class Profile extends Component {
             },
             {
                 name: 'Hiking',
-                id: 1
+                id: 2
             },
             {
                 name: 'Cold Weather',
-                id: 1
+                id: 3
             },
             {
                 name: 'Day',
-                id: 1
+                id: 4
             }
         ]
     }

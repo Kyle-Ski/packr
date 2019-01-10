@@ -29,7 +29,7 @@ class Main extends Component {
         <Route path="/add-pack" component={AddPack} />
         <Route path="/add-items" component={AddItems} />
         <Route path="/create-item" component={CreateItem} />
-        <Route path="/backpack" component={BackPack} />
+        <Route path="/backpack/:id" component={BackPack} />
         {/* <Route component={NoTfound} /> */}
     </Switch>
       </div>
