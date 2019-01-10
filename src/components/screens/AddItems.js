@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Form, Select, Dropdown, Header, Divider, Icon, Loader } from 'semantic-ui-react'
+import { Form, Select, Dropdown, Header, Divider, Icon, Loader, Message } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 
 const allItemsUrl = 'http://localhost:3222/items'
+const userPacksUrl = 'http://localhost:3222/users/'
+const addItemsUrl = 'http://localhost:3222/pack_items/'
 
 const style = {
     form: {
@@ -17,37 +19,21 @@ const style = {
 class AddItems extends Component{
 
     state={
-        newAuthors: [{firstName: '', lastName: '', id: ''}],
+        newitems: [{item_id: '', item_name: ''}],
         items : [],
         unStructuredItems: [],
-        packOptions: [
-            {
-                key: 0,
-                text: '7 Day',
-                value: 1
-            },
-            {
-                key: 1,
-                text: 'Hiking',
-                value: 2
-            },
-            {
-                key: 2,
-                text: 'Cold Weather',
-                value: 3
-            },
-            {
-                key: 3,
-                text: 'Day',
-                value: 4
-            },
-        ]
+        unStructuredPacks: [],
+        packOptions: [],
+        chosenPack: 0,
+        warning: null
     }
 
     componentDidMount(){
         this.fetchItems()
             .then(this.structureItems)
             .then(res => this.setState({items: res}))
+            .then(this.fetchUserPacks)
+            .then(this.structurePacks)
             .catch(err => console.warn(err))
     }
 
@@ -60,8 +46,50 @@ class AddItems extends Component{
             accum.push(newObject)
             return accum
         },[])
-        console.log('items',items)
         return items
+    }
+
+    structurePacks = () => {
+        const packs =  this.state.unStructuredPacks.reduce((accum, item, i) => {
+            let newObject = new Object()
+            newObject["key"] = i
+            newObject["text"] = item.backpack_name
+            newObject["value"] = item.backpack_id
+            accum.push(newObject)
+            return accum
+        },[])
+        this.setState({packOptions: packs})
+        return packs
+    }
+
+    addToPack = () => {
+        return fetch(addItemsUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify({
+                'backpack_id': this.state.chosenPack.value,
+                'item_id': this.state.newitems
+            })
+        })
+        .then(response => response.json())
+        .then(res => {
+            if(res.error) return this.setState({warning: 'warning'})
+            return this.setState({warning:'success'})
+        })
+        .catch(err => console.warn('post items error:', err))
+    }
+
+    fetchUserPacks = () => {
+        return fetch(userPacksUrl + this.props.user.id)
+            .then(res => res.json())
+            .then(res =>{
+                this.setState({unStructuredPacks: res.user[0].backpacks})
+                return res
+            })
+            .catch(err => console.warn('fetch user packs error:',err))
     }
 
     fetchItems = () => {
@@ -70,38 +98,42 @@ class AddItems extends Component{
             .then(res => this.setState({unStructuredItems: res.items}))
     }
 
-    handleAddAuthor =  (e) => {
+    handleAdditem =  (e) => {
         e.preventDefault()
         this.setState({
-          newAuthors: this.state.newAuthors.concat([{firstName: '', lastName: '', id: ''}])
+          newitems: this.state.newitems.concat([{item_id: '', item_name: ''}])
         })
       }
 
-      handleRemoveAuthor = (idx) => (e) => {
+    handleChoosePack = (e) => {
+       const chosenPack = this.state.packOptions.filter(pac => {
+           return pac.text === e.target.innerText
+       })[0]
+       this.setState({chosenPack: chosenPack})
+    }
+
+      handleRemoveitem = (idx) => (e) => {
         e.preventDefault()
         this.setState({
-        newAuthors: this.state.newAuthors.filter((s, sidx) => idx !== sidx)
+        newitems: this.state.newitems.filter((s, sidx) => idx !== sidx)
         })
       }
 
-      handleUserAuthorAdd = (idx) => (evt) => {
+      handleUseritemAdd = (idx) => (evt) => {
         if (!evt.target.type){
           const targetSpaces = evt.target.innerText
-          const noTargetSpaces = targetSpaces.replace(/\s/g,'')
-          const chosenItem = this.state.items.filter(author => {
-            // let spaces =`${author.firstName} ${author.lastName}` 
-            // let noSpaces = spaces.replace(/\s/g,'')
-            return author === targetSpaces
+          const chosenItem = this.state.items.filter(item => {
+            return item.text === targetSpaces
           })[0]  
-          const authors = this.state.newAuthors.map((author, sidx) => {
+          const items = this.state.newitems.map((item, sidx) => {
             if (idx !== sidx){
-              return author
+              return item
             } else {
-              return { ...author, firstName: chosenItem, lastName: chosenItem, id: chosenItem, }
+              return { ...item, item_id: chosenItem.value, item_name: chosenItem.text}
             }
           })
           
-          this.setState({newAuthors: authors})
+          this.setState({newitems: items})
         }   
       }
 
@@ -114,7 +146,7 @@ class AddItems extends Component{
             </div>
             <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}} as='h1'>Add Items into a Backpack</Header>
             <Divider />
-            <Form style={style.form}>
+            <Form style={style.form} className={this.state.warning}> 
                 {items.length ?<div> <Form.Group widths='equal'>
                 <div>
                     <Header style={{color: 'white'}} as='h4'>Choose A Backpack</Header>
@@ -123,22 +155,31 @@ class AddItems extends Component{
                         options={this.state.packOptions}
                         // label='Choose a Backpack:'
                         placeholder='Pack..'
+                        onChange={this.handleChoosePack}
                     />
                     
-                     <button className='add-button create' onClick={this.handleAddAuthor}><Icon name='plus' /> Another Item</button>
+                     <button className='add-button create' onClick={this.handleAdditem}><Icon name='plus' /> Another Item</button>
                      </div>
-                        {this.state.newAuthors.map((author, idx) =>(
+                        {this.state.newitems.map((item, idx) =>(
                             <div key={idx}>
                             <Header style={{color: 'white'}} as='h4'>Select an Item</Header>
-                            <Form.Field control={Dropdown} onChange={this.handleUserAuthorAdd(idx)} selection options={this.state.items} placeholder='Items..' />
-                            {/* <Form.Field control={Button} color='red' onClick={this.handleRemoveAuthor(idx)}>- Item</Form.Field> */}
-                            <button className='minus-button' onClick={this.handleRemoveAuthor(idx)}><Icon name='minus'/> Item</button>
+                            <Form.Field control={Dropdown} onChange={this.handleUseritemAdd(idx)} selection options={this.state.items} placeholder='Items..' />
+                            {/* <Form.Field control={Button} color='red' onClick={this.handleRemoveitem(idx)}>- Item</Form.Field> */}
+                            <button className='minus-button' onClick={this.handleRemoveitem(idx)}><Icon name='minus'/> Item</button>
                             </div>
                         ))
                         }
-
+                        <Message style={{marginRight: '30vw'}} success header='Item(s) added!' content={`The items have been added to ${this.state.chosenPack.text}`} />
+                        <Message
+                            style={{marginRight: '30vw'}}
+                            warning
+                            header='Could you check something!'
+                            list={[
+                                'The Items may not have been added correctly.',
+                            ]}
+                        />
                 </Form.Group>
-                <button style={style.button} className='add-button create'>Submit</button></div> : <Loader active />}
+                <button onClick={this.addToPack} style={style.button} className='add-button create'>Submit</button></div> : <Loader active />}
             </Form>
             </div>
         )

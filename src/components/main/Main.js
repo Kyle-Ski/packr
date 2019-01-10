@@ -99,7 +99,7 @@ class Main extends Component {
         <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} />
         {this.state.isAuthed && <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} />} />}
         {this.state.isAuthed && <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} />}
-        {this.state.isAuthed && <Route exact path="/add-items" component={AddItems} />}
+        {this.state.isAuthed && <Route exact path="/add-items" render={(props)=> <AddItems {...props} user={this.state.user}/>} />}
         {this.state.isAuthed && <Route exact path="/create-item" component={CreateItem} />}
         {this.state.isAuthed && <Route path="/backpack/:id" component={BackPack} />}
         {/* <Route component={NoTfound} /> */}
