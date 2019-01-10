@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { Form, Select, Dropdown, Header, Divider, Icon } from 'semantic-ui-react'
+import { Form, Select, Dropdown, Header, Divider, Icon, Loader } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
+
+const allItemsUrl = 'http://localhost:3222/items'
 
 const style = {
     form: {
@@ -16,28 +18,8 @@ class AddItems extends Component{
 
     state={
         newAuthors: [{firstName: '', lastName: '', id: ''}],
-        dropdownOptions : [
-            {
-                key: 0,
-                text: 'Knife',
-                value: 1
-            },
-            {
-                key: 1,
-                text: 'Water',
-                value: 2
-            },
-            {
-                key: 2,
-                text: 'Code',
-                value: 3
-            },
-            {
-                key: 3,
-                text: 'Fuel',
-                value: 4
-            },
-        ],
+        items : [],
+        unStructuredItems: [],
         packOptions: [
             {
                 key: 0,
@@ -62,6 +44,32 @@ class AddItems extends Component{
         ]
     }
 
+    componentDidMount(){
+        this.fetchItems()
+            .then(this.structureItems)
+            .then(res => this.setState({items: res}))
+            .catch(err => console.warn(err))
+    }
+
+    structureItems = () => {
+        const items =  this.state.unStructuredItems.reduce((accum, item, i) => {
+            let newObject = new Object()
+            newObject["key"] = i
+            newObject["text"] = item.name
+            newObject["value"] = item.id
+            accum.push(newObject)
+            return accum
+        },[])
+        console.log('items',items)
+        return items
+    }
+
+    fetchItems = () => {
+        return fetch(allItemsUrl)
+            .then(res=> res.json())
+            .then(res => this.setState({unStructuredItems: res.items}))
+    }
+
     handleAddAuthor =  (e) => {
         e.preventDefault()
         this.setState({
@@ -80,7 +88,7 @@ class AddItems extends Component{
         if (!evt.target.type){
           const targetSpaces = evt.target.innerText
           const noTargetSpaces = targetSpaces.replace(/\s/g,'')
-          const chosenItem = this.state.dropdownOptions.filter(author => {
+          const chosenItem = this.state.items.filter(author => {
             // let spaces =`${author.firstName} ${author.lastName}` 
             // let noSpaces = spaces.replace(/\s/g,'')
             return author === targetSpaces
@@ -98,6 +106,7 @@ class AddItems extends Component{
       }
 
     render(){
+        const {items} = this.state
         return (
             <div>
             <div>
@@ -106,7 +115,7 @@ class AddItems extends Component{
             <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}} as='h1'>Add Items into a Backpack</Header>
             <Divider />
             <Form style={style.form}>
-                <Form.Group widths='equal'>
+                {items.length ?<div> <Form.Group widths='equal'>
                 <div>
                     <Header style={{color: 'white'}} as='h4'>Choose A Backpack</Header>
                     <Form.Field
@@ -121,7 +130,7 @@ class AddItems extends Component{
                         {this.state.newAuthors.map((author, idx) =>(
                             <div key={idx}>
                             <Header style={{color: 'white'}} as='h4'>Select an Item</Header>
-                            <Form.Field control={Dropdown} onChange={this.handleUserAuthorAdd(idx)} selection options={this.state.dropdownOptions} placeholder='Items..' />
+                            <Form.Field control={Dropdown} onChange={this.handleUserAuthorAdd(idx)} selection options={this.state.items} placeholder='Items..' />
                             {/* <Form.Field control={Button} color='red' onClick={this.handleRemoveAuthor(idx)}>- Item</Form.Field> */}
                             <button className='minus-button' onClick={this.handleRemoveAuthor(idx)}><Icon name='minus'/> Item</button>
                             </div>
@@ -129,7 +138,7 @@ class AddItems extends Component{
                         }
 
                 </Form.Group>
-                <button style={style.button} className='add-button create'>Submit</button>
+                <button style={style.button} className='add-button create'>Submit</button></div> : <Loader active />}
             </Form>
             </div>
         )
