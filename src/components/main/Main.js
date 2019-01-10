@@ -6,6 +6,7 @@ import Profile from '../screens/Profile'
 import AddPack from '../screens/AddPack'
 import AddItems from '../screens/AddItems'
 import CreateItem from '../screens/CreateItem'
+import BackPack from '../screens/Backpack'
 class Main extends Component {
 
     state = {
@@ -28,6 +29,7 @@ class Main extends Component {
         <Route path="/add-pack" component={AddPack} />
         <Route path="/add-items" component={AddItems} />
         <Route path="/create-item" component={CreateItem} />
+        <Route path="/backpack" component={BackPack} />
         {/* <Route component={NoTfound} /> */}
     </Switch>
       </div>
