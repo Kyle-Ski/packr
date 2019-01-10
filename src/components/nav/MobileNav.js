@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Icon, Menu, Segment, Dropdown, Image } from 'semantic-ui-react'
 import { Link, } from 'react-router-dom'
-import logo from '../../PackrLogoPng.png'
+import logo from '../../PackrShadow1.png'
 const style = {
     logo: {
       marginTop: '3px',
@@ -11,7 +11,9 @@ const style = {
       height: 'auto'
     },
     menu: {
-      maxHeight: '42px'
+      maxHeight: '42px',
+      backgroundColor: 'grey !important',
+      border: 'grey !important'
     },
     altMenu: {
       padding: '10px',
@@ -30,16 +32,13 @@ export default class MobileNav extends Component {
         {/* <Segment style={style.segment}>
           <Main />
         </Segment> */}
-        <Menu style={style.menu} fixed='top' attached='top'>
+        <Menu style={style.menu} fixed='top' attached='top' >
       <Dropdown item icon='bars' simple>
         <Dropdown.Menu>
-          <Dropdown.Item><Link to='/'>Sign Out</Link></Dropdown.Item>
-          <Dropdown.Item><Link to='profile'>Profile</Link></Dropdown.Item>
-          <Dropdown.Item><Link to='create-item'>Create Item</Link></Dropdown.Item>
-          <Dropdown.Item><Link to='add-items'>Add Items</Link></Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Header>Export</Dropdown.Header>
-          <Dropdown.Item>Share</Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black'}} to='/'>Sign Out</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black'}} to='profile'>Profile</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black'}} to='create-item'>Create Item</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black'}} to='add-items'>Add Items</Link></Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Image src={logo} style={style.logo} centered size='tiny'/>

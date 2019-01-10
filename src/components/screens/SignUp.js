@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, Button, Input, Icon, Form, Message } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
-import logo from '../../PackrLogoPng.png'
+import logo from '../../PackrShadow1.png'
 
 const style = {
     form: {

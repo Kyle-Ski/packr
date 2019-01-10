@@ -103,23 +103,25 @@ class AddItems extends Component{
             <div>
                 <MobileNav />
             </div>
-            <Header as='h1'>Add Items into a Backpack</Header>
+            <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}} as='h1'>Add Items into a Backpack</Header>
             <Divider />
             <Form style={style.form}>
                 <Form.Group widths='equal'>
                 <div>
+                    <Header style={{color: 'white'}} as='h4'>Choose A Backpack</Header>
                     <Form.Field
                         control={Select}
                         options={this.state.packOptions}
-                        label='Choose a Backpack:'
+                        // label='Choose a Backpack:'
                         placeholder='Pack..'
                     />
                     
-                     <button className='add-button' onClick={this.handleAddAuthor}>+ Another Item</button>
+                     <button className='add-button create' onClick={this.handleAddAuthor}>+ Another Item</button>
                      </div>
                         {this.state.newAuthors.map((author, idx) =>(
                             <div>
-                            <Form.Field control={Dropdown} onChange={this.handleUserAuthorAdd(idx)} selection options={this.state.dropdownOptions} label='Select an Item' placeholder='Items..' />
+                            <Header style={{color: 'white'}} as='h4'>Select an Item</Header>
+                            <Form.Field control={Dropdown} onChange={this.handleUserAuthorAdd(idx)} selection options={this.state.dropdownOptions} placeholder='Items..' />
                             {/* <Form.Field control={Button} color='red' onClick={this.handleRemoveAuthor(idx)}>- Item</Form.Field> */}
                             <button className='minus-button' onClick={this.handleRemoveAuthor(idx)}>- Item</button>
                             </div>
@@ -127,7 +129,7 @@ class AddItems extends Component{
                         }
 
                 </Form.Group>
-                <button style={style.button} className='add-button'>Submit</button>
+                <button style={style.button} className='add-button create'>Submit</button>
             </Form>
             </div>
         )

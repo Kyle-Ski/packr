@@ -7,7 +7,8 @@ import Webcam from "react-webcam";
 class CreateItem extends Component{
 
     state={
-        imageSrc: ''
+        imageSrc: [],
+        itemName: '',
     }
     
     setRef = webcam => {
@@ -15,8 +16,12 @@ class CreateItem extends Component{
     }
 
     capture = () => {
-        this.setState({imageSrc: this.webcam.getScreenshot()})
+        this.setState({
+            imageSrc: [...this.state.imageSrc, this.webcam.getScreenshot()],
+        })
     }
+
+    getItemName = (e) => this.setState({itemName: e.target.value})
 
     render(){
         const videoConstraints = {
@@ -29,7 +34,7 @@ class CreateItem extends Component{
             <div>
                 <MobileNav />
             </div>
-            <Header as='h1'>Center Item in view</Header>
+            <Header as='h1' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>Center Item in view</Header>
             
                 <Webcam
                     audio={false}
@@ -41,11 +46,13 @@ class CreateItem extends Component{
                 />
                 <Divider />
                 <Form className={'warning'} onSubmit={() => console.log('submit')}>
-                    <Form.Input label='Item Name' placeholder='Item Name...' icon='pencil alternate' />
+                <Header as='h4' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>Item Name</Header>
+                    <Form.Input onChange={this.getItemName} placeholder='Item Name...' icon='pencil alternate' />
                     <Message success header='Form Completed' content="You're all signed up for the newsletter" />
-                    <Button size={`medium`} toggle={true} color={`olive`} onClick={this.capture}><Icon name='camera' />Scan Item</Button>
-                    <Button size={`medium`} toggle={true} color={`green`} ><Link to='profile'>+ Create Item</Link></Button>
+                    <button className='add-button scan' onClick={this.capture}><Icon name='camera' />Scan Item</button>
+                    <Link to='profile'><button className='add-button create' ><Icon name='plus' /> Create Item</button></Link>
                 </Form>
+                <p style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>{this.state.imageSrc.length } scans, {this.state.imageSrc.length >= 10 ? `Good ammount!`:`more scans please..`}</p>
             </div>
         )
     }

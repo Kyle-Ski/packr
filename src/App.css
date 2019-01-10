@@ -1,14 +1,15 @@
 body {
-  background-color: rgb(165, 165, 158) !important;
+  background-color: rgba(237, 238, 213, 0.995) !important;
+  background-image: url("./phoneback.jpg") !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  /* overflow: hidden !important;
+  position: fixed !important; */
 }
 
 .App {
   text-align: center;
-  /* background-color: blue; */
-}
-
-.root {
-  background-color: blue;
+  /* background-color: blue !important; */
 }
 
 .App-logo {
@@ -49,14 +50,36 @@ body {
   box-shadow: 0 1px rgba(0,0,0,0.2);
   transform: translateY(4px);
 }
+.ui.attached.menu:not(.tabular){
+  background-color: rgb(150, 150, 131) !important;
+  border: grey !important;
+}
+
+.add-button.create{
+  background-color: #92A855;
+  border: #92A855;
+}
+.scan{
+  background-color: #FD6041;
+  border: solid 2px #FD6041;
+  margin-right: 20px;
+}
 
 .add-button{
-  background-color: #528781;
-  border: solid 2px #528781;
+  background-color: #FD6041;
+  border: solid 2px #FD6041;
   height: 40px;
   border-radius: 2px;
   box-shadow: 1px 2px 0px 2px rgba(0,0,0,0.2);
   margin-bottom: 5px;
+}
+
+.ui.form .field>label {
+  color: 'white' !important;
+}
+
+.ui.form .field .ui.input input, .ui.form .fields .field .ui.input input{
+  box-shadow: 4px 4px 2px 0px rgba(0,0,0,0.2);
 }
 
 .add-button:focus{
