@@ -16,14 +16,14 @@ const style = {
     }
 }
 
-const SignUp = () => (
+const SignUp = ({handleChange}) => (
   <div style={style.page}>
   <Image src={logo} size='large' style={style.logo} />
   <Form style={style.form} className={'warning'} onSubmit={()=>console.log('submit')}>
-    <Form.Input label='First Name' placeholder='First Name...' icon='pencil alternate' />
-    <Form.Input label='Last Name' placeholder='Last Name' icon='pencil alternate' />
-    <Form.Input label='Email' placeholder='joe@schmoe.com' icon='envelope' />
-    <Form.Input type='password' label='Password' placeholder='password' icon='lock' />
+    <Form.Input name='firstName' label='First Name' placeholder='First Name...' icon='pencil alternate' />
+    <Form.Input name='lastName' label='Last Name' placeholder='Last Name' icon='pencil alternate' />
+    <Form.Input name='email' label='Email' placeholder='joe@schmoe.com' icon='envelope' />
+    <Form.Input name='password' type='password' label='Password' placeholder='password' icon='lock' />
     <Message success header='Form Completed' content="You're all signed up for the newsletter" />
     <Link to='profile'><button className='add-button' style={{color: 'lightgrey', backgroundColor: '#FD6041', border: '#FD6041', boxShadow: '1.75px 2px 0px 2px rgba(0,0,0,0.2)', width: '25vw'}}>Sign Up</button></Link>
   </Form>

@@ -14,7 +14,7 @@ class Main extends Component {
     state = {
         warning: '',
         email: '',
-        pass: '',
+        password: '',
         firstName: '',
         lastName: '',
         isAuthed: false,
@@ -26,10 +26,11 @@ class Main extends Component {
       return console.warn('General Error:',err)
     }
 
-    getEmail = (e) => this.setState({email: e.target.value})
-    getPass = (e) => this.setState({pass: e.target.value})
-    getFirstName = (e) => this.setState({firstName: e.target.value})
-    getLastName = (e) => this.setState({lastName: e.target.value})
+    handleChange = (e) => {
+      this.setState({
+        [e.target.name]: e.target.value
+      })
+    }
 
     logIn = (e) => {
       fetch(loginUrl, {
@@ -42,6 +43,7 @@ class Main extends Component {
           'email': this.state.email,
           'password': this.state.password
         }) 
+      })
           .then(response => response.json())
           .then(res => {
             console.log('before if',res)
@@ -54,7 +56,7 @@ class Main extends Component {
             }
           })
           .catch(this.generalError)
-      })
+      
     }
 
     signUp =(e) => {
@@ -66,8 +68,8 @@ class Main extends Component {
     return (
       <div >
       <Switch>
-        <Route exact path="/" render={(props) => <Login {...props} getEmail={this.getEmail} getPass={this.getPass} logIn={this.logIn}/>} />
-        <Route exact path="/signup" render={(props) => <Signup {...props} getEmail={this.getEmail} getPass={this.getPass} getFirstName={this.getFirstName} getLastName={this.getLastName} signUp={this.signUp}/>} />
+        <Route exact path="/" render={(props) => <Login {...props} handleChange={this.handleChange} logIn={this.logIn}/>} />
+        <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} />
         {this.state.isAuthed && <Route exact path="/profile" component={Profile} />}
         {this.state.isAuthed && <Route exact path="/add-pack" component={AddPack} />}
         {this.state.isAuthed && <Route exact path="/add-items" component={AddItems} />}
