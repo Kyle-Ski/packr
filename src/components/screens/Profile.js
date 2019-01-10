@@ -2,20 +2,30 @@ import React, { Component } from 'react'
 import { Image, Button, Icon, Header, Segment, Divider } from 'semantic-ui-react'
 import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
+import ProfilePacks from './ProfilePacks'
 
-const style = {
-    page: {
-    marginTop:'100px',
-  },
-//   button: {
-//       backgroundColor: '#528781',
-//       border: 'solid 2px #528781',
-//       height: '40px',
-//       borderRadius: '5px',
-//       boxShadow: 'black 2px'
-//   }
-}
 class Profile extends Component {
+
+    state = {
+        packs: [
+            {
+                name: '7 Day',
+                id: 1
+            },
+            {
+                name: 'Hiking',
+                id: 1
+            },
+            {
+                name: 'Cold Weather',
+                id: 1
+            },
+            {
+                name: 'Day',
+                id: 1
+            }
+        ]
+    }
 
     render(){
         return(
@@ -32,11 +42,8 @@ class Profile extends Component {
             </Segment>
             <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}} as='h1'>Backpacks:</Header>
             <Divider />
-            <div style={style.page}>
-            <Header as='h2'>backpack 1</Header>
-            <Header as='h2'>backpack 2</Header>
-            <Header as='h2'>backpack 3</Header>
-            <Header as='h2'>backpack 4</Header>
+            <div >
+            <ProfilePacks packs={this.state.packs}/>
             <Divider />
             <Link to='add-pack'><button className='add-button create' ><Icon name='add' />Add Pack</button></Link>
             </div>
