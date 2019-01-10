@@ -21,6 +21,11 @@ class Main extends Component {
         user: '',
     }
 
+    generalError = (err) => {
+      this.setState({error: true})
+      return console.warn('General Error:',err)
+    }
+
     getEmail = (e) => this.setState({email: e.target.value})
     getPass = (e) => this.setState({pass: e.target.value})
     getFirstName = (e) => this.setState({firstName: e.target.value})
@@ -39,12 +44,16 @@ class Main extends Component {
         }) 
           .then(response => response.json())
           .then(res => {
+            console.log('before if',res)
             if(res.error){
+              console.log('error')
               return alert(res.error)
             } else {
-              this.setState({user: res[0], isAuthed: true})
+              console.log('else')
+              return this.setState({user: res[0], isAuthed: true})
             }
           })
+          .catch(this.generalError)
       })
     }
 
@@ -53,11 +62,12 @@ class Main extends Component {
     }
 
   render() {
+    
     return (
       <div >
       <Switch>
-        <Route exact path="/" render={(props) => <Login {...props} getEmail={this.state.getEmail} getPass={this.state.getPass} logIn={this.logIn}/>} />
-        <Route exact path="/signup" render={(props) => <Signup {...props} getEmail={this.state.getEmail} getPass={this.state.getPass} getFirstName={this.state.getFirstName} getLastName={this.state.getLastName} signUp={this.signUp}/>} />
+        <Route exact path="/" render={(props) => <Login {...props} getEmail={this.getEmail} getPass={this.getPass} logIn={this.logIn}/>} />
+        <Route exact path="/signup" render={(props) => <Signup {...props} getEmail={this.getEmail} getPass={this.getPass} getFirstName={this.getFirstName} getLastName={this.getLastName} signUp={this.signUp}/>} />
         {this.state.isAuthed && <Route exact path="/profile" component={Profile} />}
         {this.state.isAuthed && <Route exact path="/add-pack" component={AddPack} />}
         {this.state.isAuthed && <Route exact path="/add-items" component={AddItems} />}
