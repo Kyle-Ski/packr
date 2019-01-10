@@ -1,10 +1,14 @@
 body {
-  background-color: blue;
+  background-color: rgb(165, 165, 158) !important;
 }
 
 .App {
   text-align: center;
   /* background-color: blue; */
+}
+
+.root {
+  background-color: blue;
 }
 
 .App-logo {
@@ -26,6 +30,50 @@ body {
 .App-link {
   color: #61dafb;
 }
+
+.minus-button{
+  background-color: red;
+  border: solid 2px red;
+  height: 40px;
+  border-radius: 2px;
+  box-shadow: 1.5px 2px 0px 2px rgb(175, 69, 69);
+  margin-bottom: 10px;
+}
+
+.minus-button:focus{
+  outline: 0;
+}
+
+.minus-button:active {
+  border-radius: 2px;
+  box-shadow: 0 1px rgba(0,0,0,0.2);
+  transform: translateY(4px);
+}
+
+.add-button{
+  background-color: #528781;
+  border: solid 2px #528781;
+  height: 40px;
+  border-radius: 2px;
+  box-shadow: 1px 2px 0px 2px rgba(0,0,0,0.2);
+  margin-bottom: 5px;
+}
+
+.add-button:focus{
+  outline: 0;
+}
+
+.ui.selection.dropdown{
+  margin-bottom: 15px;
+}
+
+.add-button:active {
+  border-radius: 2px;
+  box-shadow: 0 1px rgba(0,0,0,0.2);
+  transform: translateY(4px);
+}
+
+
 
 @keyframes App-logo-spin {
   from {

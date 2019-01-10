@@ -23,7 +23,7 @@ const SignUp = ({}) => (
     <Message success header='Form Completed' content="You're all signed up for the newsletter" />
     <Button size={`medium`} toggle={true} color={`olive`} ><Link to='profile'>Sign Up</Link></Button>
   </Form>
-    <Button size={`medium`} toggle={true} basic={true} color={`green`} onClick={()=>console.log('test')}><Link to='/'> Log In</Link></Button>
+    <Button size={`medium`} toggle={true} basic={true} color={`black`} onClick={()=>console.log('test')}><Link to='/'> Log In</Link></Button>
 
   </div>
 )

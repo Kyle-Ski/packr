@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
-import { Button, Form, Message, Select, Dropdown, Header } from 'semantic-ui-react'
+import { Button, Form, Message, Select, Dropdown, Header, Divider } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
+
+const style = {
+    form: {
+        marginLeft: '25vw',
+    },
+    button: {
+        marginRight: '25vw'
+    }
+}
 
 class AddItems extends Component{
 
@@ -95,31 +104,30 @@ class AddItems extends Component{
                 <MobileNav />
             </div>
             <Header as='h1'>Add Items into a Backpack</Header>
-            <Form>
+            <Divider />
+            <Form style={style.form}>
                 <Form.Group widths='equal'>
+                <div>
                     <Form.Field
                         control={Select}
                         options={this.state.packOptions}
                         label='Choose a Backpack:'
                         placeholder='Pack..'
                     />
-                     <Form.Field color='blue' control={Button} onClick={this.handleAddAuthor}> + Another Item</Form.Field>
+                    
+                     <button className='add-button' onClick={this.handleAddAuthor}>+ Another Item</button>
+                     </div>
                         {this.state.newAuthors.map((author, idx) =>(
                             <div>
                             <Form.Field control={Dropdown} onChange={this.handleUserAuthorAdd(idx)} selection options={this.state.dropdownOptions} label='Select an Item' placeholder='Items..' />
-                            <Form.Field control={Button} color='red' onClick={this.handleRemoveAuthor(idx)}>- Item</Form.Field>
+                            {/* <Form.Field control={Button} color='red' onClick={this.handleRemoveAuthor(idx)}>- Item</Form.Field> */}
+                            <button className='minus-button' onClick={this.handleRemoveAuthor(idx)}>- Item</button>
                             </div>
                         ))
                         }
 
                 </Form.Group>
-                <Form.Field
-                    id='form-button-control-public'
-                    control={Button}
-                    color='green'
-                    content='Submit'
-                    label='Add Items'
-                />
+                <button style={style.button} className='add-button'>Submit</button>
             </Form>
             </div>
         )

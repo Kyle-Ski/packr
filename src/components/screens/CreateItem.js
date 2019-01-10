@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Form, Message, Icon } from 'semantic-ui-react'
+import { Button, Form, Message, Icon, Header, Divider } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";
@@ -29,6 +29,8 @@ class CreateItem extends Component{
             <div>
                 <MobileNav />
             </div>
+            <Header as='h1'>Center Item in view</Header>
+            
                 <Webcam
                     audio={false}
                     height={300}
@@ -37,6 +39,7 @@ class CreateItem extends Component{
                     width={400}
                     videoConstraints={videoConstraints}
                 />
+                <Divider />
                 <Form className={'warning'} onSubmit={() => console.log('submit')}>
                     <Form.Input label='Item Name' placeholder='Item Name...' icon='pencil alternate' />
                     <Message success header='Form Completed' content="You're all signed up for the newsletter" />

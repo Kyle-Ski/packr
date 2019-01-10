@@ -26,11 +26,11 @@ export default class MobileNav extends Component {
     const { activeItem } = this.state
 
     return (
-      <div>
+      <div style={{marginBottom: '42px'}}>
         {/* <Segment style={style.segment}>
           <Main />
         </Segment> */}
-        <Menu style={style.menu} attached='top'>
+        <Menu style={style.menu} fixed='top' attached='top'>
       <Dropdown item icon='bars' simple>
         <Dropdown.Menu>
           <Dropdown.Item><Link to='/'>Sign Out</Link></Dropdown.Item>
@@ -44,37 +44,6 @@ export default class MobileNav extends Component {
       </Dropdown>
       <Image src={logo} style={style.logo} centered size='tiny'/>
       </Menu>
-        {/* <Menu fixed='top' >
-        <Dropdown item icon='hamburger' simple>
-          <Dropdown.Item>
-          <Link to='/'>
-            Sign In
-            </Link>
-          </Dropdown.Item>
-
-          <Dropdown.item>
-          <Link to='/signup'>
-            Sign Up
-            </Link>
-          </Dropdown.item>
-
-          <Dropdown.item>
-            <Icon name='users'/>
-            <Link to='profile'>
-              Profile
-            </Link>
-          </Dropdown.item>
-
-            <Dropdown.item>
-              <Icon name='add' />
-              Backpacks
-            </Dropdown.item>
-            <Dropdown.item>
-              <Icon name='add' />
-              Backpacks
-            </Dropdown.item>
-        </Dropdown>
-        </Menu> */}
       </div>
     )
   }

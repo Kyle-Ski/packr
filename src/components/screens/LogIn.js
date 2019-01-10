@@ -8,12 +8,16 @@ const style = {
       margin: '10px'
   },
   logo: {
-      marginTop: '25px'
+      marginTop: '25px',
+      // boxShadow: '2px 2px black'
+  },
+  page: {
+    marginTop:'200px'
   }
 }
 
 const LogIn = ({test, warning}) => (
-  <div>
+  <div style={style.page}>
   <Image src={logo} size='large' style={style.logo} />
   <Form style={style.form} className={warning} onSubmit={()=>console.log('submit')}>
     <Form.Input label='Email' placeholder='joe@schmoe.com' icon='at' />
@@ -22,7 +26,7 @@ const LogIn = ({test, warning}) => (
     <Button size={`medium`} toggle={true} color={`olive`} ><Link to='profile'>Log In</Link></Button>
   </Form>
 
-    <Button size={`medium`} toggle={true} basic={true} color={`green`} onClick={test}><Link to='/signup'>Sign Up</Link></Button>
+    <Button size={`medium`} toggle={true} basic={true} color={`black`} onClick={test}><Link to='/signup'>Sign Up</Link></Button>
   
   </div>
 )

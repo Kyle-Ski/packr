@@ -19,7 +19,7 @@ class Main extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div >
       {/* <Login test={this.test} warning={this.state.warning}/> */}
       <Switch>
         <Route exact path="/" component={Login} />
