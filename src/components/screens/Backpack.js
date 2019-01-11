@@ -56,12 +56,15 @@ class Backpack extends Component{
                     <Header style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)' }} as='h1'>Items:</Header>
                     <Divider />
                     <BackpackItems items={items} />
-                    <div >
-                        <Link to='/add-items'><button className='add-button create' onClick={(e) => {
+                    <div>
+                        <Link to='/add-items'><button className='add-button create' style={{margin: '10px'}} onClick={(e) => {
                             // e.preventDefault()
                             console.log(this.state.backpack)
                         }} ><Icon name='add' />Add Item</button></Link>
-
+                        <Link to='/add-items'><button className='add-button' onClick={(e) => {
+                            // e.preventDefault()
+                            console.log(this.state.backpack)
+                        }} ><Icon name='camera' />Scan Pack</button></Link>
                     </div> 
                     </div>: <Loader active />}
             </div>

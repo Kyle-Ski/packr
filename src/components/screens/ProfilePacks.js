@@ -4,8 +4,9 @@ import { Card } from 'semantic-ui-react'
 
 const style={
     link: {
-        boxShadow: '1px 2px 0px 0px rgba(0,0,0,0.6)',
-        width: '117px'
+        boxShadow: '1px 2px 0px 0px rgba(0,0,0,0)',
+        width: '117px',
+        color: 'white'
     }
 }
 

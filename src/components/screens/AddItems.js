@@ -12,7 +12,8 @@ const style = {
         marginLeft: '25vw',
     },
     button: {
-        marginRight: '31vw'
+        marginRight: '31vw',
+        width: '140px'
     }
 }
 
@@ -158,7 +159,7 @@ class AddItems extends Component{
                         onChange={this.handleChoosePack}
                     />
                     
-                     <button className='add-button create' onClick={this.handleAdditem}><Icon name='plus' /> Another Item</button>
+                     <button style={{width:'140px'}} className='add-button create' onClick={this.handleAdditem}><Icon name='plus' /> Another Item</button>
                      </div>
                         {this.state.newitems.map((item, idx) =>(
                             <div key={idx}>

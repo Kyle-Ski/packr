@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Image, Form, Message } from 'semantic-ui-react'
 import { Link, } from 'react-router-dom'
 import shadow from '../../PackrShadow2.png'
+import VideoRecorder from './VideoRecorder';
 
 const style = {
   form: {
@@ -17,12 +18,14 @@ const style = {
     padding: '10vw'
   }
 }
+
 class LogIn extends Component{
 
 render(){
   return (
   <div style={style.page}>
   <Image src={shadow} size='large' style={style.logo} />
+  {/* <VideoRecorder /> */}
   <Form style={style.form} >
     <Form.Input name='email' onChange={this.props.handleChange} label='Email' placeholder='example_packr@email.com..' icon='at' style={{color: 'darkblue'}} />
     <Form.Input name='password' onChange={this.props.handleChange} type='password' label='Password' placeholder='Password..' icon='lock' style={{color: 'darkblue'}}/>
@@ -31,7 +34,6 @@ render(){
   </Form>
 
     <Link style={{color: 'skyblue', fontWeight: '1000',fontSize:'20px'}} to='/signup'>Sign Up</Link>
-  
   </div>
 )
 }

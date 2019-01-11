@@ -37,7 +37,7 @@ class Profile extends Component {
             
             <Header style={{color: 'white', marginTop: '60px', marginLeft: '55px'}} as='h1'>
             <Icon circular inverted name='users' size='huge'/>
-            <Header.Content  as='h3'>Placeholder Name</Header.Content>
+            <Header.Content  as='h3'>{this.props.user.first_name} {this.props.user.last_name}</Header.Content>
             </Header>
             
             <Header style={{color: 'white', }} as='h1'>Backpacks:</Header>
@@ -47,7 +47,7 @@ class Profile extends Component {
             <ProfilePacks packs={this.state.packs}/>
             </Card.Group>
             <Divider />
-            <Link to='add-pack'><button className='add-button create' ><Icon name='add' />Add Pack</button></Link>
+            <Link style={{color: 'white'}} to='add-pack'><button className='add-button create' ><Icon name='add' />Add Pack</button></Link>
             </div>
             </div>
         )
@@ -55,3 +55,4 @@ class Profile extends Component {
 }
 
 export default Profile
+
