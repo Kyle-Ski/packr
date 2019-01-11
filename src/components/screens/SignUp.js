@@ -25,9 +25,9 @@ const SignUp = ({handleChange}) => (
     <Form.Input name='email' label='Email' placeholder='joe@schmoe.com' icon='envelope' onChange={handleChange}/>
     <Form.Input name='password' type='password' label='Password' placeholder='password' icon='lock' onChange={handleChange}/>
     <Message success header='Form Completed' content="You're all signed up for the newsletter" />
-    <Link to='profile'><button className='add-button' style={{color: 'lightgrey', backgroundColor: '#FD6041', border: '#FD6041', boxShadow: '1.75px 2px 0px 2px rgba(0,0,0,0.2)', width: '25vw'}}>Sign Up</button></Link>
+    <Link to='profile'><button className='add-button' style={{color: 'lightgrey', backgroundColor: '#FD6041', border: '#FD6041', boxShadow: '1.75px 2px 0px 2px rgba(0,0,0,0.2)', width: '40vw'}}>Sign Up</button></Link>
   </Form>
-  <Link style={{color: '#FD6041', textShadow: '-1px 0px 4px rgba(1, 1, 1)', fontWeight: '1000', fontSize:'20px'}} to='/'>Log In</Link>
+  <Link style={{color: 'skyblue', fontWeight: '1000',fontSize:'20px'}} to='/'>Log In</Link>
 
   </div>
 )

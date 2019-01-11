@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Header, Segment, Divider } from 'semantic-ui-react'
+import { Icon, Header, Segment, Divider, Card } from 'semantic-ui-react'
 import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
 import ProfilePacks from './ProfilePacks'
@@ -34,16 +34,18 @@ class Profile extends Component {
             <div >
             </div>
             
-            <Segment style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
-            <Header as='h1'>
+            
+            <Header style={{color: 'white', marginTop: '60px', marginLeft: '55px'}} as='h1'>
             <Icon circular inverted name='users' size='huge'/>
-            <Header.Content style={{color: 'white'}} as='h3'>Placeholder Name</Header.Content>
+            <Header.Content  as='h3'>Placeholder Name</Header.Content>
             </Header>
-            </Segment>
-            <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}} as='h1'>Backpacks:</Header>
+            
+            <Header style={{color: 'white', }} as='h1'>Backpacks:</Header>
             <Divider />
             <div >
+            <Card.Group centered>
             <ProfilePacks packs={this.state.packs}/>
+            </Card.Group>
             <Divider />
             <Link to='add-pack'><button className='add-button create' ><Icon name='add' />Add Pack</button></Link>
             </div>
