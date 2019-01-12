@@ -19,7 +19,7 @@ const style = {
 class VideoRecorder extends Component {
 
     state = {
-        isMobile: null
+        isMobile: true
     }
 
     startVideo = () => {

@@ -73,6 +73,7 @@ class ScanPack extends Component{
             {items.length > 0 ? <div><div>
                 <MobileNav />
             </div>
+            <div>
             <div style={{
                     position: 'fixed',
                     top: '25px',
@@ -82,20 +83,22 @@ class ScanPack extends Component{
                     zIndex: '1'
 
                 }}>
-                {/* <Webcam
+                <Webcam
                     audio={false}
-                    height={400}
+                    height={200}
                     ref={this.setRef}
                     screenshotFormat="image/jpeg"
-                    width={300}
+                    width={400}
                     videoConstraints={videoConstraints}
-                /> */}
-                <VideoRecorder />
+                />
+                {/* <VideoRecorder /> */}
                 <h1 style={{marginTop: '-30px'}} className='searching'>Itmes in {this.state.name} Not Ready..</h1>
                 </div>
-                <div style={{marginTop: '400px'}}>
-                <ScanPackItems style={{zIndex: '-1'}} items={items}/>
-                </div></div>:<div><Loader active /></div>}
+                <div style={{zIndex: '-1', marginTop: '300px'}}>
+                <ScanPackItems  items={items}/>
+                </div>
+                </div>
+                </div>:<div><Loader active /></div>}
             </div>
         )
     }

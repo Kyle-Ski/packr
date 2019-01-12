@@ -4,7 +4,8 @@ import { Icon } from 'semantic-ui-react'
 class ScanPackItem extends React.Component {
 
     state = {
-        name: 'card'
+        name: 'card',
+        flipOrder: []
     }
 
     handleFlip = (e) => {
@@ -17,6 +18,7 @@ class ScanPackItem extends React.Component {
         }
     }
     render(){
+        
         return (
             <div onClick={this.handleFlip} className='scene'>
                 <div className={this.state.name}>

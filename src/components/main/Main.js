@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom'
+import { Loader } from 'semantic-ui-react'
 import Login from '../screens/LogIn'
 import Signup from '../screens/SignUp'
 import Profile from '../screens/Profile'
@@ -98,12 +99,16 @@ class Main extends Component {
       <Switch>
         <Route exact path="/" render={(props) => <Login {...props} handleChange={this.handleChange} logIn={this.logIn}/>} />
         <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} />
-        {this.state.isAuthed && <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} />} />}
-        {this.state.isAuthed && <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} />}
-        {this.state.isAuthed && <Route exact path="/add-items" render={(props)=> <AddItems {...props} user={this.state.user}/>} />}
-        {this.state.isAuthed && <Route exact path="/create-item" component={CreateItem} />}
-        {this.state.isAuthed && <Route path="/backpack/:id" component={BackPack} />}
-        {this.state.isAuthed && <Route path="/scan-items/:id" component={ScanPack} />}
+        { this.state.isAuthed ?
+        <div>
+         <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} />} />
+         <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} />
+         <Route exact path="/add-items" render={(props)=> <AddItems {...props} user={this.state.user}/>} />
+         <Route exact path="/create-item" component={CreateItem} />
+         <Route path="/backpack/:id" component={BackPack} />
+         <Route path="/scan-items/:id" component={ScanPack} />
+         </div>
+        : <Loader active />}
         {/* <Route component={NoTfound} /> */}
     </Switch>
       </div>
