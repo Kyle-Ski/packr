@@ -19,7 +19,7 @@ class ScanPack extends Component{
     fetchBackpack = () => {
         console.log(this.props.match)
         this.setState({backpack: this.props.match.params.id})
-        return fetch(`https://packr-database.herokuapp.com/${this.props.match.params.id}/items`)
+        return fetch(`https://packr-database.herokuapp.com/packs/${this.props.match.params.id}/items`)
             .then(res => res.json())
             .then(res => {
                 if(res.error){
@@ -69,7 +69,7 @@ class ScanPack extends Component{
           const {items} = this.state 
         return(
             <div>
-            <div>
+            {items.length > 0 ? <div><div>
                 <MobileNav />
             </div>
             <div style={{
@@ -92,8 +92,8 @@ class ScanPack extends Component{
                 </div>
                 <div style={{marginTop: '340px'}}>
                 <Divider />
-                {items ? <ScanPackItems items={items}/>:<Loader active />}
-                </div>
+                <ScanPackItems items={items}/>
+                </div></div>:<div><Loader active /></div>}
             </div>
         )
     }
