@@ -5,6 +5,7 @@ import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";
 import scanPackItems from './ScanPackItems'
 import ScanPackItems from './ScanPackItems';
+import VideoRecorder from './VideoRecorder'
 
 
 class ScanPack extends Component{
@@ -64,7 +65,7 @@ class ScanPack extends Component{
         const videoConstraints = {
             width: 1280,
             height: 720,
-            facingMode: "forward"
+            facingMode: {exact: 'environment'}
           }
           const {items} = this.state 
         return(
@@ -81,14 +82,15 @@ class ScanPack extends Component{
                     zIndex: '1'
 
                 }}>
-                <Webcam
+                {/* <Webcam
                     audio={false}
                     height={400}
                     ref={this.setRef}
                     screenshotFormat="image/jpeg"
                     width={300}
                     videoConstraints={videoConstraints}
-                />
+                /> */}
+                <VideoRecorder />
                 <h1 style={{marginTop: '-30px'}} className='searching'>Itmes in {this.state.name} Not Ready..</h1>
                 </div>
                 <div style={{marginTop: '400px'}}>

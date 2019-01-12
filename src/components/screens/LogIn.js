@@ -27,7 +27,7 @@ render(){
   <Image src={shadow} size='large' style={style.logo} />
   {/* <VideoRecorder /> */}
   <Form style={style.form} >
-  <div onClick={() => window.scrollTo(0, 0)}>
+  <div>
     <Form.Input name='email' onChange={this.props.handleChange} label='Email' placeholder='example_packr@email.com..' icon='at' style={{color: 'darkblue'}} />
     </div>
     <Form.Input name='password' onChange={this.props.handleChange} type='password' label='Password' placeholder='Password..' icon='lock' style={{color: 'darkblue'}}/>
