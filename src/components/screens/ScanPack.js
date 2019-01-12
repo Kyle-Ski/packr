@@ -77,7 +77,8 @@ class ScanPack extends Component{
                     top: '25px',
                     left: '0',
                     width: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    zIndex: '1'
 
                 }}>
                 <Webcam
@@ -92,7 +93,7 @@ class ScanPack extends Component{
                 </div>
                 <div style={{marginTop: '340px'}}>
                 <Divider />
-                <ScanPackItems items={items}/>
+                <ScanPackItems style={{zIndex: '-1'}} items={items}/>
                 </div></div>:<div><Loader active /></div>}
             </div>
         )
