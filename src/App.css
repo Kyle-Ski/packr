@@ -124,10 +124,38 @@ body {
   transform: translateY(4px);
 }
 
-.found{
-  color: #35A3A6 !important;
-  text-shadow: 4px 4px 2px 4px rgb(2, 2, 2);
+.scene {
+  perspective: 500px;
 }
+
+.card {
+  transform-style: preserve-3d;
+  transform-origin: center right;
+  transition: transform 1s;
+}
+
+.card.is-fliped {
+  transform: translateY(0%) rotateX(180deg);
+}
+
+.item__face {
+  backface-visibility: hidden;  
+}
+
+.item__face--front {
+  color: red;
+}
+
+.item__face--back {
+  color: #35A3A6 !important;
+  transform: rotateX(180deg);
+}
+
+
+/* .item__face item__face--front{
+  color: #35A3A6 !important;
+  text-shadow: 4px 4px 2px 4px rgb(2, 2, 2); */
+/* } */
 
 .searching{
   color: red !important;

@@ -39,6 +39,7 @@ export default class MobileNav extends Component {
           <Dropdown.Item><Link style={{color:'black'}} to='/profile'>Profile</Link></Dropdown.Item>
           <Dropdown.Item><Link style={{color:'black'}} to='/create-item'>Create Item</Link></Dropdown.Item>
           <Dropdown.Item><Link style={{color:'black'}} to='/add-items'>Add Items</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black'}} to='/add-pack'>Add Pack</Link></Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Image src={logo} style={style.logo} centered size='tiny'/>
