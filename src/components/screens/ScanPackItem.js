@@ -17,11 +17,22 @@ class ScanPackItem extends React.Component {
             console.log('else')
         }
     }
+
+    componentDidMount(){
+        this.setState({name: this.props.item.isFliped})
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(this.props.item.isFlipped !== nextProps.item.isFlipped){
+            this.setState({name: nextProps.item.isFlipped})
+        } 
+    }
+
     render(){
-        
+        const {name} = this.state
         return (
-            <div onClick={this.handleFlip} className='scene'>
-                <div className={this.state.name}>
+            <div className='scene'>
+                <div className={name}>
                     <h2 className='item__face item__face--front' ><Icon className='item__face item__face--front' name='search' /> {this.props.item.item_name}</h2>
                     <h2 className='item__face item__face--back' ><Icon name='check' /> {this.props.item.item_name}</h2>
                 </div>

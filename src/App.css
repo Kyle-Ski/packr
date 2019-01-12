@@ -2,7 +2,7 @@
 
 html {
   width: 100%;
-  height: 120vh;
+  height: 100vh;
 }
 body {
   background-image: url("./phoneback.jpg") !important;
@@ -154,6 +154,7 @@ body {
 .item__face--back {
   color: #35A3A6 !important;
   transform: rotateX(180deg);
+  margin-top: 0px;
 }
 
 

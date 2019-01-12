@@ -15,6 +15,7 @@ class ScanPack extends Component{
         itemName: '',
         name: '',
         items: [],
+        itemName: 'card'
     }
 
     fetchBackpack = () => {
@@ -61,6 +62,17 @@ class ScanPack extends Component{
 
     getItemName = (e) => this.setState({itemName: e.target.value})
 
+    handleFlip = (e) => {
+        if(this.state.itemName === 'card'){
+            this.setState({itemName: 'card is-fliped'})
+        } else if (this.state.itemName === 'card is-fliped'){
+            this.setState({itemName: 'card'})
+        } else {
+            console.log('else')
+        }
+    }
+
+
     render(){
         const videoConstraints = {
             width: 1280,
@@ -84,17 +96,21 @@ class ScanPack extends Component{
 
                 }}>
                 <Webcam
+                // style={{position: 'fixed', top: '25px', left: '0'}}
                     audio={false}
-                    height={200}
+                    height={400}
                     ref={this.setRef}
                     screenshotFormat="image/jpeg"
-                    width={400}
+                    width={200}
                     videoConstraints={videoConstraints}
                 />
                 {/* <VideoRecorder /> */}
-                <h1 style={{marginTop: '-30px'}} className='searching'>Itmes in {this.state.name} Not Ready..</h1>
+                <div className={this.state.itemName}>
+                <h1 onClick={this.handleFlip} style={{marginTop: '30px'}} className='item__face item__face--front'>Itmes in {this.state.name} Not Ready..</h1>
+                <h1 onClick={this.handleFlip} style={{marginTop: '-40px'}} className='item__face item__face--back'><Icon name='check' /> {this.state.name} Ready to Go!</h1>
                 </div>
-                <div style={{zIndex: '-1', marginTop: '300px'}}>
+                </div>
+                <div style={{zIndex: '-1', marginTop: '600px'}}>
                 <ScanPackItems  items={items}/>
                 </div>
                 </div>
