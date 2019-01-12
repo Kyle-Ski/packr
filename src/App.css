@@ -1,5 +1,9 @@
 
 
+html {
+  width: 100%;
+  height: 120vh;
+}
 body {
   background-image: url("./phoneback.jpg") !important;
   background-repeat: no-repeat !important;
@@ -15,8 +19,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 120vw;
-  height: 120vh;
+  width: 100%;
+  height: 100%;
   z-index: -1;
 }
 
@@ -126,7 +130,6 @@ body {
 
 .scene {
   margin: -45px;
-
   perspective: 500px;
 }
 

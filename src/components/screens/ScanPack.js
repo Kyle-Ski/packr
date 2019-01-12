@@ -83,10 +83,10 @@ class ScanPack extends Component{
                 }}>
                 <Webcam
                     audio={false}
-                    height={300}
+                    height={400}
                     ref={this.setRef}
                     screenshotFormat="image/jpeg"
-                    width={400}
+                    width={300}
                     videoConstraints={videoConstraints}
                 />
                 <h1 style={{marginTop: '-30px'}} className='searching'>Itmes in {this.state.name} Not Ready..</h1>
