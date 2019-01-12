@@ -125,6 +125,8 @@ body {
 }
 
 .scene {
+  margin: -45px;
+
   perspective: 500px;
 }
 

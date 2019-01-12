@@ -91,8 +91,7 @@ class ScanPack extends Component{
                 />
                 <h1 style={{marginTop: '-30px'}} className='searching'>Itmes in {this.state.name} Not Ready..</h1>
                 </div>
-                <div style={{marginTop: '340px'}}>
-                <Divider />
+                <div style={{marginTop: '400px'}}>
                 <ScanPackItems style={{zIndex: '-1'}} items={items}/>
                 </div></div>:<div><Loader active /></div>}
             </div>
