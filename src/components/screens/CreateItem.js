@@ -3,8 +3,6 @@ import { Form, Message, Icon, Header, Divider } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";
-const Clarifai = require('clarifai')
-const app = new Clarifai.App({apiKey: process.env.API_KEY})
 
 const createUrl = 'https://packr-database.herokuapp.com/create'
 
