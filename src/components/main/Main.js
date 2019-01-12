@@ -7,6 +7,7 @@ import AddPack from '../screens/AddPack'
 import AddItems from '../screens/AddItems'
 import CreateItem from '../screens/CreateItem'
 import BackPack from '../screens/Backpack'
+import ScanPack from '../screens/ScanPack'
 
 const loginUrl = 'http://localhost:3222/auth/login'
 const addPackUrl = 'http://localhost:3222/packs'
@@ -102,6 +103,7 @@ class Main extends Component {
         {this.state.isAuthed && <Route exact path="/add-items" render={(props)=> <AddItems {...props} user={this.state.user}/>} />}
         {this.state.isAuthed && <Route exact path="/create-item" component={CreateItem} />}
         {this.state.isAuthed && <Route path="/backpack/:id" component={BackPack} />}
+        {this.state.isAuthed && <Route path="/scan-items/:id" component={ScanPack} />}
         {/* <Route component={NoTfound} /> */}
     </Switch>
       </div>

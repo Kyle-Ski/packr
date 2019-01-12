@@ -124,7 +124,14 @@ body {
   transform: translateY(4px);
 }
 
+.found{
+  color: #35A3A6 !important;
+  text-shadow: 4px 4px 2px 4px rgb(2, 2, 2);
+}
 
+.searching{
+  color: red !important;
+}
 
 @keyframes App-logo-spin {
   from {
