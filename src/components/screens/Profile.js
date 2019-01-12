@@ -4,7 +4,7 @@ import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
 import ProfilePacks from './ProfilePacks'
 
-const userPacksUrl = 'http://localhost:3222/users/'
+const userPacksUrl = 'https://packr-database.herokuapp.com/users/'
 
 class Profile extends Component {
 
@@ -47,7 +47,7 @@ class Profile extends Component {
             <ProfilePacks packs={this.state.packs}/>
             </Card.Group>
             <Divider />
-            <Link style={{color: 'white'}} to='add-pack'><button className='add-button create' ><Icon name='add' />Add Pack</button></Link>
+            <Link style={{color: 'white'}} to='add-pack'><button className='add-button create' style={{color: 'white'}} ><Icon name='add' />Add Pack</button></Link>
             </div>
             </div>
         )

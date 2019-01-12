@@ -4,7 +4,7 @@ import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
 import BackpackItems from './BackpackItems'
 
-const itemsByPackUrl = 'http://localhost:3222/packs//items'
+const itemsByPackUrl = 'https://packr-database.herokuapp.com/items'
 class Backpack extends Component{
 
     state={
@@ -16,7 +16,7 @@ class Backpack extends Component{
     fetchBackpack = () => {
         console.log(this.props.match)
         this.setState({backpack: this.props.match.params.id})
-        fetch(`http://localhost:3222/packs/${this.props.match.params.id}/items`)
+        fetch(`https://packr-database.herokuapp.com/packs/${this.props.match.params.id}/items`)
             .then(res => res.json())
             .then(res => {
                 if(res.error){

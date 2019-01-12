@@ -9,8 +9,8 @@ import CreateItem from '../screens/CreateItem'
 import BackPack from '../screens/Backpack'
 import ScanPack from '../screens/ScanPack'
 
-const loginUrl = 'http://localhost:3222/auth/login'
-const addPackUrl = 'http://localhost:3222/packs'
+const loginUrl = 'https://packr-database.herokuapp.com/auth/login'
+const addPackUrl = 'https://packr-database.herokuapp.com/packs'
 class Main extends Component {
 
     state = {

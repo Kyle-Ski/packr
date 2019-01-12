@@ -1,5 +1,4 @@
 import React from 'react'
-import { Icon } from 'semantic-ui-react'
 import ScanPackItem from './ScanPackItem'
 class ScanPackItems extends React.Component{
     render(){

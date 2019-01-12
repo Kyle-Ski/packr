@@ -19,7 +19,7 @@ class ScanPack extends Component{
     fetchBackpack = () => {
         console.log(this.props.match)
         this.setState({backpack: this.props.match.params.id})
-        return fetch(`http://localhost:3222/packs/${this.props.match.params.id}/items`)
+        return fetch(`https://packr-database.herokuapp.com/${this.props.match.params.id}/items`)
             .then(res => res.json())
             .then(res => {
                 if(res.error){

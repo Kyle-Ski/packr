@@ -3,9 +3,9 @@ import { Form, Select, Dropdown, Header, Divider, Icon, Loader, Message } from '
 import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 
-const allItemsUrl = 'http://localhost:3222/items'
-const userPacksUrl = 'http://localhost:3222/users/'
-const addItemsUrl = 'http://localhost:3222/pack_items/'
+const allItemsUrl = 'https://packr-database.herokuapp.com/items'
+const userPacksUrl = 'https://packr-database.herokuapp.com/users/'
+const addItemsUrl = 'https://packr-database.herokuapp.com/pack_items/'
 
 const style = {
     form: {
