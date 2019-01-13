@@ -87,8 +87,10 @@ body {
 .scan{
   background-color: #FD6041;
   border: solid 2px #FD6041;
-  margin-right: 20px;
+  margin-left: 20px;
 }
+
+.ui.form .field
 
 .ui.cards>.card{
   background-color: rgb(219, 219, 202) !important;

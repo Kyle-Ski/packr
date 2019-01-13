@@ -9,7 +9,7 @@ const createUrl = 'https://packr-database.herokuapp.com/items'
 class CreateItem extends Component{
 
     state={
-        imageSrc: [],
+        imageSrc: 0,
         itemName: '',
         warning: null
     }
@@ -66,7 +66,7 @@ class CreateItem extends Component{
             
                 <Webcam
                     audio={false}
-                    height={300}
+                    height={500}
                     ref={this.setRef}
                     screenshotFormat="image/jpeg"
                     width={400}
@@ -85,11 +85,11 @@ class CreateItem extends Component{
                             ]}
                         />
                     <div>
-                    <button className='add-button scan' onClick={this.capture}><Icon name='camera' />Scan Item</button>
                     <button className='add-button create' onClick={this.sendItem} ><Icon name='plus' /> Create Item</button>
+                    <button className='add-button scan' onClick={this.capture}><Icon name='camera' />Scan Item</button>
                     </div>
                 </Form>
-                <h3 style={{color: 'white'}}>{this.state.imageSrc.length } scans, {this.state.imageSrc/*.length*/ >= 10 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h3>
+                <h3 style={{color: 'white'}}>{this.state.imageSrc} scans, {this.state.imageSrc/*.length*/ >= 10 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h3>
             </div>
         )
     }
