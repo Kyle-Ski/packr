@@ -29,7 +29,6 @@ class Backpack extends Component{
     }
 
     componentDidMount(){
-        window.scrollTo(0,20)
         this.fetchBackpack()
             // .then(() => {
             //     if(this.state.backpack > 2){

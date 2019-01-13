@@ -11,10 +11,7 @@ class CreateItem extends Component{
     state={
         imageSrc: [],
         itemName: '',
-    }
-
-    componentDidMount(){
-        window.scrollTo(0,20)
+        warning: null
     }
     
     setRef = webcam => {
@@ -43,7 +40,13 @@ class CreateItem extends Component{
             })
         })
         .then(response => response.json())
-        .then(res => console.log(res))
+        .then(res => {
+            if(res.error){
+                this.setState({warning: 'warning'})
+            } else {
+                this.setState({warning: 'success'})
+            }
+        })
         .catch(err => console.warn(err))
     }
 
@@ -53,6 +56,7 @@ class CreateItem extends Component{
             height: 720,
             facingMode: {exact: 'environment'}
           }
+          const {warning} = this.state
         return(
             <div>
             <div>
@@ -69,16 +73,23 @@ class CreateItem extends Component{
                     videoConstraints={videoConstraints}
                 />
                 <Divider />
-                <Form className={'warning'} onSubmit={() => console.log('submit')}>
+                <Form className={warning} onSubmit={() => console.log('submit')}>
                 <Header as='h4' style={{color: 'white'}}>Item Name</Header>
                     <Form.Input required onChange={this.getItemName} placeholder='Item Name...' icon='pencil alternate' />
-                    <Message success header='Form Completed' content="You're all signed up for the newsletter" />
+                    <Message success header='Item Added!' content={`I now know what your ${this.state.itemName} looks like!`} />
+                    <Message
+                            warning
+                            header='Could you check something!'
+                            list={[
+                                'The Items may not have been created correctly.',
+                            ]}
+                        />
                     <div>
                     <button className='add-button scan' onClick={this.capture}><Icon name='camera' />Scan Item</button>
                     <button className='add-button create' onClick={this.sendItem} ><Icon name='plus' /> Create Item</button>
                     </div>
                 </Form>
-                <h4 style={{color: 'white'}}>{this.state.imageSrc.length } scans, {this.state.imageSrc/*.length*/ >= 10 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h4>
+                <h3 style={{color: 'white'}}>{this.state.imageSrc.length } scans, {this.state.imageSrc/*.length*/ >= 10 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h3>
             </div>
         )
     }

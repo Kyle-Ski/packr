@@ -32,7 +32,6 @@ class ScanPack extends Component{
     }
 
     componentDidMount(){
-        window.scrollTo(0,20)
         this.fetchBackpack()
         .catch(err => console.warn(err))
             // .then(() => {
@@ -60,11 +59,11 @@ class ScanPack extends Component{
     handleFlip = (e) => {
         if(this.state.itemName === 'card'){
             this.setState({itemName: 'card is-fliped'})
-        } else if (this.state.itemName === 'card is-fliped'){
+        } /*else if (this.state.itemName === 'card is-fliped'){
             this.setState({itemName: 'card'})
         } else {
             console.log('else')
-        }
+        }*/
     }
 
 

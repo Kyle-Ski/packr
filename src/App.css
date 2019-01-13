@@ -104,6 +104,7 @@ body {
   margin-bottom: 5px;
   font-size: 15px;
   font-weight: 900;
+  min-width: 140px;
 }
 
 .ui.form .field>label {

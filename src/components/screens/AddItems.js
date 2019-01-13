@@ -29,7 +29,6 @@ class AddItems extends Component{
     }
 
     componentDidMount(){
-        window.scrollTo(0,20)
         this.fetchItems()
             .then(this.structureItems)
             .then(res => this.setState({items: res}))
@@ -147,9 +146,9 @@ class AddItems extends Component{
             <div>
                 <MobileNav signOut={this.props.signOut}/>
             </div>
-            <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}} as='h1'>Add Items into a Backpack</Header>
+            <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', marginTop: '10px'}} as='h1'>Add Items into a Backpack</Header>
             <Divider />
-            <Form style={style.form} className={this.state.warning}> 
+            <Form big style={style.form} className={this.state.warning}> 
                 {items.length ?<div> <Form.Group widths='equal'>
                 <div>
                     <Header style={{color: 'white'}} as='h4'>Choose A Backpack</Header>

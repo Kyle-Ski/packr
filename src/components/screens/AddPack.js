@@ -5,11 +5,9 @@ import MobileNav from '../nav/MobileNav'
 
 class AddPack extends Component{
 
-    componentDidMount(){
-        window.scrollTo(0,20)
-    }
 
     render(){
+        const {warning}=this.props
         return(
             <div>
             <div>
@@ -17,7 +15,7 @@ class AddPack extends Component{
             </div>
             <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}} as='h1'>Create A Pack</Header>
             <Divider />
-            <Form style={{margin: '10vw'}} className={'warning'} onSubmit={()=>console.log('submit')}>
+            <Form style={{margin: '10vw'}} className={warning} onSubmit={()=>console.log('submit')}>
             <Header as='h4' style={{color: 'white'}}>Pack Name</Header>
                 <Form.Input name='packName' placeholder='Pack Name...' icon='travel' onChange={this.props.handleChange} />
                 <Message success header='Form Completed' content="You're all signed up for the newsletter" />

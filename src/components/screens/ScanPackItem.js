@@ -8,15 +8,15 @@ class ScanPackItem extends React.Component {
         flipOrder: []
     }
 
-    handleFlip = (e) => {
-        if(this.state.name === 'card'){
-            this.setState({name: 'card is-fliped'})
-        } else if (this.state.name === 'card is-fliped'){
-            this.setState({name: 'card'})
-        } else {
-            console.log('else')
-        }
-    }
+    // handleFlip = (e) => {
+    //     if(this.state.name === 'card'){
+    //         this.setState({name: 'card is-fliped'})
+    //     } else if (this.state.name === 'card is-fliped'){
+    //         this.setState({name: 'card'})
+    //     } else {
+    //         console.log('else')
+    //     }
+    // }
 
     componentDidMount(){
         this.setState({name: this.props.item.isFlipped})

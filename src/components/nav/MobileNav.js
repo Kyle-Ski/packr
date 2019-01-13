@@ -13,7 +13,7 @@ const style = {
     menu: {
       maxHeight: '42px',
       backgroundColor: 'grey !important',
-      border: 'grey !important'
+      border: 'grey !important',
     },
     altMenu: {
       padding: '10px',
@@ -28,11 +28,11 @@ export default class MobileNav extends Component {
         <Menu style={style.menu} fixed='top' attached='top' >
       <Dropdown item icon='bars' simple>
         <Dropdown.Menu>
-          <Dropdown.Item><Link style={{color:'black'}} to='/' onClick={this.props.signOut}>Sign Out</Link></Dropdown.Item>
-          <Dropdown.Item><Link style={{color:'black'}} to='/profile'>Profile</Link></Dropdown.Item>
-          <Dropdown.Item><Link style={{color:'black'}} to='/create-item'>Create Item</Link></Dropdown.Item>
-          <Dropdown.Item><Link style={{color:'black'}} to='/add-items'>Add Items</Link></Dropdown.Item>
-          <Dropdown.Item><Link style={{color:'black'}} to='/add-pack'>Add Pack</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/' onClick={this.props.signOut}>Sign Out</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/profile'>Profile</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/create-item'>Create Item</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/add-items'>Add Items</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/add-pack'>Add Pack</Link></Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <Image src={logo} style={style.logo} centered size='tiny'/>

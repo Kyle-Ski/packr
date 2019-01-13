@@ -23,6 +23,7 @@ class Main extends Component {
         isAuthed: false,
         user: '',
         packName: '',
+        addPackWarn: ''
     }
 
     generalError = (err) => {
@@ -113,10 +114,10 @@ class Main extends Component {
           .then(res => {
             console.log('before if',res)
             if(res.error){
-              console.log('error')
-              return alert(res.error)
+              this.setState({addPackWarn: 'warning'})
+              return res
             } else {
-              console.log('else', res)
+              this.setState({addPackWarn: 'success'})
               return res
             }
           })
@@ -137,7 +138,7 @@ class Main extends Component {
     }
 
   render() {
-    const { isAuthed } = this.state
+    const { isAuthed, addPackWarn } = this.state
     return (
       <div >
       <Switch>
@@ -146,7 +147,7 @@ class Main extends Component {
         
         {isAuthed ?<div>
          <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} signOut={this.signOut}/>} />
-         <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} signOut={this.signOut} />
+         <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} signOut={this.signOut} warning={addPackWarn}/>
          <Route exact path="/add-items" render={(props)=> <AddItems {...props} user={this.state.user} signOut={this.signOut}/>} />
          <Route exact path="/create-item" render={(props) => <CreateItem {...props}  signOut={this.signOut} />}/>
          <Route path="/backpack/:id" render={(props) => <BackPack {...props} signOut={this.signOut} />}/>
