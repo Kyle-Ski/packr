@@ -17,7 +17,7 @@ class AddPack extends Component{
             <Header as='h4' style={{color: 'white'}}>Pack Name</Header>
                 <Form.Input name='packName' placeholder='Pack Name...' icon='travel' onChange={this.props.handleChange} />
                 <Message success header='Form Completed' content="You're all signed up for the newsletter" />
-                <Link onClick={this.props.addPack} to='add-items'><button className='add-button create' ><Icon name='plus' /> Create Pack</button></Link>
+                <Link onClick={this.props.addPack} to='add-items'><button style={{width:'140px'}} className='add-button create' ><Icon name='plus' /> Create Pack</button></Link>
             </Form>
             </div>
         )

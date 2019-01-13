@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Form, Select, Dropdown, Header, Divider, Icon, Loader, Message } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 
-const allItemsUrl = 'http://localhost:3222/items'
-const userPacksUrl = 'http://localhost:3222/users/'
-const addItemsUrl = 'http://localhost:3222/pack_items/'
+const allItemsUrl = 'https://packr-database.herokuapp.com/items'
+const userPacksUrl = 'https://packr-database.herokuapp.com/users/'
+const addItemsUrl = 'https://packr-database.herokuapp.com/pack_items/'
 
 const style = {
     form: {
@@ -105,10 +106,12 @@ class AddItems extends Component{
       }
 
     handleChoosePack = (e) => {
-       const chosenPack = this.state.packOptions.filter(pac => {
-           return pac.text === e.target.innerText
-       })[0]
-       this.setState({chosenPack: chosenPack})
+       if(e.target.innerText!== undefined){
+            const chosenPack = this.state.packOptions.filter(pac => {
+                return pac.text === e.target.innerText
+            })[0]
+            this.setState({chosenPack: chosenPack})
+        }
     }
 
       handleRemoveitem = (idx) => (e) => {
@@ -127,8 +130,8 @@ class AddItems extends Component{
           const items = this.state.newitems.map((item, sidx) => {
             if (idx !== sidx){
               return item
-            } else {
-              return { ...item, item_id: chosenItem.value, item_name: chosenItem.text}
+            } else if (chosenItem){
+                return { ...item, item_id: chosenItem.value, item_name: chosenItem.text}
             }
           })
           
@@ -157,9 +160,12 @@ class AddItems extends Component{
                         placeholder='Pack..'
                         onChange={this.handleChoosePack}
                     />
-                    <button onClick={this.addToPack} style={style.button} className='add-button create'>Add Items To {this.state.chosenPack.text}</button>
+                    </div>
+                    <div style={{paddingRight: '120px'}}>
+                    <button onClick={this.addToPack} style={style.button} className='add-button create'>Add Items To {this.state.chosenPack ? this.state.chosenPack.text:''}</button>
+                    <Link to='create-item'><button style={{width: '140px', backgroundColor:'#FD6041'}} className='add-button create'>Item Not Here? Create It!</button></Link>
                      </div>
-                    <Message style={{marginRight: '30vw'}} success header='Item(s) added!' content={`The items have been added to ${this.state.chosenPack.text}`} />
+                    {this.state.chosenPack ? <Message style={{marginRight: '30vw'}} success header='Item(s) added!' content={`The items have been added to ${this.state.chosenPack.text}`} />:''}
                         <Message
                             style={{marginRight: '30vw'}}
                             warning

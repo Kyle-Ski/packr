@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";
 
-const createUrl = 'http://localhost:3222/'
+const createUrl = 'https://packr-database.herokuapp.com/items'
 
 class CreateItem extends Component{
 
@@ -18,26 +18,26 @@ class CreateItem extends Component{
     }
 
     capture = () => {
-        this.setState({
-            imageSrc: [...this.state.imageSrc, this.webcam.getScreenshot().slice(23)],
-        })
+        // this.setState({
+        //     imageSrc: [...this.state.imageSrc, this.webcam.getScreenshot().slice(23)],
+        // })
+        this.setState({imageSrc: this.state.imageSrc+=1})
     }
 
     getItemName = (e) => this.setState({itemName: e.target.value})
 
     sendItem =  () => {
         console.log(JSON.stringify(this.state.imageSrc[0]))
-        fetch(createUrl/*, {
+        fetch(createUrl, {
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8'
             },
             body: JSON.stringify({
-                'img': this.state.imageSrc[0],
-                'id': this.state.itemName
+                'name': this.state.itemName,
             })
-        }*/)
+        })
         .then(response => response.json())
         .then(res => console.log(res))
         .catch(err => console.warn(err))
@@ -47,7 +47,7 @@ class CreateItem extends Component{
         const videoConstraints = {
             width: 1280,
             height: 720,
-            facingMode: "forward"
+            facingMode: {exact: 'environment'}
           }
         return(
             <div>
@@ -67,13 +67,14 @@ class CreateItem extends Component{
                 <Divider />
                 <Form className={'warning'} onSubmit={() => console.log('submit')}>
                 <Header as='h4' style={{color: 'white'}}>Item Name</Header>
-                    <Form.Input onChange={this.getItemName} placeholder='Item Name...' icon='pencil alternate' />
+                    <Form.Input required onChange={this.getItemName} placeholder='Item Name...' icon='pencil alternate' />
                     <Message success header='Form Completed' content="You're all signed up for the newsletter" />
+                    <div>
                     <button className='add-button scan' onClick={this.capture}><Icon name='camera' />Scan Item</button>
                     <button className='add-button create' onClick={this.sendItem} ><Icon name='plus' /> Create Item</button>
+                    </div>
                 </Form>
-                <p style={{color: 'white'}}>{this.state.imageSrc.length } scans, {this.state.imageSrc.length >= 10 ? `Good ammount!`:`more scans please..`}</p>
-                <p>{this.state.imageSrc[0]}</p>
+                <h4 style={{color: 'white'}}>{this.state.imageSrc.length } scans, {this.state.imageSrc/*.length*/ >= 10 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h4>
             </div>
         )
     }

@@ -4,7 +4,7 @@ import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
 import ProfilePacks from './ProfilePacks'
 
-const userPacksUrl = 'http://localhost:3222/users/'
+const userPacksUrl = 'https://packr-database.herokuapp.com/users/'
 
 class Profile extends Component {
 
