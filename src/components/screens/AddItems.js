@@ -29,6 +29,7 @@ class AddItems extends Component{
     }
 
     componentDidMount(){
+        window.scrollTo(0,20)
         this.fetchItems()
             .then(this.structureItems)
             .then(res => this.setState({items: res}))

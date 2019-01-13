@@ -32,6 +32,7 @@ class ScanPack extends Component{
     }
 
     componentDidMount(){
+        window.scrollTo(0,20)
         this.fetchBackpack()
         .catch(err => console.warn(err))
             // .then(() => {

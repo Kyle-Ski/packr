@@ -5,6 +5,10 @@ import MobileNav from '../nav/MobileNav'
 
 class AddPack extends Component{
 
+    componentDidMount(){
+        window.scrollTo(0,20)
+    }
+
     render(){
         return(
             <div>

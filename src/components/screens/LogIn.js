@@ -20,6 +20,10 @@ const style = {
 
 class LogIn extends Component{
 
+componentDidMount(){
+  window.scrollTo(0,20)
+}
+
 render(){
   return (
   <div style={style.page}>

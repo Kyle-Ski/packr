@@ -12,6 +12,10 @@ class CreateItem extends Component{
         imageSrc: [],
         itemName: '',
     }
+
+    componentDidMount(){
+        window.scrollTo(0,20)
+    }
     
     setRef = webcam => {
         this.webcam = webcam;
