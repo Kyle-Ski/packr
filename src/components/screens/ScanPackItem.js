@@ -19,12 +19,12 @@ class ScanPackItem extends React.Component {
     }
 
     componentDidMount(){
-        this.setState({name: this.props.item.isFliped})
+        this.setState({name: this.props.item.isFlipped})
     }
 
     componentWillReceiveProps(nextProps){
-        if(this.props.item.isFlipped !== nextProps.item.isFlipped){
-            this.setState({name: nextProps.item.isFlipped})
+        if(this.props.item.isFliped !== nextProps.item.isFliped){
+            this.setState({name: nextProps.item.isFliped})
         } 
     }
 

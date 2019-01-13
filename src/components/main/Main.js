@@ -9,7 +9,7 @@ import AddItems from '../screens/AddItems'
 import CreateItem from '../screens/CreateItem'
 import BackPack from '../screens/Backpack'
 import ScanPack from '../screens/ScanPack'
-
+const initUrl = 'https://packr-database.herokuapp.com/'
 const loginUrl = 'https://packr-database.herokuapp.com/auth/login'
 const addPackUrl = 'https://packr-database.herokuapp.com/packs'
 class Main extends Component {
@@ -22,7 +22,24 @@ class Main extends Component {
         lastName: '',
         isAuthed: false,
         user: '',
-        packName: ''
+        packName: '',
+        loaded: false,
+    }
+
+    fetchInit = () => {
+      
+    }
+
+    componentDidMount(){
+      fetch(initUrl)
+        .then(res => res.json())
+        .then(res => {
+          if (res.message){
+            this.setState({loaded: true})
+          }
+          return res
+        })
+      .catch(err => console.warn('mount:', err))
     }
 
     generalError = (err) => {
@@ -93,12 +110,13 @@ class Main extends Component {
     }
 
   render() {
+    const {loaded, isAuthed} = this.state
     return (
       <div >
       <Switch>
-        <Route exact path="/" render={(props) => <Login {...props} handleChange={this.handleChange} logIn={this.logIn}/>} />
-        <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} />
-        { this.state.isAuthed ?
+        {loaded ? <div><Route exact path="/" render={(props) => <Login {...props} handleChange={this.handleChange} logIn={this.logIn}/>} />
+        <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} /></div> :<Loader active >Loading... if Packr is taking too long, refresh the page.</Loader>}
+        {isAuthed ?
         <div>
          <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} />} />
          <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} />
