@@ -10,6 +10,7 @@ import CreateItem from '../screens/CreateItem'
 import BackPack from '../screens/Backpack'
 import ScanPack from '../screens/ScanPack'
 const initUrl = 'https://packr-database.herokuapp.com/'
+const signUpUrl = 'https://packr-database.herokuapp.com/users'
 const loginUrl = 'https://packr-database.herokuapp.com/auth/login'
 const addPackUrl = 'https://packr-database.herokuapp.com/packs'
 class Main extends Component {
@@ -45,7 +46,7 @@ class Main extends Component {
         },
         body: JSON.stringify({
           'email': this.state.email,
-          'password': this.state.password
+          'password': this.state.password,
         }) 
       })
           .then(response => response.json())
@@ -62,7 +63,38 @@ class Main extends Component {
           .catch(this.generalError)
     }
 
+    requireAuth = (nextState, replace, next) => {
+      const query = nextState.location.query
+      console.log('query', query)
+    }
+
+
     signUp =(e) => {
+      fetch(signUpUrl, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify({
+          'email': this.state.email,
+          'password': this.state.password,
+          'first_name': this.state.firstName,
+          'last_name': this.state.lastName
+        }) 
+      })
+          .then(response => response.json())
+          .then(res => {
+            console.log('before if',res)
+            if(res.error){
+              console.log('error')
+              return alert(res.error)
+            } else {
+              console.log('else')
+              return this.setState({user: res.user, isAuthed: true, password: ''})
+            }
+          })
+          .catch(this.generalError)
 
     }
 
@@ -99,8 +131,8 @@ class Main extends Component {
       <Switch>
         <Route exact path="/" render={(props) => <Login {...props} handleChange={this.handleChange} logIn={this.logIn}/>} />
         <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} />
-        {isAuthed ?
-        <div>
+        
+        {isAuthed ?<div>
          <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} />} />
          <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} />
          <Route exact path="/add-items" render={(props)=> <AddItems {...props} user={this.state.user}/>} />
@@ -108,7 +140,8 @@ class Main extends Component {
          <Route path="/backpack/:id" component={BackPack} />
          <Route path="/scan-items/:id" component={ScanPack} />
          </div>
-        : <Loader active />}
+        : <Loader style={{color: 'white'}} active>Loading..</Loader>}
+
         {/* <Route component={NoTfound} /> */}
     </Switch>
       </div>

@@ -12,8 +12,7 @@ const style = {
         marginLeft: '25vw',
     },
     button: {
-        marginRight: '31vw',
-        width: '140px'
+        width: '140px',
     }
 }
 
@@ -152,25 +151,16 @@ class AddItems extends Component{
                 <div>
                     <Header style={{color: 'white'}} as='h4'>Choose A Backpack</Header>
                     <Form.Field
+                        required
                         control={Select}
                         options={this.state.packOptions}
                         // label='Choose a Backpack:'
                         placeholder='Pack..'
                         onChange={this.handleChoosePack}
                     />
-                    
-                     <button style={{width:'140px'}} className='add-button create' onClick={this.handleAdditem}><Icon name='plus' /> Another Item</button>
+                    <button onClick={this.addToPack} style={style.button} className='add-button create'>Add Items To {this.state.chosenPack.text}</button>
                      </div>
-                        {this.state.newitems.map((item, idx) =>(
-                            <div key={idx}>
-                            <Header style={{color: 'white'}} as='h4'>Select an Item</Header>
-                            <Form.Field control={Dropdown} onChange={this.handleUseritemAdd(idx)} selection options={this.state.items} placeholder='Items..' />
-                            {/* <Form.Field control={Button} color='red' onClick={this.handleRemoveitem(idx)}>- Item</Form.Field> */}
-                            <button className='minus-button' onClick={this.handleRemoveitem(idx)}><Icon name='minus'/> Item</button>
-                            </div>
-                        ))
-                        }
-                        <Message style={{marginRight: '30vw'}} success header='Item(s) added!' content={`The items have been added to ${this.state.chosenPack.text}`} />
+                    <Message style={{marginRight: '30vw'}} success header='Item(s) added!' content={`The items have been added to ${this.state.chosenPack.text}`} />
                         <Message
                             style={{marginRight: '30vw'}}
                             warning
@@ -179,8 +169,19 @@ class AddItems extends Component{
                                 'The Items may not have been added correctly.',
                             ]}
                         />
+                        {this.state.newitems.map((item, idx) =>(
+                            <div key={idx}>
+                            <Header style={{color: 'white'}} as='h4'>Select an Item</Header>
+                            <Form.Field required control={Dropdown} onChange={this.handleUseritemAdd(idx)} selection options={this.state.items} placeholder='Items..' />
+                            {/* <Form.Field control={Button} color='red' onClick={this.handleRemoveitem(idx)}>- Item</Form.Field> */}
+                            <button className='minus-button' onClick={this.handleRemoveitem(idx)}><Icon name='minus'/> Item</button>
+                            </div>
+                        ))
+                        }
+                        
                 </Form.Group>
-                <button onClick={this.addToPack} style={style.button} className='add-button create'>Submit</button></div> : <Loader active />}
+                <button style={{width:'140px', marginRight: '125px', backgroundColor: 'olive'}} className='add-button create' onClick={this.handleAdditem}><Icon name='plus' /> Another Item</button>
+                </div> : <Loader active />}
             </Form>
             </div>
         )
