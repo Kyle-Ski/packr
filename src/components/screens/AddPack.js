@@ -9,7 +9,7 @@ class AddPack extends Component{
         return(
             <div>
             <div>
-                <MobileNav />
+                <MobileNav signOut={this.props.signOut}/>
             </div>
             <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}} as='h1'>Create A Pack</Header>
             <Divider />

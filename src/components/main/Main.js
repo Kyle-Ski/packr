@@ -9,10 +9,9 @@ import AddItems from '../screens/AddItems'
 import CreateItem from '../screens/CreateItem'
 import BackPack from '../screens/Backpack'
 import ScanPack from '../screens/ScanPack'
-const initUrl = 'https://packr-database.herokuapp.com/'
-const signUpUrl = 'https://packr-database.herokuapp.com/users'
-const loginUrl = 'https://packr-database.herokuapp.com/auth/login'
-const addPackUrl = 'https://packr-database.herokuapp.com/packs'
+const signUpUrl = 'http://localhost:3222/users'
+const loginUrl = 'http://localhost:3222/auth/login'
+const addPackUrl = 'http://localhost:3222/packs'
 class Main extends Component {
 
     state = {
@@ -124,8 +123,21 @@ class Main extends Component {
           .catch(this.generalError)
     }
 
+    signOut = () => {
+      this.setState({
+        warning: '',
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        isAuthed: false,
+        user: '',
+        packName: '',
+      })
+    }
+
   render() {
-    const {loaded, isAuthed} = this.state
+    const { isAuthed } = this.state
     return (
       <div >
       <Switch>
@@ -133,12 +145,12 @@ class Main extends Component {
         <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} />
         
         {isAuthed ?<div>
-         <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} />} />
-         <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} />
-         <Route exact path="/add-items" render={(props)=> <AddItems {...props} user={this.state.user}/>} />
-         <Route exact path="/create-item" component={CreateItem} />
-         <Route path="/backpack/:id" component={BackPack} />
-         <Route path="/scan-items/:id" component={ScanPack} />
+         <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} signOut={this.signOut}/>} />
+         <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} signOut={this.signOut} />
+         <Route exact path="/add-items" render={(props)=> <AddItems {...props} user={this.state.user} signOut={this.signOut}/>} />
+         <Route exact path="/create-item" render={(props) => <CreateItem {...props}  signOut={this.signOut} />}/>
+         <Route path="/backpack/:id" render={(props) => <BackPack {...props} signOut={this.signOut} />}/>
+         <Route path="/scan-items/:id" render={(props) => <ScanPack {...props} signOut={this.signOut} />}/>
          </div>
         : <Loader style={{color: 'white'}} active>Loading..</Loader>}
 

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";
 
-const createUrl = 'https://packr-database.herokuapp.com/create'
+const createUrl = 'http://localhost:3222/'
 
 class CreateItem extends Component{
 
@@ -52,7 +52,7 @@ class CreateItem extends Component{
         return(
             <div>
             <div>
-                <MobileNav />
+                <MobileNav signOut={this.props.signOut}/>
             </div>
             <Header as='h1' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>Center Item in view</Header>
             

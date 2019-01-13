@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Image, Form, Message } from 'semantic-ui-react'
 import { Link, } from 'react-router-dom'
 import shadow from '../../PackrShadow2.png'
-import VideoRecorder from './VideoRecorder';
 
 const style = {
   form: {

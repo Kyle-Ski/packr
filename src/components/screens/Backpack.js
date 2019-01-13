@@ -4,7 +4,7 @@ import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
 import BackpackItems from './BackpackItems'
 
-const itemsByPackUrl = 'https://packr-database.herokuapp.com/items'
+const itemsByPackUrl = 'http://localhose:3222/items'
 class Backpack extends Component{
 
     state={
@@ -46,7 +46,7 @@ class Backpack extends Component{
             <div>
                 {items ? 
                 <div>
-                <MobileNav />
+                <MobileNav signOut={this.props.signOut}/>
                     <Segment style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
                         <Header as='h1'>
                             <Icon circular inverted name='users' size='huge' />

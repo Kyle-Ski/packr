@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Divider, Loader, Icon } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
+import { Loader, Icon } from 'semantic-ui-react'
 import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";
 import scanPackItems from './ScanPackItems'
@@ -12,7 +11,6 @@ class ScanPack extends Component{
 
     state={
         imageSrc: [],
-        itemName: '',
         name: '',
         items: [],
         itemName: 'card'
@@ -21,7 +19,7 @@ class ScanPack extends Component{
     fetchBackpack = () => {
         console.log(this.props.match)
         this.setState({backpack: this.props.match.params.id})
-        return fetch(`https://packr-database.herokuapp.com/packs/${this.props.match.params.id}/items`)
+        return fetch(`http://localhost:3222/packs/${this.props.match.params.id}/items`)
             .then(res => res.json())
             .then(res => {
                 if(res.error){
@@ -44,10 +42,6 @@ class ScanPack extends Component{
             //     }
             // })
             // .catch(console.warn)
-    }
-
-    handleFlip = (e) => {
-        console.log(e.target)
     }
     
     setRef = webcam => {
@@ -83,7 +77,7 @@ class ScanPack extends Component{
         return(
             <div>
             {items.length > 0 ? <div><div>
-                <MobileNav />
+                <MobileNav signOut={this.props.signOut}/>
             </div>
             <div>
             <div style={{

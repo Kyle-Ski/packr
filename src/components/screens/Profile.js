@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Icon, Header, Segment, Divider, Card, Loader } from 'semantic-ui-react'
+import { Icon, Header, Divider, Card, Loader } from 'semantic-ui-react'
 import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
 import ProfilePacks from './ProfilePacks'
 
-const userPacksUrl = 'https://packr-database.herokuapp.com/users/'
+const userPacksUrl = 'http://localhost:3222/users/'
 
 class Profile extends Component {
 
@@ -31,7 +31,7 @@ class Profile extends Component {
         const {packs} = this.state
         return(
             <div>
-            <MobileNav />
+            <MobileNav signOut={this.props.signOut}/>
             {packs.length ?<div >
             
             <Header style={{color: 'white', marginTop: '60px', marginLeft: '55px'}} as='h1'>

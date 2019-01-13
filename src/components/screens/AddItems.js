@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Form, Select, Dropdown, Header, Divider, Icon, Loader, Message } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 
-const allItemsUrl = 'https://packr-database.herokuapp.com/items'
-const userPacksUrl = 'https://packr-database.herokuapp.com/users/'
-const addItemsUrl = 'https://packr-database.herokuapp.com/pack_items/'
+const allItemsUrl = 'http://localhost:3222/items'
+const userPacksUrl = 'http://localhost:3222/users/'
+const addItemsUrl = 'http://localhost:3222/pack_items/'
 
 const style = {
     form: {
@@ -142,7 +141,7 @@ class AddItems extends Component{
         return (
             <div>
             <div>
-                <MobileNav />
+                <MobileNav signOut={this.props.signOut}/>
             </div>
             <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}} as='h1'>Add Items into a Backpack</Header>
             <Divider />
