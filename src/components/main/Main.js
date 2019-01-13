@@ -23,23 +23,6 @@ class Main extends Component {
         isAuthed: false,
         user: '',
         packName: '',
-        loaded: false,
-    }
-
-    fetchInit = () => {
-      
-    }
-
-    componentDidMount(){
-      fetch(initUrl)
-        .then(res => res.json())
-        .then(res => {
-          if (res.message){
-            this.setState({loaded: true})
-          }
-          return res
-        })
-      .catch(err => console.warn('mount:', err))
     }
 
     generalError = (err) => {
@@ -114,8 +97,8 @@ class Main extends Component {
     return (
       <div >
       <Switch>
-        {loaded ? <div><Route exact path="/" render={(props) => <Login {...props} handleChange={this.handleChange} logIn={this.logIn}/>} />
-        <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} /></div> :<Loader active >Loading... if Packr is taking too long, refresh the page.</Loader>}
+        <Route exact path="/" render={(props) => <Login {...props} handleChange={this.handleChange} logIn={this.logIn}/>} />
+        <Route exact path="/signup" render={(props) => <Signup {...props} handleChange={this.handleChange} signUp={this.signUp}/>} />
         {isAuthed ?
         <div>
          <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} />} />
