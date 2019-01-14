@@ -13,6 +13,8 @@ import CreateItemName from '../screens/CreateItemName'
 const signUpUrl = 'https://packr-database.herokuapp.com/users'
 const loginUrl = 'https://packr-database.herokuapp.com/auth/login'
 const addPackUrl = 'https://packr-database.herokuapp.com/packs'
+const createUrl = 'http://localhost:3222/items'
+
 class Main extends Component {
 
     state = {
@@ -24,7 +26,9 @@ class Main extends Component {
         isAuthed: false,
         user: '',
         packName: '',
-        addPackWarn: ''
+        addPackWarn: '',
+        itemName: '',
+        itemId: null, 
     }
 
     generalError = (err) => {
@@ -63,6 +67,31 @@ class Main extends Component {
           })
           .catch(this.generalError)
     }
+
+    sendItem =  () => {
+      fetch(createUrl, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+          },
+          body: JSON.stringify({
+              'name': this.state.itemName,
+          })
+      })
+      .then(response => response.json())
+      .then(res => {
+          if(res.error){
+              this.setState({warning: 'warning'})
+              return res
+          } else {
+              this.setState({warning: 'success', itemId: res.item.id})
+              return res
+          }
+      })
+      .catch(err => console.warn(err))
+  }
+
 
     requireAuth = (nextState, replace, next) => {
       const query = nextState.location.query
@@ -150,8 +179,8 @@ class Main extends Component {
          <Route exact path="/profile" render={(props)=> <Profile {...props} user={this.state.user} signOut={this.signOut}/>} />
          <Route exact path="/add-pack" render={(props)=> <AddPack {...props} handleChange={this.handleChange} addPack={this.addPack}/>} signOut={this.signOut} warning={addPackWarn}/>
          <Route exact path="/add-items" render={(props)=> <AddItems {...props} user={this.state.user} signOut={this.signOut}/>} />
-         <Route exact path="/create-item-name" render={(props) => <CreateItemName {...props}  signOut={this.signOut} />}/>
-         <Route exact path="/create-item" render={(props) => <CreateItem {...props}  signOut={this.signOut} />}/>
+         <Route exact path="/create-item-name" render={(props) => <CreateItemName {...props} sendItem={this.sendItem} handleChange={this.handleChange} signOut={this.signOut} />}/>
+         <Route exact path="/create-item" render={(props) => <CreateItem {...props}  signOut={this.signOut} itemId={this.state.itemId} itemName={this.state.itemName}/>}/>
          <Route path="/backpack/:id" render={(props) => <BackPack {...props} signOut={this.signOut} />}/>
          <Route path="/scan-items/:id" render={(props) => <ScanPack {...props} signOut={this.signOut} />}/>
          </div>

@@ -63,6 +63,7 @@ class ScanPackItems extends React.Component{
 
     componentDidMount(){
         this.structureItems()
+        .catch(err=>console.error('Structure Items:', err))
     }
 
     structureItems = () => {

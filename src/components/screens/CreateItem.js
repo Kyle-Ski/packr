@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Message, Icon, Header, Divider, CommentContent } from 'semantic-ui-react'
+import { Form, Message, Icon, Header, Divider, Loader, Responsive } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";
@@ -10,10 +10,9 @@ class CreateItem extends Component{
 
     state={
         imageSrc: 0,
-        itemName: '',
         warning: null,
         tfLoaded: false,
-        itemId: null
+        mouseDown: false
     }
 
     componentDidMount(){
@@ -44,30 +43,40 @@ class CreateItem extends Component{
     //     this.webcam = webcam;
     // }
 
-    // capture = () => {
+    capture = () => {
         // this.setState({
         //     imageSrc: [...this.state.imageSrc, this.webcam.getScreenshot().slice(23)],
         // })
-    //     this.setState({imageSrc: this.state.imageSrc+=1})
-    // }
-
-    capture = () => {
-        return tf.tidy(() => {
-          // Reads the image as a Tensor from the webcam <video> element.
-          const webcamImage = tf.fromPixels(this.refs.preview);
-    
-          // Crop the image so we're using the center square of the rectangular
-          // webcam.
-          const croppedImage = this.cropImage(webcamImage);
-    
-          // Expand the outer most dimension so we have a batch size of 1.
-          const batchedImage = croppedImage.expandDims(0);
-    
-          // Normalize the image between -1 and 1. The image comes in between 0-255,
-          // so we divide by 127 and subtract 1.
-          return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
-        });
+        // this.setState({imageSrc: this.state.imageSrc+=1})
+        this.setState({mouseDown: true})
+        // while(this.state.mouseDown){
+        //     this.setState({imageSrc: this.state.imageSrc+=1})
+        // }
+        console.log('down')
     }
+
+    mouseUp = () =>{
+        this.setState({mouseDown:false})
+        console.log('up')
+    }
+
+    // capture = () => {
+    //     return tf.tidy(() => {
+    //       // Reads the image as a Tensor from the webcam <video> element.
+    //       const webcamImage = tf.fromPixels(this.refs.preview);
+    
+    //       // Crop the image so we're using the center square of the rectangular
+    //       // webcam.
+    //       const croppedImage = this.cropImage(webcamImage);
+    
+    //       // Expand the outer most dimension so we have a batch size of 1.
+    //       const batchedImage = croppedImage.expandDims(0);
+    
+    //       // Normalize the image between -1 and 1. The image comes in between 0-255,
+    //       // so we divide by 127 and subtract 1.
+    //       return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+    //     });
+    // }
 
     cropImage = (img) => {
         const size = Math.min(img.shape[0], img.shape[1]);
@@ -149,15 +158,16 @@ class CreateItem extends Component{
             height: 720,
             facingMode: {exact: 'environment'}
           }
-          const {warning, tfLoaded, itemId} = this.state
+          const {warning, tfLoaded, imageSrc} = this.state
+          const {itemId, itemName} = this.props
         return(
             <div>
             <div>
                 <MobileNav signOut={this.props.signOut}/>
             </div>
-            <Header as='h1' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>Center Item in view</Header>
+            <Header as='h1' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>Center {itemName? itemName: `Item`} in view</Header>
             <video id='preview' ref="preview" width="360" height="400" autoPlay muted playsInline></video>
-            {tfLoaded && itemId?<p style={{color: 'white'}}>Loaded!</p>: <p style={{color: 'red'}}>Loading?</p>}
+            {tfLoaded && itemId?<p style={{color: 'white'}}>Loaded!</p>: <Loader size='mini' active>Loading..</Loader>}
                 {/* <Webcam
                     audio={false}
                     height={500}
@@ -168,8 +178,6 @@ class CreateItem extends Component{
                 /> */}
                 <Divider />
                 <Form className={warning} onSubmit={() => console.log('submit')}>
-                <Header as='h4' style={{color: 'white'}}>Item Name</Header>
-                    <Form.Input required onChange={this.getItemName} placeholder='Item Name...' icon='pencil alternate' />
                     <Message success header='Item Added!' content={`I now know what your ${this.state.itemName} looks like!`} />
                     <Message
                             warning
@@ -180,12 +188,22 @@ class CreateItem extends Component{
                         />
                     <div>
                     {
-                    itemId ? <button className='add-button scan' onClick={this.capture}><Icon name='camera' />Scan Item</button> :
-                    <button className='add-button create' onClick={this.sendItem} ><Icon name='plus' /> Create Item</button>
+                    itemId ? 
+                    <div>
+                    <Responsive minWidth={768} >
+                            <button style={{ width: '170px' }} className='add-button create' onMouseDown={this.capture} onMouseUp={this.mouseUp}><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
+                    </Responsive>
+                    <Responsive maxWidth={767}>
+                        <button style={{ width: '170px' }} className='add-button create' onTouchStart={this.capture} onTouchEnd={this.mouseUp}><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
+                    </Responsive>
+                    </div>
+                    :
+                    <Loader size='mini' active>Loading...</Loader>
                     }
                     </div>
                 </Form>
-                <h3 style={{color: 'white'}}>{this.state.imageSrc} scans, {this.state.imageSrc/*.length*/ >= 10 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h3>
+                <h3 style={{color: 'white'}}>{imageSrc} scans, {imageSrc/*.length*/ >= 10 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h3>
+                {imageSrc>=10 ? <Link to='/add-items'><button style={{width: '170px'}} className='add-button create' onClick={this.props.sendItem} ><i class="fas fa-brain" style={{color: 'white', marginRight: '7px'}}>  </i>Teach Me {itemName}!</button></Link>: ''}
             </div>
         )
     }

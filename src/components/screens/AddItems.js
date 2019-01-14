@@ -163,7 +163,7 @@ class AddItems extends Component{
                     </div>
                     <div style={{paddingRight: '120px'}}>
                     <button onClick={this.addToPack} style={style.button} className='add-button create'>Add Items To {this.state.chosenPack ? this.state.chosenPack.text:''}</button>
-                    <Link to='create-item'><button style={{width: '140px', backgroundColor:'#FD6041'}} className='add-button create'>Item Not Here? Create It!</button></Link>
+                    <Link to='create-item-name'><button style={{width: '140px', backgroundColor:'#FD6041'}} className='add-button create'>Item Not Here? Create It!</button></Link>
                      </div>
                     {this.state.chosenPack ? <Message style={{marginRight: '30vw'}} success header='Item(s) added!' content={`The items have been added to ${this.state.chosenPack.text}`} />:''}
                         <Message
