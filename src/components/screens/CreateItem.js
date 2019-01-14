@@ -17,11 +17,11 @@ class CreateItem extends Component{
 
     componentDidMount(){
         this.setup()
-            .then(res => {
-                console.log(res)
-                return res
-            })
-            .then(this.modelHelper)
+            // .then(res => {
+            //     console.log(res)
+            //     return res
+            // })
+            // .then(this.modelHelper)
             .then(res => {
                 console.log('res from modelHelper',res)
                 this.setState({tfLoaded: true})
@@ -30,12 +30,11 @@ class CreateItem extends Component{
             .catch(err => console.error('componentDidMount err:', err))
     }
 
-    modelHelper = () => {
-        tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
-            .then(mobilenet => {
-                const layer = mobilenet.getLayer('conv_pw_13_relu')
-                return tf.model({inputs: mobilenet.inputs, outputs: layer.output})
-            })
+    modelHelper = async () => {
+        const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
+        console.log('mobilenet', mobilenet.layers())
+        const layer = mobilenet.getLayer('conv_pw_13_relu')
+        return tf.model({inputs: mobilenet.inputs, outputs: layer.output})
         // Return a model that outputs an internal activation.
       }
     
@@ -43,10 +42,15 @@ class CreateItem extends Component{
     predict = async () => {
         // this.setState({mouseDown: true})
         // while(this.state.mouseDown){
+            // const modelHelp = await this.modelHelper
+            const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
+            const layer = mobilenet.getLayer('conv_pw_13_relu')
+
             try { 
                 const predictedClass = tf.tidy(() => {
                     const img = this.capture()
-                    const prediction = this.modelHelper.predict(img)
+                    console.log('predict',img)
+                    const prediction = tf.model({inputs: mobilenet.inputs, outputs: layer.output}).predict(img)
                     return prediction.as1D().argMax()
                 })
                 const classId = (await predictedClass.data())[0]
@@ -183,7 +187,7 @@ class CreateItem extends Component{
                 <MobileNav signOut={this.props.signOut}/>
             </div>
             <Header as='h1' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>Center {itemName? itemName: `Item`} in view</Header>
-            <video id='preview' ref="preview" width="360" height="225" autoPlay muted playsInline></video>
+            <video id='preview' ref="preview" width="360" height="224" autoPlay muted playsInline></video>
             {tfLoaded && itemId?<p style={{color: 'white'}}>Loaded!</p>: <Loader size='mini' active>Loading..</Loader>}
                 <Divider />
                 <Form className={warning} onSubmit={() => console.log('submit')}>
