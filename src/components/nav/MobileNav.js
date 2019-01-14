@@ -30,7 +30,7 @@ export default class MobileNav extends Component {
         <Dropdown.Menu>
           <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/' onClick={this.props.signOut}>Sign Out</Link></Dropdown.Item>
           <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/profile'>Profile</Link></Dropdown.Item>
-          <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/create-item'>Create Item</Link></Dropdown.Item>
+          <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/create-item-name'>Create Item</Link></Dropdown.Item>
           <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/add-items'>Add Items</Link></Dropdown.Item>
           <Dropdown.Item><Link style={{color:'black', fontSize: '22px'}} to='/add-pack'>Add Pack</Link></Dropdown.Item>
         </Dropdown.Menu>
