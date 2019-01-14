@@ -39,44 +39,61 @@ class CreateItem extends Component{
         // Return a model that outputs an internal activation.
       }
     
-    // setRef = webcam => {
-    //     this.webcam = webcam;
-    // }
 
-    capture = () => {
+    predict = async () => {
+        // this.setState({mouseDown: true})
+        // while(this.state.mouseDown){
+            try { 
+                const predictedClass = tf.tidy(() => {
+                    const img = this.capture()
+                    const prediction = this.modelHelper.predict(img)
+                    return prediction.as1D().argMax()
+                })
+                const classId = (await predictedClass.data())[0]
+                predictedClass.dispose()
+                console.log('classId', classId)
+                await tf.nextFrame()
+
+            } catch (err){
+                console.warn('Catch', err)
+            }
+           
+        // }
+        //setinterval(fn, time), clearInterval
+    }
+
+    // capture = () => {
         // this.setState({
         //     imageSrc: [...this.state.imageSrc, this.webcam.getScreenshot().slice(23)],
         // })
         // this.setState({imageSrc: this.state.imageSrc+=1})
-        this.setState({mouseDown: true})
         // while(this.state.mouseDown){
         //     this.setState({imageSrc: this.state.imageSrc+=1})
         // }
-        console.log('down')
-    }
+    // }
 
     mouseUp = () =>{
         this.setState({mouseDown:false})
         console.log('up')
     }
 
-    // capture = () => {
-    //     return tf.tidy(() => {
-    //       // Reads the image as a Tensor from the webcam <video> element.
-    //       const webcamImage = tf.fromPixels(this.refs.preview);
+    capture = () => {
+        return tf.tidy(() => {
+          // Reads the image as a Tensor from the webcam <video> element.
+          const webcamImage = tf.fromPixels(this.refs.preview);
     
-    //       // Crop the image so we're using the center square of the rectangular
-    //       // webcam.
-    //       const croppedImage = this.cropImage(webcamImage);
+          // Crop the image so we're using the center square of the rectangular
+          // webcam.
+          const croppedImage = this.cropImage(webcamImage);
     
-    //       // Expand the outer most dimension so we have a batch size of 1.
-    //       const batchedImage = croppedImage.expandDims(0);
+          // Expand the outer most dimension so we have a batch size of 1.
+          const batchedImage = croppedImage.expandDims(0);
     
-    //       // Normalize the image between -1 and 1. The image comes in between 0-255,
-    //       // so we divide by 127 and subtract 1.
-    //       return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
-    //     });
-    // }
+          // Normalize the image between -1 and 1. The image comes in between 0-255,
+          // so we divide by 127 and subtract 1.
+          return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+        });
+    }
 
     cropImage = (img) => {
         const size = Math.min(img.shape[0], img.shape[1]);
@@ -166,16 +183,8 @@ class CreateItem extends Component{
                 <MobileNav signOut={this.props.signOut}/>
             </div>
             <Header as='h1' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>Center {itemName? itemName: `Item`} in view</Header>
-            <video id='preview' ref="preview" width="360" height="400" autoPlay muted playsInline></video>
+            <video id='preview' ref="preview" width="360" height="225" autoPlay muted playsInline></video>
             {tfLoaded && itemId?<p style={{color: 'white'}}>Loaded!</p>: <Loader size='mini' active>Loading..</Loader>}
-                {/* <Webcam
-                    audio={false}
-                    height={500}
-                    ref={this.setRef}
-                    screenshotFormat="image/jpeg"
-                    width={400}
-                    videoConstraints={videoConstraints}
-                /> */}
                 <Divider />
                 <Form className={warning} onSubmit={() => console.log('submit')}>
                     <Message success header='Item Added!' content={`I now know what your ${this.state.itemName} looks like!`} />
@@ -191,10 +200,10 @@ class CreateItem extends Component{
                     itemId ? 
                     <div>
                     <Responsive minWidth={768} >
-                            <button style={{ width: '170px' }} className='add-button create' onMouseDown={this.capture} onMouseUp={this.mouseUp}><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
+                            <button style={{ width: '170px' }} className='add-button create' onMouseDown={this.predict} onMouseUp={this.mouseUp}><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
                     </Responsive>
                     <Responsive maxWidth={767}>
-                        <button style={{ width: '170px' }} className='add-button create' onTouchStart={this.capture} onTouchEnd={this.mouseUp}><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
+                        <button style={{ width: '170px' }} className='add-button create' onTouchStart={this.predict} onTouchEnd={this.mouseUp}><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
                     </Responsive>
                     </div>
                     :
