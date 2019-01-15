@@ -15,6 +15,7 @@ class ScanPack extends Component{
         items: [],
         itemName: 'card',
         totalItems: 0,
+        predictingMessage: 'not yet predicting'
     }
 
     fetchBackpack = () => {
@@ -59,7 +60,7 @@ class ScanPack extends Component{
             return this.preTrained
         })
         .then(() => {
-            let loadingPackr = tf.loadModel('indexeddb://my-model-1')
+            let loadingPackr = tf.loadModel('indexeddb://packr-model')
             return loadingPackr
         })
         .then(loadingPackr => {
@@ -74,6 +75,7 @@ class ScanPack extends Component{
     }
     
     predictTheImage = () => {
+        this.setState({predictingMessage: 'Predicting...'})
         var startPredicting = setInterval(async () => {
             try {
                 const predictedClass = tf.tidy(() => {
@@ -89,6 +91,8 @@ class ScanPack extends Component{
                 this.setState({ predictCount: this.state.predictCount + 1 })
                 if (this.state.predictCount === 50) {
                     clearInterval(startPredicting)
+                    this.setState({predictingMessage: 'Done Predicting'})
+
                 }
             } catch (err) {
                 console.warn('Predict Catch', err)
@@ -162,7 +166,7 @@ class ScanPack extends Component{
 
 
     render(){
-          const {items, name} = this.state 
+          const {items, name, predictingMessage} = this.state 
         return(
             <div>
             {items.length > 0 ? <div><div>
@@ -184,7 +188,8 @@ class ScanPack extends Component{
                 <h1 onClick={this.handleFlip} style={{marginTop: '-40px'}} className='item__face item__face--back'><Icon name='check' /> {this.state.name} Ready to Go!</h1>
                 </div>
                 <button className='add-button create' onClick={this.listModels}>list models</button>
-                <button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {name}</span></button>
+                <button style={{ width: '170px' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='camera' /><span className='no-copy'>Scan {name}</span></button>
+                <h3 style={{color: 'white'}}>Predicting Message: {predictingMessage}</h3>
                 </div>
                 <div style={{zIndex: '-1', marginTop: '600px'}}>
                 <ScanPackItems  items={items}/>
