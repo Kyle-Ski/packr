@@ -155,6 +155,15 @@ class CreateItem extends Component {
         }, 300)
     }
 
+    saveModel = () => {
+        this.model.save('indexeddb://packr-model')
+        .then(res => {
+            console.log('packr model saved, response:',res)
+            return res
+        })
+        .catch(err => console.warn('model save error:', err))
+    }
+
     capture = () => {
         return tf.tidy(() => {
             // Reads the image as a Tensor from the webcam <video> element.
@@ -246,7 +255,7 @@ class CreateItem extends Component {
     }
 
     render() {
-        const { warning, tfLoaded, predictCount, lossThreshold, exampleCount } = this.state
+        const { warning, tfLoaded, predictCount, lossThreshold, exampleCount, isTraining } = this.state
         const { itemId, itemName } = this.props
         return (
             <div>
@@ -272,19 +281,23 @@ class CreateItem extends Component {
                                 <div>
                                     {exampleCount === 20 ? '':<button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>}
                                     {exampleCount === 20 ? <button style={{ width: '170px', backgroundColor: 'olive' }} className='add-button create' onClick={this.train} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Teach Me {itemName}!</button>:''}
-                                    {lossThreshold ? <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='stop circle outline' /><span className='no-copy'>Predict {itemName}</span></button>:<Loader active>Teaching...</Loader>}
+                                    {lossThreshold  ? <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='stop circle outline' /><span className='no-copy'>Predict {itemName}</span></button>:''}
                                 </div>
                                 :
                                 <Loader size='mini' active>Loading...</Loader>
                         }
                     </div>
                 </Form>
-                <h3 style={{ color: 'white' }}>{exampleCount} scans, {exampleCount/*.length*/ >= 20 ? `Good ammount! Ready to Learn!` : `More scans please..`}</h3>
+                <h3 style={{ color: 'white' }}>{exampleCount} scans, {exampleCount/*.length*/ >= 20 ? `Good ammount! Ready to Learn!` : `scanning..`}</h3>
                 <h3 style={{ color: 'white' }}>{predictCount} prediction scans</h3>
-                {lossThreshold ? <Link to='/add-items'><button style={{ width: '170px' }} className='add-button create' onClick={this.props.sendItem} ><Icon name='plus'/> Add {itemName} to a Pack!</button></Link> : ''}
+                {lossThreshold ? <button style={{ width: '170px' }} className='add-button create' onClick={this.saveModel} ><Icon name='plus'/> Save {itemName} the model</button>: ''}
             </div>
         )
     }
 }
 
 export default CreateItem
+
+// {lossThreshold ? <button style={{ width: '170px' }} className='add-button create' onClick={this.saveModel} ><Icon name='plus'/> Add {itemName} to a Pack!</button>: ''}
+
+// to local storage: size quota being exceeded is a possible cause of this failure: modelTopologyBytes=1076, weightSpecsBytes=197, weightDataBytes=5023600.
