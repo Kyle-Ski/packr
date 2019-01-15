@@ -16,7 +16,8 @@ class CreateItem extends Component{
             warning: null,
             tfLoaded: false,
             mouseDown: false,
-            imgCount: 0
+            imgCount: 0,
+            exampleCount: 0
         }
         // this.mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
         // this.layer = mobilenet.getLayer('conv_pw_13_relu')
@@ -29,6 +30,7 @@ class CreateItem extends Component{
         this.setup()
             .then(res => {
                 console.log('res from setup',res)
+                this.setState({imageSrc: this.props.itemId})
                 return res
             })
             .then(() => {
@@ -38,21 +40,18 @@ class CreateItem extends Component{
             .then(mobilenet=>{
                 let layer = mobilenet.getLayer('conv_pw_13_relu')
                 this.preTrained = tf.model({inputs: mobilenet.inputs, outputs: layer.output})
-                this.setState({tfLoaded: true , imageSrc: this.props.itemId})
+                this.saveData = new ControllerDataset(this.state.imageSrc +1)
+                this.model = this.model
+                this.setState({tfLoaded: true})
                 return this.preTrained
             })
             .catch(err => console.error('componentDidMount err:', err))
             
     }
 
-    trainIt = async () => {
-        const startTraining = setInterval
-            const img = this.capture()
-        this.train(this.preTrained.predict(img), this.saveData)
-    }
 
-    train = async (preTrained, controllerDataset) => {
-        if (this.state.imgCount < 20) {
+    train = async () => {
+        if (this.saveData.xs == null) {
             throw new Error('Add some examples before training!');
         }
         const denseUnits = 100
@@ -60,14 +59,13 @@ class CreateItem extends Component{
         const learningRate = 0.0001
         const epochs = 20
         const batchSizeFraction = 0.4
-        let model
-        model = tf.sequential({
+        this.model = tf.sequential({
             layers: [
                 // Flattens the input to a vector so we can use it in a dense layer. While
                 // technically a layer, this only performs a reshape (and has no training
                 // parameters).
                 tf.layers.flatten({
-                    inputShape: preTrained.outputs[0].shape.slice(1)
+                    inputShape: this.preTrained.outputs[0].shape.slice(1)
                 }),
                 // Layer 1.
                 tf.layers.dense({
@@ -92,20 +90,20 @@ class CreateItem extends Component{
         // categorical classification which measures the error between our predicted
         // probability distribution over classes (probability that an input is of each
         // class), versus the label (100% probability in the true class)>
-        model.compile({ optimizer: optimizer, loss: 'categoricalCrossentropy' });
+        this.model.compile({ optimizer: optimizer, loss: 'categoricalCrossentropy' });
 
         // We parameterize batch size as a fraction of the entire dataset because the
         // number of examples that are collected depends on how many examples the user
         // collects. This allows us to have a flexible batch size.
         const batchSize =
-            Math.floor(controllerDataset.xs.shape[0] * batchSizeFraction)
+            Math.floor(this.saveData.xs.shape[0] * batchSizeFraction)
         if (!(batchSize > 0)) {
             throw new Error(
                 `Batch size is 0 or NaN. Please choose a non-zero fraction.`);
         }
 
         // Train the model! Model.fit() will shuffle xs & ys so we don't have to.
-        model.fit(controllerDataset.xs, controllerDataset.ys)/*, {
+        this.model.fit(this.saveData.xs, this.saveData.ys)/*, {
         batchSize,
         epochs: ui.getEpochs(),
         callbacks: {
@@ -116,33 +114,42 @@ class CreateItem extends Component{
     });*/
     }
 
-    timer = () =>{
-        var startPredicting = setInterval(async()=>{
-        // const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
-        // const layer = mobilenet.getLayer('conv_pw_13_relu')
-        try { 
-            const predictedClass = tf.tidy(() => {
-                const img = this.capture()
-                // const prediction = tf.model({inputs: mobilenet.inputs, outputs: layer.output})
-                const predictions = this.preTrained.predict(img)
-                // tf.tidy(() => saveData.addExample(prediction.predict(img), this.state.imageSrc))
-                return predictions.as1D().argMax()
-            })
-            const classId = (await predictedClass.data())[0]
-            console.log('predictedClassId:', classId)
-            predictedClass.dispose()
-            await tf.nextFrame() 
-            this.setState({imgCount: this.state.imgCount+=1})
-            if(this.state.imgCount === 20) {
-                clearInterval(startPredicting)
 
+    getExamples = () =>{
+        const label = this.state.imageSrc
+        var startGetting = setInterval(() => {
+            const img = this.capture()
+            const example = this.preTrained.predict(img)
+            tf.tidy(() => this.saveData.addExample(example, label))                
+            this.setState({ imgCount: this.state.exampleCount += 1 })
+            if (this.state.exampleCount === 20) {
+                clearInterval(startGetting)
+            }   
+        }, 400)
+    }
+
+    predictTheImage = () =>{
+        var startPredicting = setInterval(async () => {
+            try {
+                const predictedClass = tf.tidy(() => {
+                    const img = this.capture()
+                    const predictions = this.preTrained.predict(img)
+                    return predictions.as1D().argMax()
+                })
+                const classId = (await predictedClass.data())[0]
+                console.log('predictedClassId:', classId)
+                predictedClass.dispose()
+                await tf.nextFrame()
+                this.setState({ imgCount: this.state.imgCount += 1 })
+                if (this.state.imgCount === 20) {
+                    clearInterval(startPredicting)
+                }
+            } catch (err) {
+                console.warn('Catch', err)
             }
-        } catch (err){
-            console.warn('Catch', err)
-        }    
-       
         }, 600)
     }
+
 
     stopTimer=() =>{
         console.log('stop')
@@ -279,8 +286,9 @@ class CreateItem extends Component{
                     {
                     itemId ? 
                     <div>
-                        <button style={{ width: '170px' }} className='add-button create' onClick={this.timer} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
-                        <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.predictImage} ><Icon name='stop circle outline' /><span className='no-copy'>Predict {itemName}</span></button>
+                        <button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
+                        <button style={{width: '170px'}} className='add-button create' onClick={this.train} ><i className="fas fa-brain" style={{color: 'white', marginRight: '7px'}}>  </i>Teach Me {itemName}!</button>
+                        <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='stop circle outline' /><span className='no-copy'>Predict {itemName}</span></button>
                     </div>
                     :
                     <Loader size='mini' active>Loading...</Loader>
