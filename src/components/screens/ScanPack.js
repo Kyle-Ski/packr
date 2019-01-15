@@ -96,6 +96,15 @@ class ScanPack extends Component{
         }, 300)
     }
 
+    adjustVideoSize = (width, height) => {
+        const aspectRatio = width / height;
+        if (width >= height) {
+            this.refs.preview.width = aspectRatio * this.refs.preview.height;
+        } else if (width < height) {
+            this.refs.preview.height = this.refs.preview.width / aspectRatio;
+        }
+    }
+
 
     capture = () => {
         return tf.tidy(() => {
