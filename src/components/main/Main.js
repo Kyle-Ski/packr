@@ -56,12 +56,9 @@ class Main extends Component {
       })
           .then(response => response.json())
           .then(res => {
-            console.log('before if',res)
             if(res.error){
-              console.log('error')
               return alert(res.error)
             } else {
-              console.log('else')
               return this.setState({user: res, isAuthed: true, password: ''})
             }
           })

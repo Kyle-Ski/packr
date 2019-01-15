@@ -16,7 +16,6 @@ class Profile extends Component {
         fetch(userPacksUrl + this.props.user.id)
             .then(res => res.json())
             .then(res =>{
-                console.log('res', res.user[0].backpacks)
                 this.setState({packs: res.user[0].backpacks})
                 return res
             })
@@ -34,7 +33,7 @@ class Profile extends Component {
             <MobileNav signOut={this.props.signOut}/>
             {packs.length ?<div >
             
-            <Header style={{color: 'white', marginTop: '60px', marginLeft: '55px'}} as='h1'>
+            <Header style={{color: 'white', marginTop: '60px', marginLeft: '55px'}}>
             <Icon circular inverted name='users' size='huge'/>
             <Header.Content  as='h3'>{this.props.user.first_name} {this.props.user.last_name}</Header.Content>
             </Header>

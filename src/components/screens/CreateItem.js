@@ -18,7 +18,8 @@ class CreateItem extends Component {
             imgCount: 0,
             exampleCount: 0,
             predictCount: 0,
-            lossThreshold: false
+            lossThreshold: false,
+            isTraining: false,
         }
     }
 
@@ -47,8 +48,11 @@ class CreateItem extends Component {
 
     }
 
+    setTrainingMode = () => this.setState({isTraining: !this.state.isTraining})
+
 
     train = async () => {
+        this.setTrainingMode()
         if (this.saveData.xs == null) {
             throw new Error('Add some examples before training!');
         }
@@ -119,7 +123,8 @@ class CreateItem extends Component {
             const img = this.capture()
             const example = this.preTrained.predict(img)
             tf.tidy(() => this.saveData.addExample(example, label))
-            this.setState({ imgCount: this.state.exampleCount + 1 })
+            let addToCount = this.state.exampleCount
+            this.setState({ exampleCount: addToCount + 1 })
             if (this.state.exampleCount === 20) {
                 clearInterval(startGetting)
                 console.log('label', label)
@@ -241,7 +246,7 @@ class CreateItem extends Component {
     }
 
     render() {
-        const { warning, tfLoaded, imgCount, predictCount, lossThreshold } = this.state
+        const { warning, tfLoaded, predictCount, lossThreshold, exampleCount } = this.state
         const { itemId, itemName } = this.props
         return (
             <div>
@@ -265,8 +270,8 @@ class CreateItem extends Component {
                         {
                             itemId ?
                                 <div>
-                                    {imgCount === 20 ? '':<button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>}
-                                    {imgCount === 20 ? <button style={{ width: '170px', backgroundColor: 'olive' }} className='add-button create' onClick={this.train} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Teach Me {itemName}!</button>:''}
+                                    {exampleCount === 20 ? '':<button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>}
+                                    {exampleCount === 20 ? <button style={{ width: '170px', backgroundColor: 'olive' }} className='add-button create' onClick={this.train} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Teach Me {itemName}!</button>:''}
                                     {lossThreshold ? <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='stop circle outline' /><span className='no-copy'>Predict {itemName}</span></button>:<Loader active>Teaching...</Loader>}
                                 </div>
                                 :
@@ -274,7 +279,7 @@ class CreateItem extends Component {
                         }
                     </div>
                 </Form>
-                <h3 style={{ color: 'white' }}>{imgCount} scans, {imgCount/*.length*/ >= 20 ? `Good ammount! Ready to Learn!` : `More scans please..`}</h3>
+                <h3 style={{ color: 'white' }}>{exampleCount} scans, {exampleCount/*.length*/ >= 20 ? `Good ammount! Ready to Learn!` : `More scans please..`}</h3>
                 <h3 style={{ color: 'white' }}>{predictCount} prediction scans</h3>
                 {lossThreshold ? <Link to='/add-items'><button style={{ width: '170px' }} className='add-button create' onClick={this.props.sendItem} ><Icon name='plus'/> Add {itemName} to a Pack!</button></Link> : ''}
             </div>

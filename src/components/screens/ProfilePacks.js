@@ -12,7 +12,7 @@ const style={
 
 const ProfilePacks = ({packs}) => packs.map((pac, key) => {
         return (
-            <Card>
+            <Card key={key}>
             <Card.Content>
             <i style={{color: 'white',textShadow: '-1px 0px 4px rgba(1, 1, 1)', float:'right'}} className="fas fa-hiking"></i>
             <Card.Header float='left'>
