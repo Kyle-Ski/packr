@@ -14,7 +14,8 @@ class ScanPack extends Component{
         items: [],
         itemName: 'card',
         totalItems: 0,
-        predictingMessage: 'not yet predicting'
+        predictingMessage: 'not yet predicting',
+        predictCount: 0
     }
 
     fetchBackpack = () => {

@@ -42,10 +42,10 @@ class CreateItemName extends Component {
             <div>
                 <MobileNav />
                 <div>
-                <Header as='h1' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>What Is the Item's Name?</Header>
+                <Header as='h1' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', marginTop: '150px', marginBottom: '40px'}}>What Is the Item's Name?</Header>
                 <Input name='itemName' required onChange={this.props.handleChange} placeholder='Item Name...' icon='pencil alternate' />
-                <Link to='/create-item'><button className='add-button create' onClick={this.props.sendItem} ><Icon name='plus' /> Name Item</button></Link>
                 </div>
+                <Link to='/create-item'><button style={{marginTop: '20px'}} className='add-button create' onClick={this.props.sendItem} ><Icon name='plus' /> Submit</button></Link>
             </div>
         )
     }
