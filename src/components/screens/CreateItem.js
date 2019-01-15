@@ -6,78 +6,85 @@ import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";
 import * as tf from '@tensorflow/tfjs';
 
+
 const createUrl = 'http://localhost:3222/items'
 class CreateItem extends Component{
-
-    state={
-        imageSrc: 0,
-        warning: null,
-        tfLoaded: false,
-        mouseDown: false,
-        imgCount: 0
+    constructor(props){
+        super(props)
+        this.state={
+            imageSrc: 0,
+            warning: null,
+            tfLoaded: false,
+            mouseDown: false,
+            imgCount: 0
+        }
+        // this.mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
+        // this.layer = mobilenet.getLayer('conv_pw_13_relu')
+        //  = tf.model({inputs: mobilenet.inputs, outputs: layer.output})
     }
+
+    
 
     componentDidMount(){
         this.setup()
-            // .then(res => {
-            //     console.log(res)
-            //     return res
-            // })
-            // .then(this.modelHelper)
             .then(res => {
-                console.log('res from modelHelper',res)
-                this.setState({tfLoaded: true , imageSrc: this.props.itemId})
+                console.log('res from setup',res)
                 return res
             })
+            .then(() => {
+                let mobilenet = tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
+                return mobilenet
+            })
+            .then(mobilenet=>{
+                let layer = mobilenet.getLayer('conv_pw_13_relu')
+                this.preTrained = tf.model({inputs: mobilenet.inputs, outputs: layer.output})
+                this.setState({tfLoaded: true , imageSrc: this.props.itemId})
+                return this.preTrained
+            })
             .catch(err => console.error('componentDidMount err:', err))
+            
     }
 
-    modelHelper = async () => {
-        const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
-        console.log('mobilenet', mobilenet.layers())
-        const layer = mobilenet.getLayer('conv_pw_13_relu')
-        return tf.model({inputs: mobilenet.inputs, outputs: layer.output})
-        // Return a model that outputs an internal activation.
-      }
-    
-      train = async (preTrained) => {
-        //preTrained is the cosnt mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
-        //const layer = mobilenet.getLayer('conv_pw_13_relu')
-        //return tf.model({inputs: mobilenet.inputs, outputs: layer.output})  <------!!!!
+    trainIt = async () => {
+        const startTraining = setInterval
+            const img = this.capture()
+        this.train(this.preTrained.predict(img), this.saveData)
+    }
+
+    train = async (preTrained, controllerDataset) => {
         if (this.state.imgCount < 20) {
-          throw new Error('Add some examples before training!');
+            throw new Error('Add some examples before training!');
         }
         const denseUnits = 100
         const totalNumItemsInDb = this.state.imageSrc + 1
         const learningRate = 0.0001
         const epochs = 20
-        // Creates a 2-layer fully connected model. By creating a separate model,
-        // rather than adding layers to the mobilenet model, we "freeze" the weights
-        // of the mobilenet model, and only train weights from the new model.
+        const batchSizeFraction = 0.4
+        let model
         model = tf.sequential({
-          layers: [
-            // Flattens the input to a vector so we can use it in a dense layer. While
-            // technically a layer, this only performs a reshape (and has no training
-            // parameters).
-            tf.layers.flatten({
-              inputShape: preTrained.outputs[0].shape.slice(1)
-            }),
-            // Layer 1.
-            tf.layers.dense({
-              units: denseUnits,
-              activation: 'relu',
-              kernelInitializer: 'varianceScaling',
-              useBias: true
-            }),
-            // Layer 2. The number of units of the last layer should correspond
-            // to the number of classes we want to predict.
-            tf.layers.dense({
-              units: totalNumItemsInDb,
-              kernelInitializer: 'varianceScaling',
-              useBias: false,
-              activation: 'softmax'
-            })
-          ]
+            layers: [
+                // Flattens the input to a vector so we can use it in a dense layer. While
+                // technically a layer, this only performs a reshape (and has no training
+                // parameters).
+                tf.layers.flatten({
+                    inputShape: preTrained.outputs[0].shape.slice(1)
+                }),
+                // Layer 1.
+                tf.layers.dense({
+                    units: denseUnits,
+                    activation: 'relu',
+                    kernelInitializer: 'varianceScaling',
+                    useBias: true
+                }),
+                // Layer 2. The number of units of the last layer should correspond
+                // to the number of classes we want to predict.
+                tf.layers.dense({
+                    units: totalNumItemsInDb,
+                    kernelInitializer: 'varianceScaling',
+                    useBias: false,
+                    activation: 'softmax'
+                })
+            ]
         });
         // Creates the optimizers which drives training of the model.
         const optimizer = tf.train.adam(learningRate);
@@ -91,59 +98,35 @@ class CreateItem extends Component{
         // number of examples that are collected depends on how many examples the user
         // collects. This allows us to have a flexible batch size.
         const batchSize =
-            Math.floor(controllerDataset.xs.shape[0] * ui.getBatchSizeFraction());
+            Math.floor(controllerDataset.xs.shape[0] * batchSizeFraction)
         if (!(batchSize > 0)) {
             throw new Error(
                 `Batch size is 0 or NaN. Please choose a non-zero fraction.`);
         }
 
         // Train the model! Model.fit() will shuffle xs & ys so we don't have to.
-        model.fit(controllerDataset.xs, controllerDataset.ys, {
-            batchSize,
-            epochs: ui.getEpochs(),
-            callbacks: {
-                onBatchEnd: async (batch, logs) => {
-                    ui.trainStatus('Loss: ' + logs.loss.toFixed(5));
-                }
+        model.fit(controllerDataset.xs, controllerDataset.ys)/*, {
+        batchSize,
+        epochs: ui.getEpochs(),
+        callbacks: {
+            onBatchEnd: async (batch, logs) => {
+                ui.trainStatus('Loss: ' + logs.loss.toFixed(5));
             }
-        });
+        }
+    });*/
     }
-
-        // var startPredicting = setInterval(async()=>{
-    //     const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
-    //     const layer = mobilenet.getLayer('conv_pw_13_relu')
-    //     try { 
-    //         const predictedClass = tf.tidy(() => {
-    //             const img = this.capture()
-    //             const prediction = tf.model({inputs: mobilenet.inputs, outputs: layer.output}).predict(img)
-    //             return prediction.as1D().argMax()
-    //         })
-    //         const classId = (await predictedClass.data())[0]
-    //         console.log('predictedClassId:', classId)
-    //         predictedClass.dispose()
-    //         await tf.nextFrame() 
-    //         this.setState({imgCount: this.state.imgCount+=1})
-    //         if(this.state.imgCount === 20) {
-    //             clearInterval(startPredicting)
-
-    //         }
-    //     } catch (err){
-    //         console.warn('Catch', err)
-    //     }    
-       
-    //     }, 600)
 
     timer = () =>{
         var startPredicting = setInterval(async()=>{
-        const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
-        const layer = mobilenet.getLayer('conv_pw_13_relu')
-        const saveData = new ControllerDataset(this.state.imageSrc)
+        // const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
+        // const layer = mobilenet.getLayer('conv_pw_13_relu')
         try { 
             const predictedClass = tf.tidy(() => {
                 const img = this.capture()
-                const prediction = tf.model({inputs: mobilenet.inputs, outputs: layer.output})
-                tf.tidy(() => saveData.addExample(prediction.predict(img), this.state.imageSrc))
-                return prediction.as1D().argMax()
+                // const prediction = tf.model({inputs: mobilenet.inputs, outputs: layer.output})
+                const predictions = this.preTrained.predict(img)
+                // tf.tidy(() => saveData.addExample(prediction.predict(img), this.state.imageSrc))
+                return predictions.as1D().argMax()
             })
             const classId = (await predictedClass.data())[0]
             console.log('predictedClassId:', classId)
