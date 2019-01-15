@@ -109,6 +109,16 @@ class ScanPack extends Component{
         }
     }
 
+    cropImage = (img) => {
+        const size = Math.min(img.shape[0], img.shape[1]);
+        const centerHeight = img.shape[0] / 2;
+        const beginHeight = centerHeight - (size / 2);
+        const centerWidth = img.shape[1] / 2;
+        const beginWidth = centerWidth - (size / 2);
+        return img.slice([beginHeight, beginWidth, 0], [size, size, 3]);
+    }
+
+
 
     capture = () => {
         return tf.tidy(() => {
