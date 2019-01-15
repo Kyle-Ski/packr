@@ -3,7 +3,6 @@ import { Loader, Icon } from 'semantic-ui-react'
 import MobileNav from '../nav/MobileNav'
 import ScanPackItems from './ScanPackItems';
 import * as tf from '@tensorflow/tfjs'
-import { ControllerDataset } from './SaveData'
 
 const totalItemUrl = 'http://localhost:3222/items'
 
