@@ -8,10 +8,10 @@ import * as tf from '@tensorflow/tfjs';
 
 
 const createUrl = 'http://localhost:3222/items'
-class CreateItem extends Component{
-    constructor(props){
+class CreateItem extends Component {
+    constructor(props) {
         super(props)
-        this.state={
+        this.state = {
             imageSrc: 0,
             warning: null,
             tfLoaded: false,
@@ -24,29 +24,29 @@ class CreateItem extends Component{
         //  = tf.model({inputs: mobilenet.inputs, outputs: layer.output})
     }
 
-    
 
-    componentDidMount(){
+
+    componentDidMount() {
         this.setup()
             .then(res => {
-                console.log('res from setup',res)
-                this.setState({imageSrc: this.props.itemId})
+                console.log('res from setup', res)
+                this.setState({ imageSrc: this.props.itemId })
                 return res
             })
             .then(() => {
                 let mobilenet = tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
                 return mobilenet
             })
-            .then(mobilenet=>{
+            .then(mobilenet => {
                 let layer = mobilenet.getLayer('conv_pw_13_relu')
-                this.preTrained = tf.model({inputs: mobilenet.inputs, outputs: layer.output})
-                this.saveData = new ControllerDataset(this.state.imageSrc +1)
+                this.preTrained = tf.model({ inputs: mobilenet.inputs, outputs: layer.output })
+                this.saveData = new ControllerDataset(this.state.imageSrc + 1)
                 this.model = this.model
-                this.setState({tfLoaded: true})
+                this.setState({ tfLoaded: true })
                 return this.preTrained
             })
             .catch(err => console.error('componentDidMount err:', err))
-            
+
     }
 
 
@@ -103,37 +103,39 @@ class CreateItem extends Component{
         }
 
         // Train the model! Model.fit() will shuffle xs & ys so we don't have to.
-        this.model.fit(this.saveData.xs, this.saveData.ys)/*, {
-        batchSize,
-        epochs: ui.getEpochs(),
-        callbacks: {
-            onBatchEnd: async (batch, logs) => {
-                ui.trainStatus('Loss: ' + logs.loss.toFixed(5));
+        this.model.fit(this.saveData.xs, this.saveData.ys, {
+            batchSize,
+            epochs: epochs,
+            callbacks: {
+                onBatchEnd: async (batch, logs) => {
+                    console.log('Loss: ' + logs.loss.toFixed(5), this.saveData.ys);
+                }
             }
-        }
-    });*/
+        })
     }
 
 
-    getExamples = () =>{
+    getExamples = () => {
         const label = this.state.imageSrc
         var startGetting = setInterval(() => {
             const img = this.capture()
             const example = this.preTrained.predict(img)
-            tf.tidy(() => this.saveData.addExample(example, label))                
+            tf.tidy(() => this.saveData.addExample(example, label))
             this.setState({ imgCount: this.state.exampleCount += 1 })
             if (this.state.exampleCount === 20) {
                 clearInterval(startGetting)
-            }   
+                console.log('label', label)
+            }
         }, 400)
     }
 
-    predictTheImage = () =>{
+    predictTheImage = () => {
         var startPredicting = setInterval(async () => {
             try {
                 const predictedClass = tf.tidy(() => {
                     const img = this.capture()
-                    const predictions = this.preTrained.predict(img)
+                    const embeddings = this.preTrained.predict(img)
+                    const predictions = this.model.predict(embeddings)
                     return predictions.as1D().argMax()
                 })
                 const classId = (await predictedClass.data())[0]
@@ -150,40 +152,21 @@ class CreateItem extends Component{
         }, 600)
     }
 
-
-    stopTimer=() =>{
-        console.log('stop')
-        return clearInterval(this.timer)
-    }
-    // capture = () => {
-        // this.setState({
-        //     imageSrc: [...this.state.imageSrc, this.webcam.getScreenshot().slice(23)],
-        // })
-        // this.setState({imageSrc: this.state.imageSrc+=1})
-        // while(this.state.mouseDown){
-        //     this.setState({imageSrc: this.state.imageSrc+=1})
-        // }
-    // }
-
-    mouseUp = () =>{
-        
-    }
-
     capture = () => {
         return tf.tidy(() => {
-          // Reads the image as a Tensor from the webcam <video> element.
-          const webcamImage = tf.fromPixels(this.refs.preview);
-    
-          // Crop the image so we're using the center square of the rectangular
-          // webcam.
-          const croppedImage = this.cropImage(webcamImage);
-    
-          // Expand the outer most dimension so we have a batch size of 1.
-          const batchedImage = croppedImage.expandDims(0);
-    
-          // Normalize the image between -1 and 1. The image comes in between 0-255,
-          // so we divide by 127 and subtract 1.
-          return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+            // Reads the image as a Tensor from the webcam <video> element.
+            const webcamImage = tf.fromPixels(this.refs.preview);
+
+            // Crop the image so we're using the center square of the rectangular
+            // webcam.
+            const croppedImage = this.cropImage(webcamImage);
+
+            // Expand the outer most dimension so we have a batch size of 1.
+            const batchedImage = croppedImage.expandDims(0);
+
+            // Normalize the image between -1 and 1. The image comes in between 0-255,
+            // so we divide by 127 and subtract 1.
+            return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
         });
     }
 
@@ -195,7 +178,7 @@ class CreateItem extends Component{
         const beginWidth = centerWidth - (size / 2);
         return img.slice([beginHeight, beginWidth, 0], [size, size, 3]);
     }
-    
+
     adjustVideoSize = (width, height) => {
         const aspectRatio = width / height;
         if (width >= height) {
@@ -207,36 +190,37 @@ class CreateItem extends Component{
 
     setup = () => {
         return new Promise((resolve, reject) => {
-          const navigatorAny = navigator;
-          navigator.getUserMedia = navigator.getUserMedia ||
-              navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
-              navigatorAny.msGetUserMedia;
-          if (navigator.getUserMedia) {
-            navigator.getUserMedia(
-                {video: true},
-                stream => {
-                  this.refs.preview.srcObject = stream;
-                  this.refs.preview.addEventListener('loadeddata', async () => {
-                    this.adjustVideoSize(
-                        this.refs.preview.videoWidth,
-                        this.refs.preview.videoHeight);
-                    resolve();
-                  }, false);
-                },
-                error => {
-                  reject();
-                });
-          } else {
-            reject();
-          }
+            const navigatorAny = navigator;
+            navigator.getUserMedia = navigator.getUserMedia ||
+                navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
+                navigatorAny.msGetUserMedia;
+            if (navigator.getUserMedia) {
+                navigator.getUserMedia(
+                    { video: true },
+                    stream => {
+                        this.refs.preview.srcObject = stream;
+                        this.refs.preview.addEventListener('loadeddata', async () => {
+                            this.adjustVideoSize(
+                                this.refs.preview.videoWidth,
+                                this.refs.preview.videoHeight);
+                            resolve();
+                        }, false);
+                    },
+                    error => {
+                        reject();
+                    });
+            } else {
+                reject();
+            }
         });
     }
-    
-    
 
-    getItemName = (e) => this.setState({itemName: e.target.value})
+    // atch Error: Error when checking : expected flatten_Flatten1_input to have shape [null,7,7,256] but got array with shape [1,224,224,3].
 
-    sendItem =  () => {
+
+    getItemName = (e) => this.setState({ itemName: e.target.value })
+
+    sendItem = () => {
         console.log(JSON.stringify(this.state.imageSrc[0]))
         fetch(createUrl, {
             method: 'POST',
@@ -248,55 +232,55 @@ class CreateItem extends Component{
                 'name': this.state.itemName,
             })
         })
-        .then(response => response.json())
-        .then(res => {
-            if(res.error){
-                this.setState({warning: 'warning'})
-                return res
-            } else {
-                this.setState({warning: 'success', itemId: res.item.id})
-                return res
-            }
-        })
-        .catch(err => console.warn(err))
+            .then(response => response.json())
+            .then(res => {
+                if (res.error) {
+                    this.setState({ warning: 'warning' })
+                    return res
+                } else {
+                    this.setState({ warning: 'success', itemId: res.item.id })
+                    return res
+                }
+            })
+            .catch(err => console.warn(err))
     }
 
-    render(){
-          const {warning, tfLoaded, imgCount} = this.state
-          const {itemId, itemName} = this.props
-        return(
+    render() {
+        const { warning, tfLoaded, imgCount } = this.state
+        const { itemId, itemName } = this.props
+        return (
             <div>
-            <div>
-                <MobileNav signOut={this.props.signOut}/>
-            </div>
-            <Header as='h1' style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)'}}>Center {itemName? itemName: `Item`} in view</Header>
-            <video id='preview' ref="preview" width="360" height="224" autoPlay muted playsInline></video>
-            {tfLoaded && itemId?<p style={{color: 'white'}}>Loaded!</p>: <Loader size='mini' active>Loading..</Loader>}
+                <div>
+                    <MobileNav signOut={this.props.signOut} />
+                </div>
+                <Header as='h1' style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)' }}>Center {itemName ? itemName : `Item`} in view</Header>
+                <video id='preview' ref="preview" width="360" height="224" autoPlay muted playsInline></video>
+                {tfLoaded && itemId ? <p style={{ color: 'white' }}>Loaded!</p> : <Loader size='mini' active>Loading..</Loader>}
                 <Divider />
                 <Form className={warning} onSubmit={() => console.log('submit')}>
                     <Message success header='Item Added!' content={`I now know what your ${this.state.itemName} looks like!`} />
                     <Message
-                            warning
-                            header='Could you check something!'
-                            list={[
-                                'The Items may not have been created correctly.',
-                            ]}
-                        />
+                        warning
+                        header='Could you check something!'
+                        list={[
+                            'The Items may not have been created correctly.',
+                        ]}
+                    />
                     <div>
-                    {
-                    itemId ? 
-                    <div>
-                        <button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
-                        <button style={{width: '170px'}} className='add-button create' onClick={this.train} ><i className="fas fa-brain" style={{color: 'white', marginRight: '7px'}}>  </i>Teach Me {itemName}!</button>
-                        <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='stop circle outline' /><span className='no-copy'>Predict {itemName}</span></button>
-                    </div>
-                    :
-                    <Loader size='mini' active>Loading...</Loader>
-                    }
+                        {
+                            itemId ?
+                                <div>
+                                    <button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
+                                    <button style={{ width: '170px' }} className='add-button create' onClick={this.train} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Teach Me {itemName}!</button>
+                                    <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='stop circle outline' /><span className='no-copy'>Predict {itemName}</span></button>
+                                </div>
+                                :
+                                <Loader size='mini' active>Loading...</Loader>
+                        }
                     </div>
                 </Form>
-                <h3 style={{color: 'white'}}>{imgCount} scans, {imgCount/*.length*/ >= 20 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h3>
-                {imgCount>=20 ? <Link to='/add-items'><button style={{width: '170px'}} className='add-button create' onClick={this.props.sendItem} ><i className="fas fa-brain" style={{color: 'white', marginRight: '7px'}}>  </i>Teach Me {itemName}!</button></Link>: ''}
+                <h3 style={{ color: 'white' }}>{imgCount} scans, {imgCount/*.length*/ >= 20 ? `Good ammount! Ready to Learn!` : `More scans please..`}</h3>
+                {imgCount >= 20 ? <Link to='/add-items'><button style={{ width: '170px' }} className='add-button create' onClick={this.props.sendItem} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Teach Me {itemName}!</button></Link> : ''}
             </div>
         )
     }
