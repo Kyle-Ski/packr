@@ -12,7 +12,8 @@ class CreateItem extends Component{
         imageSrc: 0,
         warning: null,
         tfLoaded: false,
-        mouseDown: false
+        mouseDown: false,
+        imgCount: 0
     }
 
     componentDidMount(){
@@ -24,7 +25,7 @@ class CreateItem extends Component{
             // .then(this.modelHelper)
             .then(res => {
                 console.log('res from modelHelper',res)
-                this.setState({tfLoaded: true})
+                this.setState({tfLoaded: true , imageSrc: this.props.itemId})
                 return res
             })
             .catch(err => console.error('componentDidMount err:', err))
@@ -39,33 +40,59 @@ class CreateItem extends Component{
       }
     
 
-    predict = async () => {
-        // this.setState({mouseDown: true})
-        // while(this.state.mouseDown){
-            // const modelHelp = await this.modelHelper
-            const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
-            const layer = mobilenet.getLayer('conv_pw_13_relu')
-
-            try { 
-                const predictedClass = tf.tidy(() => {
-                    const img = this.capture()
-                    console.log('predict',img)
-                    const prediction = tf.model({inputs: mobilenet.inputs, outputs: layer.output}).predict(img)
-                    return prediction.as1D().argMax()
-                })
-                const classId = (await predictedClass.data())[0]
-                predictedClass.dispose()
-                console.log('classId', classId)
-                await tf.nextFrame()
-
-            } catch (err){
-                console.warn('Catch', err)
+    predict = async () => {            
+        const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
+        const layer = mobilenet.getLayer('conv_pw_13_relu')
+        try { 
+            const predictedClass = tf.tidy(() => {
+                const img = this.capture()
+                const prediction = tf.model({inputs: mobilenet.inputs, outputs: layer.output}).predict(img)
+                return prediction.as1D().argMax()
+            })
+            const classId = (await predictedClass.data())[0]
+            console.log('predictedClassId:', classId)
+            predictedClass.dispose()
+            await tf.nextFrame() 
+            this.setState({imgCount: this.state.imgCount+=1})
+            if(this.state.imgCount === 15) {
+                // return clearInterval(startIt)
             }
-           
-        // }
-        //setinterval(fn, time), clearInterval
+            return 'hello'
+        } catch (err){
+            console.warn('Catch', err)
+        }    
+       
     }
 
+    timer = () =>{
+        var startIt = setInterval(async()=>{
+        const mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
+        const layer = mobilenet.getLayer('conv_pw_13_relu')
+        try { 
+            const predictedClass = tf.tidy(() => {
+                const img = this.capture()
+                const prediction = tf.model({inputs: mobilenet.inputs, outputs: layer.output}).predict(img)
+                return prediction.as1D().argMax()
+            })
+            const classId = (await predictedClass.data())[0]
+            console.log('predictedClassId:', classId)
+            predictedClass.dispose()
+            await tf.nextFrame() 
+            this.setState({imgCount: this.state.imgCount+=1})
+            if(this.state.imgCount === 15) {
+                clearInterval(startIt)
+            }
+        } catch (err){
+            console.warn('Catch', err)
+        }    
+       
+        }, 600)
+    }
+
+    stopTimer=() =>{
+        console.log('stop')
+        return clearInterval(this.timer)
+    }
     // capture = () => {
         // this.setState({
         //     imageSrc: [...this.state.imageSrc, this.webcam.getScreenshot().slice(23)],
@@ -77,8 +104,7 @@ class CreateItem extends Component{
     // }
 
     mouseUp = () =>{
-        this.setState({mouseDown:false})
-        console.log('up')
+        
     }
 
     capture = () => {
@@ -174,12 +200,7 @@ class CreateItem extends Component{
     }
 
     render(){
-        const videoConstraints = {
-            width: 1280,
-            height: 720,
-            facingMode: {exact: 'environment'}
-          }
-          const {warning, tfLoaded, imageSrc} = this.state
+          const {warning, tfLoaded, imgCount} = this.state
           const {itemId, itemName} = this.props
         return(
             <div>
@@ -203,20 +224,16 @@ class CreateItem extends Component{
                     {
                     itemId ? 
                     <div>
-                    <Responsive minWidth={768} >
-                            <button style={{ width: '170px' }} className='add-button create' onMouseDown={this.predict} onMouseUp={this.mouseUp}><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
-                    </Responsive>
-                    <Responsive maxWidth={767}>
-                        <button style={{ width: '170px' }} className='add-button create' onTouchStart={this.predict} onTouchEnd={this.mouseUp}><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
-                    </Responsive>
+                        <button style={{ width: '170px' }} className='add-button create' onClick={this.timer} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
+                        <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.stopTimer} ><Icon name='stop circle outline' /><span className='no-copy'>Stop Scanning {itemName}</span></button>
                     </div>
                     :
                     <Loader size='mini' active>Loading...</Loader>
                     }
                     </div>
                 </Form>
-                <h3 style={{color: 'white'}}>{imageSrc} scans, {imageSrc/*.length*/ >= 10 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h3>
-                {imageSrc>=10 ? <Link to='/add-items'><button style={{width: '170px'}} className='add-button create' onClick={this.props.sendItem} ><i class="fas fa-brain" style={{color: 'white', marginRight: '7px'}}>  </i>Teach Me {itemName}!</button></Link>: ''}
+                <h3 style={{color: 'white'}}>{imgCount} scans, {imgCount/*.length*/ >= 20 ? `Good ammount! Ready to Learn!`:`More scans please..`}</h3>
+                {imgCount>=20 ? <Link to='/add-items'><button style={{width: '170px'}} className='add-button create' onClick={this.props.sendItem} ><i className="fas fa-brain" style={{color: 'white', marginRight: '7px'}}>  </i>Teach Me {itemName}!</button></Link>: ''}
             </div>
         )
     }
