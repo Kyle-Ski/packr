@@ -39,10 +39,7 @@ class AddItems extends Component{
 
     structureItems = () => {
         const items =  this.state.unStructuredItems.reduce((accum, item, i) => {
-            let newObject = new Object()
-            newObject["key"] = i
-            newObject["text"] = item.name
-            newObject["value"] = item.id
+            let newObject = {key: i, text: item.name, value: item.id}
             accum.push(newObject)
             return accum
         },[])
@@ -51,10 +48,7 @@ class AddItems extends Component{
 
     structurePacks = () => {
         const packs =  this.state.unStructuredPacks.reduce((accum, item, i) => {
-            let newObject = new Object()
-            newObject["key"] = i
-            newObject["text"] = item.backpack_name
-            newObject["value"] = item.backpack_id
+            let newObject = {key: i, text: item.backpack_name, value: item.backpack_id}
             accum.push(newObject)
             return accum
         },[])
@@ -123,19 +117,19 @@ class AddItems extends Component{
 
       handleUseritemAdd = (idx) => (evt) => {
         if (!evt.target.type){
-          const targetSpaces = evt.target.innerText
-          const chosenItem = this.state.items.filter(item => {
-            return item.text === targetSpaces
-          })[0]  
-          const items = this.state.newitems.map((item, sidx) => {
-            if (idx !== sidx){
-              return item
-            } else if (chosenItem){
-                return { ...item, item_id: chosenItem.value, item_name: chosenItem.text}
-            }
-          })
-          
-          this.setState({newitems: items})
+            const targetSpaces = evt.target.innerText
+            const chosenItem = this.state.items.filter(item => item.text === targetSpaces)[0]  
+            const items = this.state.newitems.map((item, sidx) => {
+                if (idx !== sidx){
+                    return item
+                } else if (chosenItem){
+                    return { ...item, item_id: chosenItem.value, item_name: chosenItem.text}
+                } else {
+                    return console.log('user add item else')
+                }
+            })
+            
+            this.setState({newitems: items})
         }   
       }
 

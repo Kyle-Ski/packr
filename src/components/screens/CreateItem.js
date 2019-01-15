@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Form, Message, Icon, Header, Divider, Loader, Responsive } from 'semantic-ui-react'
+import { Form, Message, Icon, Header, Divider, Loader } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { ControllerDataset } from './SaveData'
 import MobileNav from '../nav/MobileNav'
-import Webcam from "react-webcam";
 import * as tf from '@tensorflow/tfjs';
 
 
@@ -17,11 +16,10 @@ class CreateItem extends Component {
             tfLoaded: false,
             mouseDown: false,
             imgCount: 0,
-            exampleCount: 0
+            exampleCount: 0,
+            predictCount: 0,
+            lossThreshold: false
         }
-        // this.mobilenet = await tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
-        // this.layer = mobilenet.getLayer('conv_pw_13_relu')
-        //  = tf.model({inputs: mobilenet.inputs, outputs: layer.output})
     }
 
 
@@ -91,7 +89,6 @@ class CreateItem extends Component {
         // probability distribution over classes (probability that an input is of each
         // class), versus the label (100% probability in the true class)>
         this.model.compile({ optimizer: optimizer, loss: 'categoricalCrossentropy' });
-
         // We parameterize batch size as a fraction of the entire dataset because the
         // number of examples that are collected depends on how many examples the user
         // collects. This allows us to have a flexible batch size.
@@ -108,7 +105,8 @@ class CreateItem extends Component {
             epochs: epochs,
             callbacks: {
                 onBatchEnd: async (batch, logs) => {
-                    console.log('Loss: ' + logs.loss.toFixed(5), this.saveData.ys);
+                    if(logs.loss.toFixed(6) <= 0.000001) this.setState({lossThreshold: true})
+                    console.log('Loss: ' + logs.loss.toFixed(6), this.saveData.ys);
                 }
             }
         })
@@ -121,12 +119,12 @@ class CreateItem extends Component {
             const img = this.capture()
             const example = this.preTrained.predict(img)
             tf.tidy(() => this.saveData.addExample(example, label))
-            this.setState({ imgCount: this.state.exampleCount += 1 })
+            this.setState({ imgCount: this.state.exampleCount + 1 })
             if (this.state.exampleCount === 20) {
                 clearInterval(startGetting)
                 console.log('label', label)
             }
-        }, 400)
+        }, 300)
     }
 
     predictTheImage = () => {
@@ -142,28 +140,25 @@ class CreateItem extends Component {
                 console.log('predictedClassId:', classId)
                 predictedClass.dispose()
                 await tf.nextFrame()
-                this.setState({ imgCount: this.state.imgCount += 1 })
-                if (this.state.imgCount === 20) {
+                this.setState({ predictCount: this.state.predictCount + 1 })
+                if (this.state.predictCount === 50) {
                     clearInterval(startPredicting)
                 }
             } catch (err) {
                 console.warn('Catch', err)
-            }
-        }, 600)
+            }   
+        }, 300)
     }
 
     capture = () => {
         return tf.tidy(() => {
             // Reads the image as a Tensor from the webcam <video> element.
             const webcamImage = tf.fromPixels(this.refs.preview);
-
             // Crop the image so we're using the center square of the rectangular
             // webcam.
             const croppedImage = this.cropImage(webcamImage);
-
             // Expand the outer most dimension so we have a batch size of 1.
             const batchedImage = croppedImage.expandDims(0);
-
             // Normalize the image between -1 and 1. The image comes in between 0-255,
             // so we divide by 127 and subtract 1.
             return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
@@ -246,7 +241,7 @@ class CreateItem extends Component {
     }
 
     render() {
-        const { warning, tfLoaded, imgCount } = this.state
+        const { warning, tfLoaded, imgCount, predictCount, lossThreshold } = this.state
         const { itemId, itemName } = this.props
         return (
             <div>
@@ -270,9 +265,9 @@ class CreateItem extends Component {
                         {
                             itemId ?
                                 <div>
-                                    <button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>
-                                    <button style={{ width: '170px' }} className='add-button create' onClick={this.train} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Teach Me {itemName}!</button>
-                                    <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='stop circle outline' /><span className='no-copy'>Predict {itemName}</span></button>
+                                    {imgCount === 20 ? '':<button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>}
+                                    {imgCount === 20 ? <button style={{ width: '170px', backgroundColor: 'olive' }} className='add-button create' onClick={this.train} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Teach Me {itemName}!</button>:''}
+                                    {lossThreshold ? <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='stop circle outline' /><span className='no-copy'>Predict {itemName}</span></button>:<Loader active>Teaching...</Loader>}
                                 </div>
                                 :
                                 <Loader size='mini' active>Loading...</Loader>
@@ -280,7 +275,8 @@ class CreateItem extends Component {
                     </div>
                 </Form>
                 <h3 style={{ color: 'white' }}>{imgCount} scans, {imgCount/*.length*/ >= 20 ? `Good ammount! Ready to Learn!` : `More scans please..`}</h3>
-                {imgCount >= 20 ? <Link to='/add-items'><button style={{ width: '170px' }} className='add-button create' onClick={this.props.sendItem} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Teach Me {itemName}!</button></Link> : ''}
+                <h3 style={{ color: 'white' }}>{predictCount} prediction scans</h3>
+                {lossThreshold ? <Link to='/add-items'><button style={{ width: '170px' }} className='add-button create' onClick={this.props.sendItem} ><Icon name='plus'/> Add {itemName} to a Pack!</button></Link> : ''}
             </div>
         )
     }

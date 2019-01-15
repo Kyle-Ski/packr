@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Input, Header, Icon } from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
-import * as tf from '@tensorflow/tfjs';
 
 const createUrl = 'http://localhost:3222/items'
 

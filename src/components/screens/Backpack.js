@@ -4,7 +4,7 @@ import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
 import BackpackItems from './BackpackItems'
 
-const itemsByPackUrl = 'http://localhose:3222/items'
+// const itemsByPackUrl = 'http://localhost:3222/items'
 class Backpack extends Component{
 
     state={

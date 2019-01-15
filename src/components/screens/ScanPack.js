@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import { Loader, Icon } from 'semantic-ui-react'
 import MobileNav from '../nav/MobileNav'
 import Webcam from "react-webcam";
-import scanPackItems from './ScanPackItems'
 import ScanPackItems from './ScanPackItems';
-import VideoRecorder from './VideoRecorder'
 
 
 class ScanPack extends Component{

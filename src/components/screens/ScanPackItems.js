@@ -63,15 +63,12 @@ class ScanPackItems extends React.Component{
 
     componentDidMount(){
         this.structureItems()
-        .catch(err=>console.error('Structure Items:', err))
+        // .catch(err=>console.error('Structure Items:', err))
     }
 
     structureItems = () => {
         const newItems =  this.props.items.reduce((accum, item, i) => {
-            let newObject = new Object()
-            newObject["item_name"] = item.item_name
-            newObject["item_id"] = item.item_id
-            newObject["isFliped"] = 'card'
+            let newObject = {item_name: item.item_name, item_id: item.item_id, isFliped: 'card'}
             accum.push(newObject)
             return accum
         },[])
