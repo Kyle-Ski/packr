@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { Loader, Icon } from 'semantic-ui-react'
 import MobileNav from '../nav/MobileNav'
-import Webcam from "react-webcam";
 import ScanPackItems from './ScanPackItems';
+import * as tf from '@tensorflow/tfjs'
+import { ControllerDataset } from './SaveData'
 
+const totalItemUrl = 'http://localhost:3222/items'
 
 class ScanPack extends Component{
 
@@ -11,7 +13,8 @@ class ScanPack extends Component{
         imageSrc: [],
         name: '',
         items: [],
-        itemName: 'card'
+        itemName: 'card',
+        totalItems: 0,
     }
 
     fetchBackpack = () => {
@@ -29,27 +32,84 @@ class ScanPack extends Component{
             })
     }
 
-    componentDidMount(){
-        this.fetchBackpack()
-        .catch(err => console.warn(err))
-            // .then(() => {
-            //     if(this.state.backpack > 2){
-            //         this.setState({name: ['knife', 'glue', 'code']})
-            //     } else {
-            //         this.setState({name: ['tent', 'water bottle', 'code']})
-            //     }
-            // })
-            // .catch(console.warn)
-    }
-    
-    setRef = webcam => {
-        this.webcam = webcam;
+    fetchTotalItems = () => {
+        return fetch(totalItemUrl)
+            .then(res => res.json())
+            .then(res => {
+                if(res.error){
+                    console.warn('fetchitems err:', res.error)
+                    return this.setState({error: res.error})
+                } else {
+                    this.setState({totalItems: res.items.length})
+                }
+            })
     }
 
-    capture = () => {
-        this.setState({
-            imageSrc: [...this.state.imageSrc, this.webcam.getScreenshot().slice(23)],
+    componentDidMount(){
+        this.fetchBackpack()
+        .then(this.fetchTotalItems)
+        .then(this.setup)
+        .then(() => {
+            let mobilenet = tf.loadModel('https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json')
+            return mobilenet
         })
+        .then(mobilenet => {
+            let layer = mobilenet.getLayer('conv_pw_13_relu')
+            this.preTrained = tf.model({ inputs: mobilenet.inputs, outputs: layer.output })
+            return this.preTrained
+        })
+        .then(() => {
+            let loadingPackr = tf.loadModel('indexeddb://my-model-1')
+            return loadingPackr
+        })
+        .then(loadingPackr => {
+            this.packrModel = loadingPackr
+            return this.packrModel
+        })
+        .catch(err => console.warn(err))
+    }
+
+    listModels = async () => {
+        console.log(await tf.io.listModels());
+    }
+    
+    predictTheImage = () => {
+        var startPredicting = setInterval(async () => {
+            try {
+                const predictedClass = tf.tidy(() => {
+                    const img = this.capture()
+                    const embeddings = this.preTrained.predict(img)
+                    const predictions = this.packrModel.predict(embeddings)
+                    return predictions.as1D().argMax()
+                })
+                const classId = (await predictedClass.data())[0]
+                console.log('predictedClassId:', classId)
+                predictedClass.dispose()
+                await tf.nextFrame()
+                this.setState({ predictCount: this.state.predictCount + 1 })
+                if (this.state.predictCount === 50) {
+                    clearInterval(startPredicting)
+                }
+            } catch (err) {
+                console.warn('Predict Catch', err)
+            }   
+        }, 300)
+    }
+
+
+    capture = () => {
+        return tf.tidy(() => {
+            // Reads the image as a Tensor from the webcam <video> element.
+            const webcamImage = tf.fromPixels(this.refs.preview);
+            // Crop the image so we're using the center square of the rectangular
+            // webcam.
+            const croppedImage = this.cropImage(webcamImage);
+            // Expand the outer most dimension so we have a batch size of 1.
+            const batchedImage = croppedImage.expandDims(0);
+            // Normalize the image between -1 and 1. The image comes in between 0-255,
+            // so we divide by 127 and subtract 1.
+            return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+        });
     }
 
     getItemName = (e) => this.setState({itemName: e.target.value})
@@ -64,14 +124,36 @@ class ScanPack extends Component{
         }*/
     }
 
+    setup = () => {
+        return new Promise((resolve, reject) => {
+            const navigatorAny = navigator;
+            navigator.getUserMedia = navigator.getUserMedia ||
+                navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
+                navigatorAny.msGetUserMedia;
+            if (navigator.getUserMedia) {
+                navigator.getUserMedia(
+                    { video: true },
+                    stream => {
+                        this.refs.preview.srcObject = stream;
+                        this.refs.preview.addEventListener('loadeddata', async () => {
+                            this.adjustVideoSize(
+                                this.refs.preview.videoWidth,
+                                this.refs.preview.videoHeight);
+                            resolve();
+                        }, false);
+                    },
+                    error => {
+                        reject();
+                    });
+            } else {
+                reject();
+            }
+        });
+    }
+
 
     render(){
-        const videoConstraints = {
-            width: 1280,
-            height: 720,
-            facingMode: {exact: 'environment'}
-          }
-          const {items} = this.state 
+          const {items, name} = this.state 
         return(
             <div>
             {items.length > 0 ? <div><div>
@@ -87,20 +169,13 @@ class ScanPack extends Component{
                     zIndex: '1'
 
                 }}>
-                <Webcam
-                // style={{position: 'fixed', top: '25px', left: '0'}}
-                    audio={false}
-                    height={400}
-                    ref={this.setRef}
-                    screenshotFormat="image/jpeg"
-                    width={200}
-                    videoConstraints={videoConstraints}
-                />
-                {/* <VideoRecorder /> */}
+                <video id='preview' ref="preview" width="360" height="224" autoPlay muted playsInline></video>
                 <div className={this.state.itemName}>
                 <h1 onClick={this.handleFlip} style={{marginTop: '30px'}} className='item__face item__face--front'>Itmes in {this.state.name} Not Ready..</h1>
                 <h1 onClick={this.handleFlip} style={{marginTop: '-40px'}} className='item__face item__face--back'><Icon name='check' /> {this.state.name} Ready to Go!</h1>
                 </div>
+                <button className='add-button create' onClick={this.listModels}>list models</button>
+                <button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {name}</span></button>
                 </div>
                 <div style={{zIndex: '-1', marginTop: '600px'}}>
                 <ScanPackItems  items={items}/>
