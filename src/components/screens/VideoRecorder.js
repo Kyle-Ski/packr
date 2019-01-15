@@ -214,8 +214,7 @@ export class VideoRecorder {
         navigator.getUserMedia(
             {video: true},
             stream => {
-            //   this.webcamElement.srcObject = stream;
-            console.log(this.webcamElement)
+              this.webcamElement.srcObject = stream;
               this.webcamElement.addEventListener('loadeddata', async () => {
                 this.adjustVideoSize(
                     this.webcamElement.videoWidth,

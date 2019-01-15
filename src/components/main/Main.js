@@ -9,6 +9,7 @@ import AddItems from '../screens/AddItems'
 import CreateItem from '../screens/CreateItem'
 import BackPack from '../screens/Backpack'
 import ScanPack from '../screens/ScanPack'
+import * as tf from '@tensorflow/tfjs'
 import CreateItemName from '../screens/CreateItemName'
 const signUpUrl = 'https://packr-database.herokuapp.com/users'
 const loginUrl = 'https://packr-database.herokuapp.com/auth/login'
@@ -67,6 +68,8 @@ class Main extends Component {
           })
           .catch(this.generalError)
     }
+
+    
 
     sendItem =  () => {
       fetch(createUrl, {
