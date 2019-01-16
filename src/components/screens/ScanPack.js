@@ -102,7 +102,7 @@ class ScanPack extends Component{
     }
 
     adjustVideoSize = (width, height) => {
-        const aspectRatio = width / height;
+        const aspectRatio = height / width;
         if (width >= height) {
             this.refs.preview.width = aspectRatio * this.refs.preview.height;
         } else if (width < height) {
