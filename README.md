@@ -1,6 +1,8 @@
 # Packr
 <img src='./src/PackrShadow2.png' alt='Packr logo'/>
-<video src='https://photos.google.com/share/AF1QipPNBlcQdWoBNwe2mjwFs4F1SJlHPvMlO3RT_0eN1Su1Pi-Y_IGx1T-KBaHBQJYpJw/photo/AF1QipN0dku0LS89OCgp7aF1kCTY3remfUS8Q7CHz9Ex?key=Y0JkVGNRNkdMUEM5Q0ZOMGpXc1dKWEFQOFBKbThB'autoPlay muted playsInline></video>
+
+## [Demo Video](https://photos.google.com/share/AF1QipPNBlcQdWoBNwe2mjwFs4F1SJlHPvMlO3RT_0eN1Su1Pi-Y_IGx1T-KBaHBQJYpJw?key=Y0JkVGNRNkdMUEM5Q0ZOMGpXc1dKWEFQOFBKbThB)
+
 ### Problem Statement:
 While packing for a trip, you may forget to bring some items.
 
