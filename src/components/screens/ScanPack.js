@@ -4,7 +4,7 @@ import MobileNav from '../nav/MobileNav'
 import ScanPackItems from './ScanPackItems';
 import * as tf from '@tensorflow/tfjs'
 
-const totalItemUrl = 'http://packr-database.herokuapp.com/items'
+const totalItemUrl = 'https://packr-database.herokuapp.com/items'
 
 class ScanPack extends Component{
 
@@ -19,15 +19,16 @@ class ScanPack extends Component{
     }
 
     fetchBackpack = () => {
-        console.log(this.props.match)
         this.setState({backpack: this.props.match.params.id})
         return fetch(`https://packr-database.herokuapp.com/packs/${this.props.match.params.id}/items`)
             .then(res => res.json())
             .then(res => {
+                
                 if(res.error){
                     alert(res.error)
                     return this.setState({error: res.error})
                 } else {
+                    console.log('fetch backpack',res.backpack)
                     this.setState({items: res.backpack.items, name: res.backpack.backpack_name})
                 }
             })
@@ -154,20 +155,17 @@ class ScanPack extends Component{
                 navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
                 navigatorAny.msGetUserMedia;
             if (navigator.getUserMedia) {
-                navigator.getUserMedia(
-                    { video: { facingMode: { exact: "environment" } } },
-                    stream => {
-                        this.refs.preview.srcObject = stream;
-                        this.refs.preview.addEventListener('loadeddata', async () => {
-                            this.adjustVideoSize(
-                                this.refs.preview.videoWidth,
-                                this.refs.preview.videoHeight);
-                            resolve();
-                        }, false);
-                    },
-                    error => {
-                        reject();
-                    });
+                navigator.mediaDevices.getUserMedia({ video: {facingMode: {exact: 'environment'} }})
+                .then(stream => {
+                    this.refs.preview.srcObject = stream;
+                    this.refs.preview.addEventListener('loadeddata', async () => {
+                        this.adjustVideoSize(
+                            this.refs.preview.videoWidth,
+                            this.refs.preview.videoHeight);
+                        resolve();
+                    }, false);
+                })
+                .catch(err=> reject())
             } else {
                 reject();
             }

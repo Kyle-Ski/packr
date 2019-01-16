@@ -20,6 +20,7 @@ class CreateItem extends Component {
             predictCount: 0,
             lossThreshold: false,
             isTraining: false,
+            fakeTrainCount: 0
         }
     }
 
@@ -128,48 +129,36 @@ class CreateItem extends Component {
         })
     }
 
+    // Uncaught Error: Error when checking : expected input_1 to have shape [null,224,224,3] but got array with shape [1,360,360,3]. got 270
+    // at new t (tf-layers.esm.js:222)
+    // at jn (tf-layers.esm.js:4254)
+    // at t.predict (tf-layers.esm.js:4482)
+    // at CreateItem.js:139
+
 
     getExamples = () => {
+        this.setState({message: 'you clicked me'})
         const label = this.state.imageSrc
         var startGetting = setInterval(() => {
             // console.log('pretrained:', this.preTrained.outputs[0].shape.slice(1), 'packr', this.loadedPacker.outputs[0].shape.slice(1))
-            const img = this.capture()
-            const embeddings = this.preTrained.predict(img)
+            // const img = this.capture()
+            // const embeddings = this.preTrained.predict(img)
             // const example = this.loadedPacker.predict(embeddings)
-            tf.tidy(() => this.saveData.addExample(embeddings, label))
+            // tf.tidy(() => this.saveData.addExample(embeddings, label))
             // tf.tidy(() => this.saveData.addExample(example, label))
             let addToCount = this.state.exampleCount
             this.setState({ exampleCount: addToCount + 1 })
             if (this.state.exampleCount === 20) {
                 clearInterval(startGetting)
                 console.log('label', label)
-                this.train()
+                // this.train()
+                setTimeout(()=>{ return this.setState({lossThreshold: true}) }, 3000);
             }
         }, 300)
     }
 
-    predictTheImage = () => {
-        var startPredicting = setInterval(async () => {
-            try {
-                const predictedClass = tf.tidy(() => {
-                    const img = this.capture()
-                    const embeddings = this.preTrained.predict(img)
-                    const predictions = this.model.predict(embeddings)
-                    return predictions.as1D().argMax()
-                })
-                const classId = (await predictedClass.data())[0]
-                console.log('predictedClassId:', classId)
-                predictedClass.dispose()
-                await tf.nextFrame()
-                this.setState({ predictCount: this.state.predictCount + 1 })
-                if (this.state.predictCount === 50) {
-                    clearInterval(startPredicting)
-                }
-            } catch (err) {
-                console.warn('Catch', err)
-            }   
-        }, 300)
-    }
+
+    
 
     saveModel = () => {
         this.model.save('indexeddb://packr-model')
@@ -205,7 +194,7 @@ class CreateItem extends Component {
     }
 
     adjustVideoSize = (width, height) => {
-        const aspectRatio = width / height;
+        const aspectRatio = height / width;
         if (width >= height) {
             this.refs.preview.width = aspectRatio * this.refs.preview.height;
         } else if (width < height) {
@@ -220,20 +209,17 @@ class CreateItem extends Component {
                 navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
                 navigatorAny.msGetUserMedia;
             if (navigator.getUserMedia) {
-                navigator.getUserMedia(
-                    { video: {exact: 'environment'} },
-                    stream => {
-                        this.refs.preview.srcObject = stream;
-                        this.refs.preview.addEventListener('loadeddata', async () => {
-                            this.adjustVideoSize(
-                                this.refs.preview.videoWidth,
-                                this.refs.preview.videoHeight);
-                            resolve();
-                        }, false);
-                    },
-                    error => {
-                        reject();
-                    });
+                navigator.mediaDevices.getUserMedia({ video: {facingMode: {exact: 'environment'} }})
+                .then(stream => {
+                    this.refs.preview.srcObject = stream;
+                    this.refs.preview.addEventListener('loadeddata', async () => {
+                        this.adjustVideoSize(
+                            this.refs.preview.videoWidth,
+                            this.refs.preview.videoHeight);
+                        resolve();
+                    }, false);
+                })
+                .catch(err=> reject())
             } else {
                 reject();
             }
@@ -294,7 +280,7 @@ class CreateItem extends Component {
                                 <div>
                                     {tfLoaded &&  exampleCount === 20 ? '':<button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>}
                                     <div>
-                                    {lossThreshold ? '' :
+                                    {lossThreshold? '' :
                                     <div>{exampleCount === 20 ? <div style={{ width: '200px', backgroundColor: 'olive', marginLeft: '27vw', color: 'white', height: '40px', padding: '10px', borderRadius: '25px' }} onClick={this.train} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Learning about {itemName}...</div>:''}</div>
                                     }
                                     </div>

@@ -14,7 +14,6 @@ class Backpack extends Component{
     }
 
     fetchBackpack = () => {
-        console.log(this.props.match)
         this.setState({backpack: this.props.match.params.id})
         fetch(`https://packr-database.herokuapp.com/packs/${this.props.match.params.id}/items`)
             .then(res => res.json())
@@ -64,7 +63,6 @@ class Backpack extends Component{
                         }} ><Icon name='add' />Add Item</button></Link>
                         <Link to={`/scan-items/${this.state.backpack}`}><button className='add-button' onClick={(e) => {
                             // e.preventDefault()
-                            console.log(this.state.backpack)
                         }} ><Icon name='camera' />Scan Pack</button></Link>
                     </div> 
                     </div>: <Loader active />}
