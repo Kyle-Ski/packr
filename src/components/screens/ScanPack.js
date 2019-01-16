@@ -83,6 +83,7 @@ class ScanPack extends Component{
                     const img = this.capture()
                     const embeddings = this.preTrained.predict(img)
                     const predictions = this.packrModel.predict(embeddings)
+                    // const predictions = this.preTrained.predict(img)
                     return predictions.as1D().argMax()
                 })
                 const classId = (await predictedClass.data())[0]
@@ -90,7 +91,7 @@ class ScanPack extends Component{
                 predictedClass.dispose()
                 await tf.nextFrame()
                 this.setState({ predictCount: this.state.predictCount + 1 })
-                if (this.state.predictCount === 50) {
+                if (this.state.predictCount === 35) {
                     clearInterval(startPredicting)
                     this.setState({predictingMessage: 'Done Predicting'})
 
@@ -116,7 +117,7 @@ class ScanPack extends Component{
         const beginHeight = centerHeight - (size / 2);
         const centerWidth = img.shape[1] / 2;
         const beginWidth = centerWidth - (size / 2);
-        return img.slice([beginHeight, beginWidth, 0], [size, size, 3]);
+        return img.slice([beginHeight, beginWidth, 0], [224, 224, 3]);
     }
 
 
@@ -125,13 +126,14 @@ class ScanPack extends Component{
         return tf.tidy(() => {
             // Reads the image as a Tensor from the webcam <video> element.
             const webcamImage = tf.fromPixels(this.refs.preview);
-            console.log('Webcam image tf.fromPixels:',webcamImage)
+            // console.log('Webcam image tf.fromPixels:',webcamImage)
             // Crop the image so we're using the center square of the rectangular
             // webcam.
             const croppedImage = this.cropImage(webcamImage)
-            console.log('cropped image after tf.fromPixels:',croppedImage)
+            // console.log('cropped image after tf.fromPixels:',croppedImage)
             // Expand the outer most dimension so we have a batch size of 1.
             const batchedImage = croppedImage.expandDims(0);
+            // console.log('batched img', batchedImage)
             // Normalize the image between -1 and 1. The image comes in between 0-255,
             // so we divide by 127 and subtract 1.
             return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
@@ -190,11 +192,11 @@ class ScanPack extends Component{
                     width: '100%',
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
                     zIndex: '1',
-                    marginTop: '18px'
+                    marginTop: '23px'
 
                 }}>
-                <video id='preview' ref="preview" width="360" height="350" autoPlay muted playsInline></video>
-                <div className={this.state.itemName}>
+                <video id='preview' style={{marginLeft: '-40px'}} ref="preview" width="500" height="500" autoPlay muted playsInline></video>
+                <div style={{marginTop: '-25px'}} className={this.state.itemName}>
                 <h1 onClick={this.handleFlip} style={{marginTop: '30px'}} className='item__face item__face--front'>Itmes in {this.state.name} Not Ready..</h1>
                 <h1 onClick={this.handleFlip} style={{marginTop: '-40px'}} className='item__face item__face--back'><Icon name='check' /> {this.state.name} Ready to Go!</h1>
                 </div>
@@ -280,4 +282,30 @@ shape: (3) [270, 360, 3]
 size: 291600
 strides: (2) [1080, 3]
 __proto__: Object
+
+e {isDisposedInternal: false, shape: Array(3), dtype: "int32", size: 562500, strides: Array(2), …}
+dataId: {}
+dtype: "int32"
+id: 436
+isDisposed: (...)
+isDisposedInternal: true
+rank: (...)
+rankType: "3"
+shape: (3) [375, 500, 3]
+size: 562500
+strides: (2) [1500, 3]
+__proto__: Object
 */
+
+let img = 
+{dataId: {},
+dtype: "int32",
+id: 436,
+isDisposed: (false),
+isDisposedInternal: true,
+rank: ("3"),
+rankType: "3",
+shape: (3) [375, 500, 3],
+size: 562500,
+strides: (2) [1500, 3]}
+

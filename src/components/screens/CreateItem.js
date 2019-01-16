@@ -141,10 +141,10 @@ class CreateItem extends Component {
         const label = this.state.imageSrc
         var startGetting = setInterval(() => {
             // console.log('pretrained:', this.preTrained.outputs[0].shape.slice(1), 'packr', this.loadedPacker.outputs[0].shape.slice(1))
-            // const img = this.capture()
-            // const embeddings = this.preTrained.predict(img)
+            const img = this.capture()
+            const embeddings = this.preTrained.predict(img)
             // const example = this.loadedPacker.predict(embeddings)
-            // tf.tidy(() => this.saveData.addExample(embeddings, label))
+            tf.tidy(() => this.saveData.addExample(embeddings, label))
             // tf.tidy(() => this.saveData.addExample(example, label))
             let addToCount = this.state.exampleCount
             this.setState({ exampleCount: addToCount + 1 })
@@ -184,14 +184,24 @@ class CreateItem extends Component {
         });
     }
 
+    // cropImage = (img) => {
+    //     const size = Math.min(img.shape[0], img.shape[1]);
+    //     const centerHeight = img.shape[0] / 2;
+    //     const beginHeight = centerHeight - (size / 2);
+    //     const centerWidth = img.shape[1] / 2;
+    //     const beginWidth = centerWidth - (size / 2);
+    //     return img.slice([beginHeight, beginWidth, 0], [size, size, 3]);
+    // }
+
     cropImage = (img) => {
         const size = Math.min(img.shape[0], img.shape[1]);
         const centerHeight = img.shape[0] / 2;
         const beginHeight = centerHeight - (size / 2);
         const centerWidth = img.shape[1] / 2;
         const beginWidth = centerWidth - (size / 2);
-        return img.slice([beginHeight, beginWidth, 0], [size, size, 3]);
+        return img.slice([beginHeight, beginWidth, 0], [224, 224, 3]);
     }
+
 
     adjustVideoSize = (width, height) => {
         const aspectRatio = height / width;
@@ -265,7 +275,7 @@ class CreateItem extends Component {
                     <MobileNav signOut={this.props.signOut} />
                 </div>
                 <Header as='h1' style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)' }}>Center {itemName ? itemName : `Item`} in view</Header>
-                <video id='preview' ref="preview" width="360" height="400" autoPlay muted playsInline></video>
+                <video id='preview' style={{marginLeft: '-50px'}} ref="preview" width="500" height="500" autoPlay muted playsInline></video>
                 <Divider />
                 <Form className={warning} onSubmit={() => console.log('submit')}>
                     <Message success header='Item Added!' content={`I now know what your ${this.state.itemName} looks like!`} />
@@ -289,7 +299,7 @@ class CreateItem extends Component {
                     </div>
                 </Form>
                 <h2 style={{ color: 'white' }}>{`${exampleCount} Examples..`}</h2>
-                {lossThreshold ? <div><h2 style={{ color: 'white' }}>I know what {itemName} looks like!</h2><Link to='/add-items'><button style={{ width: '170px' }} className='add-button create' onClick={()=>console.log('go')} ><Icon name='plus'/> Add {itemName} to a backpack.</button></Link></div>: ''}
+                {lossThreshold ? <div><h2 style={{ color: 'white' }}>I know what {itemName} looks like!</h2><Link to='/add-items'><button style={{ width: '170px' }} className='add-button create' onClick={this.saveModel} ><Icon name='plus'/> Add {itemName} to a backpack.</button></Link></div>: ''}
             </div>
         )
     }

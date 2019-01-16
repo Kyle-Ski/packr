@@ -1,68 +1,39 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Packr
+<img src='./src/PackrShadow2.png' alt='Packr logo'/>
+<video src='https://photos.google.com/share/AF1QipPNBlcQdWoBNwe2mjwFs4F1SJlHPvMlO3RT_0eN1Su1Pi-Y_IGx1T-KBaHBQJYpJw/photo/AF1QipN0dku0LS89OCgp7aF1kCTY3remfUS8Q7CHz9Ex?key=Y0JkVGNRNkdMUEM5Q0ZOMGpXc1dKWEFQOFBKbThB'autoPlay muted playsInline></video>
+### Problem Statement:
+While packing for a trip, you may forget to bring some items.
 
-## Available Scripts
+### Solution: 
+Packr will alleviate the feeling that you forgot something while packing for a trip. By taking a picture of the items you plan to pack, Packr will tell you before hand if you have everything you need, or if you are missing a number of items.
 
-In the project directory, you can run:
+### Technologies:
+#### Front End
+* Google Tensorflow.js
+* React.js
+    - JavaScript
+    - HTML
+    - CSS
+* Semantic UI
 
-### `npm start`
+#### Back End
+* Node.js
+* Express
+* Knex.js
+* PostgreSQL
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### To Do:
+[ ] Expand Model to allow user by user case
+[ ] Clean up CSS into one format
+[ ] Sanitize all user inputs
+[ ] Add ability to delete items from pack
+[ ] Add ability to delete a backpack
+[x] Profile page
+[x] Sign out 
+[x] Add a place to view all backpacks
+[x] Have a place to create a new backpack
+[x] Have a place to add items to a pack
+[x] Ability to check current bag to see if everything is there
+[x] Ability to sign in to profile
+[x] Ability to Sign up 
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
