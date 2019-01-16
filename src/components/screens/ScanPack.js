@@ -125,9 +125,11 @@ class ScanPack extends Component{
         return tf.tidy(() => {
             // Reads the image as a Tensor from the webcam <video> element.
             const webcamImage = tf.fromPixels(this.refs.preview);
+            console.log('Webcam image tf.fromPixels:',webcamImage)
             // Crop the image so we're using the center square of the rectangular
             // webcam.
-            const croppedImage = this.cropImage(webcamImage);
+            const croppedImage = this.cropImage(webcamImage)
+            console.log('cropped image after tf.fromPixels:',croppedImage)
             // Expand the outer most dimension so we have a batch size of 1.
             const batchedImage = croppedImage.expandDims(0);
             // Normalize the image between -1 and 1. The image comes in between 0-255,
@@ -188,10 +190,10 @@ class ScanPack extends Component{
                     width: '100%',
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
                     zIndex: '1',
-                    marginTop: '45px'
+                    marginTop: '18px'
 
                 }}>
-                <video id='preview' ref="preview" width="360" height="360" autoPlay muted playsInline></video>
+                <video id='preview' ref="preview" width="360" height="350" autoPlay muted playsInline></video>
                 <div className={this.state.itemName}>
                 <h1 onClick={this.handleFlip} style={{marginTop: '30px'}} className='item__face item__face--front'>Itmes in {this.state.name} Not Ready..</h1>
                 <h1 onClick={this.handleFlip} style={{marginTop: '-40px'}} className='item__face item__face--back'><Icon name='check' /> {this.state.name} Ready to Go!</h1>
@@ -200,8 +202,8 @@ class ScanPack extends Component{
                 <button style={{ width: '170px' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='camera' /><span className='no-copy'>Scan {name}</span></button>
                 {/* <h3 style={{color: 'white'}}>Predicting Message: {predictingMessage}</h3> */}
                 </div>
-                <div style={{zIndex: '-1', marginTop: '65vh'}}>
-                <div style={{backgroundColor: 'rgb(94, 94, 84, 0.6)', height: 'fit-content', borderRadius: '60px', borderStyle: 'dashed', borderColor: '#969684', paddingTop: '10vh', paddingBottom: '7vh'}}>
+                <div style={{zIndex: '-1', marginTop: '69vh'}}>
+                <div style={{backgroundColor: 'rgb(94, 94, 84, 0.6)', height: 'fit-content', borderRadius: '60px', borderStyle: 'dashed', borderColor: '#969684', paddingTop: '7vh', paddingBottom: '2vh'}}>
                 <ScanPackItems  items={items}/>
                 </div>
                 </div>
@@ -213,3 +215,69 @@ class ScanPack extends Component{
 }
 
 export default ScanPack
+
+/*{isDisposedInternal: false, 
+    shape: Array(3), 
+    dtype: "int32", 
+    size: 218160, 
+    strides: Array(2), …}
+    dataId: {}
+    dtype: "int32"
+    id: 525
+    isDisposed: (...)
+    isDisposedInternal: truerank: (...)
+    rankType: "3"
+    shape: (3) [360, 202, 3]
+    size: 218160
+    strides: (2) 
+    [606, 3]__proto__: Object
+    
+    
+    Cropped Image
+    
+    DataId: {}
+    dtype: "int32"
+    id: 422
+    isDisposed: (...)
+    isDisposedInternal: true
+    rank: (...)
+    rankType: "3"
+    shape: (3) [202, 202, 3]
+    size: 122412
+    strides: (2) [606, 3]
+    __proto__: Object
+
+
+    Error from phone: 
+     Error when checking : 
+     expected input_1 to have shape [null,224,224,3] but got array with shape [1,270,270,3].
+
+
+     Cropped
+     e {isDisposedInternal: false, shape: Array(3), dtype: "int32", size: 218700, strides: Array(2), …}
+dataId: {}
+dtype: "int32"
+id: 461
+isDisposed: (...)
+isDisposedInternal: true
+rank: (...)
+rankType: "3"
+shape: (3) [270, 270, 3]
+size: 218700
+strides: (2) [810, 3]
+__proto__: Object
+
+Webcam
+e {isDisposedInternal: false, shape: Array(3), dtype: "int32", size: 291600, strides: Array(2), …}
+dataId: {}
+dtype: "int32"
+id: 460
+isDisposed: (...)
+isDisposedInternal: true
+rank: (...)
+rankType: "3"
+shape: (3) [270, 360, 3]
+size: 291600
+strides: (2) [1080, 3]
+__proto__: Object
+*/

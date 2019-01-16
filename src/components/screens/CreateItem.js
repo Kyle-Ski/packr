@@ -265,7 +265,7 @@ class CreateItem extends Component {
                     <MobileNav signOut={this.props.signOut} />
                 </div>
                 <Header as='h1' style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)' }}>Center {itemName ? itemName : `Item`} in view</Header>
-                <video id='preview' ref="preview" width="360" height="224" autoPlay muted playsInline></video>
+                <video id='preview' ref="preview" width="360" height="400" autoPlay muted playsInline></video>
                 <Divider />
                 <Form className={warning} onSubmit={() => console.log('submit')}>
                     <Message success header='Item Added!' content={`I now know what your ${this.state.itemName} looks like!`} />
