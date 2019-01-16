@@ -187,10 +187,11 @@ class ScanPack extends Component{
                     left: '0',
                     width: '100%',
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    zIndex: '1'
+                    zIndex: '1',
+                    marginTop: '45px'
 
                 }}>
-                <video id='preview' ref="preview" width="360" height="224" autoPlay muted playsInline></video>
+                <video id='preview' ref="preview" width="360" height="360" autoPlay muted playsInline></video>
                 <div className={this.state.itemName}>
                 <h1 onClick={this.handleFlip} style={{marginTop: '30px'}} className='item__face item__face--front'>Itmes in {this.state.name} Not Ready..</h1>
                 <h1 onClick={this.handleFlip} style={{marginTop: '-40px'}} className='item__face item__face--back'><Icon name='check' /> {this.state.name} Ready to Go!</h1>
@@ -199,7 +200,7 @@ class ScanPack extends Component{
                 <button style={{ width: '170px' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='camera' /><span className='no-copy'>Scan {name}</span></button>
                 {/* <h3 style={{color: 'white'}}>Predicting Message: {predictingMessage}</h3> */}
                 </div>
-                <div style={{zIndex: '-1', marginTop: '50vh'}}>
+                <div style={{zIndex: '-1', marginTop: '65vh'}}>
                 <div style={{backgroundColor: 'rgb(94, 94, 84, 0.6)', height: 'fit-content', borderRadius: '60px', borderStyle: 'dashed', borderColor: '#969684', paddingTop: '10vh', paddingBottom: '7vh'}}>
                 <ScanPackItems  items={items}/>
                 </div>

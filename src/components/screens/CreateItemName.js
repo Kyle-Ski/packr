@@ -3,7 +3,7 @@ import { Input, Header, Icon } from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 
-const createUrl = 'http://packr-database.herokuapp.com/items'
+const createUrl = 'https://packr-database.herokuapp.com/items'
 
 class CreateItemName extends Component {
 
@@ -49,6 +49,6 @@ class CreateItemName extends Component {
             </div>
         )
     }
-}
+}   
 
 export default CreateItemName
