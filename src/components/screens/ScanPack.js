@@ -202,7 +202,7 @@ class ScanPack extends Component{
                 {/* <h3 style={{color: 'white'}}>Predicting Message: {predictingMessage}</h3> */}
                 </div>
                 <div style={{zIndex: '-1', marginTop: '50vh'}}>
-                <div style={{backgroundColor: 'rgb(94, 94, 84, 0.6', height: 'fit-content', borderRadius: '60px', borderStyle: 'dashed', borderColor: '#969684', paddingTop: '10vh', paddingBottom: '7vh'}}>
+                <div style={{backgroundColor: 'rgb(94, 94, 84, 0.6)', height: 'fit-content', borderRadius: '60px', borderStyle: 'dashed', borderColor: '#969684', paddingTop: '10vh', paddingBottom: '7vh'}}>
                 <ScanPackItems  items={items}/>
                 </div>
                 </div>
