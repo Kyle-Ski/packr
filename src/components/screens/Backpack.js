@@ -49,13 +49,15 @@ class Backpack extends Component{
                 <MobileNav signOut={this.props.signOut}/>
                     <Segment style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
                         <Header as='h1'>
-                            <Icon circular inverted name='users' size='huge' />
+                            <Icon circular inverted name='free code camp' size='huge' />
                             <Header.Content style={{ color: 'white' }} as='h3'>{this.state.name}</Header.Content>
                         </Header>
                     </Segment>
                     <Header style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)' }} as='h1'>Items:</Header>
                     <Divider />
+                    <div style={{backgroundColor: 'rgb(94, 94, 84, 0.6)', height: 'fit-content', borderRadius: '60px', borderStyle: 'dashed', borderColor: '#969684', paddingTop: '7vh', paddingBottom: '7vh'}}>
                     <BackpackItems items={items} />
+                    </div>
                     <div>
                         <Link to='/add-items'><button className='add-button create' style={{margin: '10px'}} onClick={(e) => {
                             // e.preventDefault()

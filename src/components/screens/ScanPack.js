@@ -155,7 +155,7 @@ class ScanPack extends Component{
                 navigatorAny.msGetUserMedia;
             if (navigator.getUserMedia) {
                 navigator.getUserMedia(
-                    { video: true },
+                    { video: { facingMode: { exact: "environment" } } },
                     stream => {
                         this.refs.preview.srcObject = stream;
                         this.refs.preview.addEventListener('loadeddata', async () => {

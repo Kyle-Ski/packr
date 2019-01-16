@@ -12,7 +12,8 @@ const style = {
         marginLeft: '25vw',
     },
     button: {
-        width: '140px',
+        width: '160px',
+        height: '50px'
     }
 }
 
@@ -156,8 +157,8 @@ class AddItems extends Component{
                     />
                     </div>
                     <div style={{paddingRight: '120px'}}>
-                    <button onClick={this.addToPack} style={style.button} className='add-button create'>Add Items To {this.state.chosenPack ? this.state.chosenPack.text:''}</button>
-                    <Link to='create-item-name'><button style={{width: '140px', backgroundColor:'#FD6041'}} className='add-button create'>Item Not Here? Create It!</button></Link>
+                    <button onClick={this.addToPack} style={style.button} className='add-button create'><Icon name='plus'/>Add Items To {this.state.chosenPack ? this.state.chosenPack.text:''}</button>
+                    <Link to='create-item-name'><button style={{width: '160px', backgroundColor:'#FD6041', height: '50px'}} className='add-button create'>Item Not Here? <Icon name='upload'/>Create It!</button></Link>
                      </div>
                     {this.state.chosenPack ? <Message style={{marginRight: '30vw'}} success header='Item(s) added!' content={`The items have been added to ${this.state.chosenPack.text}`} />:''}
                         <Message
@@ -172,7 +173,6 @@ class AddItems extends Component{
                             <div key={idx}>
                             <Header style={{color: 'white'}} as='h4'>Select an Item</Header>
                             <Form.Field required control={Dropdown} onChange={this.handleUseritemAdd(idx)} selection options={this.state.items} placeholder='Items..' />
-                            {/* <Form.Field control={Button} color='red' onClick={this.handleRemoveitem(idx)}>- Item</Form.Field> */}
                             <button className='minus-button' onClick={this.handleRemoveitem(idx)}><Icon name='minus'/> Item</button>
                             </div>
                         ))
