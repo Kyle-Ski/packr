@@ -25,17 +25,17 @@ Packr will alleviate the feeling that you forgot something while packing for a t
 * PostgreSQL
 
 ### To Do:
-[ ] Expand Model to allow user by user case
-[ ] Clean up CSS into one format
-[ ] Sanitize all user inputs
-[ ] Add ability to delete items from pack
-[ ] Add ability to delete a backpack
-[x] Profile page
-[x] Sign out 
-[x] Add a place to view all backpacks
-[x] Have a place to create a new backpack
-[x] Have a place to add items to a pack
-[x] Ability to check current bag to see if everything is there
-[x] Ability to sign in to profile
-[x] Ability to Sign up 
+- [ ] Expand Model to allow user by user case
+- [ ] Clean up CSS into one format
+- [ ] Sanitize all user inputs
+- [ ] Add ability to delete items from pack
+- [ ] Add ability to delete a backpack
+- [x] Profile page
+- [x] Sign out 
+- [x] Add a place to view all backpacks
+- [x] Have a place to create a new backpack
+- [x] Have a place to add items to a pack
+- [x] Ability to check current bag to see if everything is there
+- [x] Ability to sign in to profile
+- [x] Ability to Sign up 
 
