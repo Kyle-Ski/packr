@@ -6,7 +6,7 @@ import MobileNav from '../nav/MobileNav'
 import * as tf from '@tensorflow/tfjs';
 
 
-const createUrl = 'http://localhost:3222/items'
+const createUrl = 'http://packr-database.herokuapp.com/items'
 class CreateItem extends Component {
     constructor(props) {
         super(props)

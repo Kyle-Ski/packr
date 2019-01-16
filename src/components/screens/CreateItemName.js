@@ -3,7 +3,7 @@ import { Input, Header, Icon } from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import MobileNav from '../nav/MobileNav'
 
-const createUrl = 'http://localhost:3222/items'
+const createUrl = 'http://packr-database.herokuapp.com/items'
 
 class CreateItemName extends Component {
 

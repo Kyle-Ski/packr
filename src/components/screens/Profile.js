@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { Icon, Header, Divider, Card, Loader } from 'semantic-ui-react'
+import { Image, Header, Divider, Card, Loader, Icon } from 'semantic-ui-react'
 import MobileNav from '../nav/MobileNav'
 import { Link } from 'react-router-dom'
 import ProfilePacks from './ProfilePacks'
+
+const profileImg = './20180709_064947.png'
 
 const userPacksUrl = 'https://packr-database.herokuapp.com/users/'
 
@@ -33,10 +35,10 @@ class Profile extends Component {
             <MobileNav signOut={this.props.signOut}/>
             {packs.length ?<div >
             
-            <Header style={{color: 'white', marginTop: '60px', marginLeft: '55px'}}>
-            <Icon circular inverted name='users' size='huge'/>
-            <Header.Content  as='h3'>{this.props.user.first_name} {this.props.user.last_name}</Header.Content>
-            </Header>
+            <div style={{color: 'white', marginTop: '60px'}}>
+            <Image circular src='https://i.imgur.com/HDXn6iS.png' size='small' avatar/>
+            <Header style={{color: 'white'}} as='h2'>{this.props.user.first_name} {this.props.user.last_name}</Header>
+            </div>
             
             <Header style={{color: 'white', }} as='h1'>Backpacks:</Header>
             <Divider />

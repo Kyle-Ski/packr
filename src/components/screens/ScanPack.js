@@ -4,7 +4,7 @@ import MobileNav from '../nav/MobileNav'
 import ScanPackItems from './ScanPackItems';
 import * as tf from '@tensorflow/tfjs'
 
-const totalItemUrl = 'http://localhost:3222/items'
+const totalItemUrl = 'http://packr-database.herokuapp.com/items'
 
 class ScanPack extends Component{
 
@@ -197,12 +197,14 @@ class ScanPack extends Component{
                 <h1 onClick={this.handleFlip} style={{marginTop: '30px'}} className='item__face item__face--front'>Itmes in {this.state.name} Not Ready..</h1>
                 <h1 onClick={this.handleFlip} style={{marginTop: '-40px'}} className='item__face item__face--back'><Icon name='check' /> {this.state.name} Ready to Go!</h1>
                 </div>
-                <button className='add-button create' onClick={this.listModels}>list models</button>
+                {/* <button className='add-button create' onClick={this.listModels}>list models</button> */}
                 <button style={{ width: '170px' }} className='add-button create' onClick={this.predictTheImage} ><Icon name='camera' /><span className='no-copy'>Scan {name}</span></button>
-                <h3 style={{color: 'white'}}>Predicting Message: {predictingMessage}</h3>
+                {/* <h3 style={{color: 'white'}}>Predicting Message: {predictingMessage}</h3> */}
                 </div>
-                <div style={{zIndex: '-1', marginTop: '600px'}}>
+                <div style={{zIndex: '-1', marginTop: '50vh'}}>
+                <div style={{backgroundColor: 'rgb(94, 94, 84, 0.6', height: 'fit-content', borderRadius: '60px', borderStyle: 'dashed', borderColor: '#969684', paddingTop: '10vh', paddingBottom: '7vh'}}>
                 <ScanPackItems  items={items}/>
+                </div>
                 </div>
                 </div>
                 </div>:<div><Loader active /></div>}

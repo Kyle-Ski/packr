@@ -13,7 +13,7 @@ import CreateItemName from '../screens/CreateItemName'
 const signUpUrl = 'https://packr-database.herokuapp.com/users'
 const loginUrl = 'https://packr-database.herokuapp.com/auth/login'
 const addPackUrl = 'https://packr-database.herokuapp.com/packs'
-const createUrl = 'http://localhost:3222/items'
+const createUrl = 'http://packr-database.herokuapp.com/items'
 
 class Main extends Component {
 
