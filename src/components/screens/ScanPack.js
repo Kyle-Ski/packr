@@ -197,7 +197,7 @@ class ScanPack extends Component{
                 }}>
                 <video id='preview' style={{marginLeft: '-40px'}} ref="preview" width="500" height="500" autoPlay muted playsInline></video>
                 <div style={{marginTop: '-25px'}} className={this.state.itemName}>
-                <h1 onClick={this.handleFlip} style={{marginTop: '30px'}} className='item__face item__face--front'>Itmes in {this.state.name} Not Ready..</h1>
+                <h1 onClick={this.handleFlip} style={{marginTop: '30px'}} className='item__face item__face--front'>Items in {this.state.name} Not Ready..</h1>
                 <h1 onClick={this.handleFlip} style={{marginTop: '-40px'}} className='item__face item__face--back'><Icon name='check' /> {this.state.name} Ready to Go!</h1>
                 </div>
                 {/* <button className='add-button create' onClick={this.listModels}>list models</button> */}
@@ -297,15 +297,15 @@ strides: (2) [1500, 3]
 __proto__: Object
 */
 
-let img = 
-{dataId: {},
-dtype: "int32",
-id: 436,
-isDisposed: (false),
-isDisposedInternal: true,
-rank: ("3"),
-rankType: "3",
-shape: (3) [375, 500, 3],
-size: 562500,
-strides: (2) [1500, 3]}
+// let img = 
+// {dataId: {},
+// dtype: "int32",
+// id: 436,
+// isDisposed: (false),
+// isDisposedInternal: true,
+// rank: ("3"),
+// rankType: "3",
+// shape: (3) [375, 500, 3],
+// size: 562500,
+// strides: (2) [1500, 3]}
 
