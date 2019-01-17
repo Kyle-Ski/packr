@@ -176,14 +176,14 @@ class AddItems extends Component{
                             <Header style={{color: 'white', marginLeft: '-75px', marginTop: '10px', marginBottom: '4px'}} as='h4'>Select an Item</Header>
                             <div style={{display: 'flex'}}>
                             <Form.Field style={{display: 'inline-block'}} required control={Dropdown} onChange={this.handleUseritemAdd(idx)} selection options={this.state.items} placeholder='Items..' />
-                            <button style={{display: 'inline-block', marginLeft: '20px'}} className='minus-button' onClick={this.handleRemoveitem(idx)}><Icon style={{color: 'white'}} name='trash alternate'/></button>
+                            <button style={{display: 'inline-block', marginLeft: '20px', backgroundColor: 'white'}} className='minus-button' onClick={this.handleRemoveitem(idx)}><Icon style={{color: 'red'}} name='trash alternate'/></button>
                             </div>
                             </div>
                         ))
                         }
                         
                 </Form.Group>
-                <button style={{width:'140px', marginRight: '125px', backgroundColor: 'olive'}} className='add-button create' onClick={this.handleAdditem}><Icon name='plus' /> Another Item</button>
+                <button style={{width:'140px', marginRight: '125px'}} className='add-button create' onClick={this.handleAdditem}><Icon name='plus' /> Another Item</button>
                 </div> : <Loader active />}
             </Form>
             </div>
