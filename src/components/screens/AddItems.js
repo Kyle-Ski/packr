@@ -106,6 +106,7 @@ class AddItems extends Component{
                 return pac.text === e.target.innerText
             })[0]
             this.setState({chosenPack: chosenPack})
+        
         }
     }
 
@@ -141,14 +142,15 @@ class AddItems extends Component{
             <div>
                 <MobileNav signOut={this.props.signOut}/>
             </div>
-            <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', marginTop: '10px'}} as='h1'>Add Items into a Backpack</Header>
+            <Header style={{color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', marginTop: '15px'}} as='h1'>What Items Do You Need To Bring?</Header>
             <Divider />
             <Form big style={style.form} className={this.state.warning}> 
                 {items.length ?<div> <Form.Group widths='equal'>
                 <div>
-                    <Header style={{color: 'white'}} as='h4'>Choose A Backpack</Header>
+                    <Header style={{color: 'white'}} as='h4'>Choose A Trip</Header>
                     <Form.Field
                         required
+                        size='huge'
                         control={Select}
                         options={this.state.packOptions}
                         // label='Choose a Backpack:'
@@ -158,7 +160,7 @@ class AddItems extends Component{
                     </div>
                     <div style={{paddingRight: '120px'}}>
                     <button onClick={this.addToPack} style={style.button} className='add-button create'><Icon name='plus'/>Add Items To {this.state.chosenPack ? this.state.chosenPack.text:''}</button>
-                    <Link to='create-item-name'><button style={{width: '160px', backgroundColor:'#FD6041', height: '50px'}} className='add-button create'>Item Not Here? <Icon name='upload'/>Create It!</button></Link>
+                    <Link to='create-item-name'><button style={{width: '160px', backgroundColor:'#FD6041', height: '50px'}} className='add-button create'><Icon name='upload'/> Item Not Here? Create It!</button></Link>
                      </div>
                     {this.state.chosenPack ? <Message style={{marginRight: '30vw'}} success header='Item(s) added!' content={`The items have been added to ${this.state.chosenPack.text}`} />:''}
                         <Message
@@ -171,15 +173,17 @@ class AddItems extends Component{
                         />
                         {this.state.newitems.map((item, idx) =>(
                             <div key={idx}>
-                            <Header style={{color: 'white'}} as='h4'>Select an Item</Header>
-                            <Form.Field required control={Dropdown} onChange={this.handleUseritemAdd(idx)} selection options={this.state.items} placeholder='Items..' />
-                            <button className='minus-button' onClick={this.handleRemoveitem(idx)}><Icon name='minus'/> Item</button>
+                            <Header style={{color: 'white', marginLeft: '-75px', marginTop: '10px', marginBottom: '4px'}} as='h4'>Select an Item</Header>
+                            <div style={{display: 'flex'}}>
+                            <Form.Field style={{display: 'inline-block'}} required control={Dropdown} onChange={this.handleUseritemAdd(idx)} selection options={this.state.items} placeholder='Items..' />
+                            <button style={{display: 'inline-block', marginLeft: '20px', backgroundColor: 'white'}} className='minus-button' onClick={this.handleRemoveitem(idx)}><Icon style={{color: 'red'}} name='trash alternate'/></button>
+                            </div>
                             </div>
                         ))
                         }
                         
                 </Form.Group>
-                <button style={{width:'140px', marginRight: '125px', backgroundColor: 'olive'}} className='add-button create' onClick={this.handleAdditem}><Icon name='plus' /> Another Item</button>
+                <button style={{width:'140px', marginRight: '125px'}} className='add-button create' onClick={this.handleAdditem}><Icon name='plus' /> Another Item</button>
                 </div> : <Loader active />}
             </Form>
             </div>

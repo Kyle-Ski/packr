@@ -40,16 +40,16 @@ class Profile extends Component {
             <Header style={{color: 'white'}} as='h2'>{this.props.user.first_name} {this.props.user.last_name}</Header>
             </div>
             
-            <Header style={{color: 'white', }} as='h1'>Backpacks:</Header>
+            <Header style={{color: 'white', }} as='h1'>Trips:</Header>
             <Divider />
             <div >
             <Card.Group centered>
             <ProfilePacks packs={this.state.packs}/>
             </Card.Group>
             <Divider />
-            <Link style={{color: 'white'}} to='add-pack'><button className='add-button create' style={{color: 'white'}} ><Icon name='add' />Add Pack</button></Link>
+            <Link style={{color: 'white'}} to='add-pack'><button className='add-button create' style={{color: 'white'}} ><Icon name='add' />Add Trip</button></Link>
             </div>
-            </div>: <Loader style={{color: 'white'}} active>Lading Packs..</Loader>}
+            </div>: <Loader style={{color: 'white'}} active>Loading Tripss..</Loader>}
             </div>
         )
     }

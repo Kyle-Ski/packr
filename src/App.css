@@ -59,14 +59,14 @@ body {
 }
 
 .minus-button{
-  background-color: red;
-  border: solid 2px red;
+  background-color: rgb(177, 95, 95);
+  border: solid 2px rgb(177, 95, 95);
   height: 40px;
   border-radius: 10px;
   /* box-shadow: 1.5px 2px 0px 2px rgb(175, 69, 69); */
   margin-bottom: 10px;
   font-weight: 900;
-  width: 90px;
+  width: 45px;
 }
 
 .minus-button:focus{
@@ -160,9 +160,10 @@ body {
 }
 
 .item__face--back {
-  color: #35A3A6 !important;
+  color: lightgreen !important;
   transform: rotateX(180deg);
   margin-top: 0px;
+  font-weight: 900px;
 }
 
 

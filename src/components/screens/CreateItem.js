@@ -141,10 +141,10 @@ class CreateItem extends Component {
         const label = this.state.imageSrc
         var startGetting = setInterval(() => {
             // console.log('pretrained:', this.preTrained.outputs[0].shape.slice(1), 'packr', this.loadedPacker.outputs[0].shape.slice(1))
-            const img = this.capture()
-            const embeddings = this.preTrained.predict(img)
+            // const img = this.capture()
+            // const embeddings = this.preTrained.predict(img)
             // const example = this.loadedPacker.predict(embeddings)
-            tf.tidy(() => this.saveData.addExample(embeddings, label))
+            // tf.tidy(() => this.saveData.addExample(embeddings, label))
             // tf.tidy(() => this.saveData.addExample(example, label))
             let addToCount = this.state.exampleCount
             this.setState({ exampleCount: addToCount + 1 })
@@ -291,15 +291,16 @@ class CreateItem extends Component {
                                     {tfLoaded &&  exampleCount === 20 ? '':<button style={{ width: '170px' }} className='add-button create' onClick={this.getExamples} ><Icon name='camera' /><span className='no-copy'>Scan {itemName}</span></button>}
                                     <div>
                                     {lossThreshold? '' :
-                                    <div>{exampleCount === 20 ? <div style={{ width: '200px', backgroundColor: 'olive', marginLeft: '27vw', color: 'white', height: '40px', padding: '10px', borderRadius: '25px' }} onClick={this.train} ><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}>  </i>Learning about {itemName}...</div>:''}</div>
+                                    <div>{exampleCount === 20 ? <div style={{ width: '200px', backgroundColor: 'olive', marginLeft: '27vw', color: 'white', height: '40px', padding: '10px', borderRadius: '25px' }} onClick={this.train} >Processing {itemName}...</div>:''}</div>
                                     }
                                     </div>
                                     {/* {lossThreshold  ? <button style={{ width: '170px', backgroundColor: 'red' }} className='add-button create' onClick={()=>console.log(this.model.summary())} ><Icon name='stop circle outline' /><span className='no-copy'>log the summary of packr</span></button>:''} */}
                                 </div>
                     </div>
                 </Form>
-                <h2 style={{ color: 'white' }}>{`${exampleCount} Examples..`}</h2>
-                {lossThreshold ? <div><h2 style={{ color: 'white' }}>I know what {itemName} looks like!</h2><Link to='/add-items'><button style={{ width: '170px' }} className='add-button create' onClick={this.saveModel} ><Icon name='plus'/> Add {itemName} to a backpack.</button></Link></div>: ''}
+                <h2 style={{ color: 'white' }}>{exampleCount < 20 ?`${exampleCount * 5}%
+                Scanning...`:'100% Scanned!'}</h2>
+                {lossThreshold ? <div><h2 style={{ color: 'white' }}><i className="fas fa-brain" style={{ color: 'white', marginRight: '7px' }}></i>  I know what {itemName} looks like!</h2><Link to='/add-items'><button style={{ width: '170px' }} className='add-button create' onClick={this.saveModel} ><Icon name='plus'/> Add {itemName} to a backpack.</button></Link></div>: ''}
             </div>
         )
     }
